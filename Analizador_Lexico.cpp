@@ -1,7 +1,7 @@
 #include <iostream>
 #include <array>
 #include <vector>
-#include <unordered_set>
+#include <map>
 #include <iomanip>
 #include <string>
 #include <algorithm>
@@ -84,24 +84,78 @@ std::string tokenToString(token_ids id) {
     }
 }
 
+int error(int cod_error, std::ifstream& file, std::streampos position){
+    file.clear();
+    file.seekg(0,std::ios::beg);
+    // Ver en que fila esta
+    int line = 0;
+    string a;
+    // Get line num
+    if(position == -1){ // if position == eol -> mirar todo
+        while(getline(file,a)){
+            line++;
+        }
+    }
+    else{
+        while(file.tellg() < position){
+            line++;
+            getline(file, a);
+        }
+    }
+    // Gett err message
+    string err_msg = "";
+    switch(cod_error){
+        case 1: err_msg = "Caracter invalido '&'. Querias poner operador logico and '&&'?"; break;
+        case 2: err_msg = "Cadena sin terminar. Por favor pon \" para cerrarla"; break;
+        case 3: err_msg = "Caracter invalido /"; break;
+        case 4: err_msg = "Comentario sin finalizar. Recuerda poner \\* Al final de todo"; break;
+    }
+    // Imprimir error
+    cout << "ERROR CON CODIGO: " << cod_error << " EN LINEA " << line << ":   " << err_msg << endl; 
+    // Volver a posición anterior
+    file.seekg(position,std::ios::beg);
+    return 0;
+}
+
 void generarToken(token_ids id, int valor){
     std::cout << "<" << tokenToString(id) << ", " << valor << ">" << endl;
 }
 void generarToken(token_ids id, string valor){
+    if(id == token_ids::IDENTIFICADOR){
+        std::cout << "<" << valor << ", " << "-" << ">" << endl;
+        return;
+    }
     std::cout << "<" << tokenToString(id) << ", " << '\"' << valor << '\"' << ">" << endl;
 }
 void generarToken(token_ids id){
     std::cout << "<" << tokenToString(id) << ", " << "-" << ">" << endl;
 }
 
+// palabras reservadas
+
+
+
+
 
 int main(int argc, char* argv[]){
+    // Preparar palabras reservadas
+    std::map<std::string, token_ids> palResMap;
+    palResMap["boolean"] = token_ids::PAL_RES_BOOL;
+    palResMap["for"] = token_ids::PAL_RES_FOR;
+    palResMap["function"] = token_ids::PAL_RES_FUNCTION;
+    palResMap["if"] = token_ids::PAL_RES_IF;
+    palResMap["input"] = token_ids::PAL_RES_INPUT;
+    palResMap["output"] = token_ids::PAL_RES_OUTPUT;
+    palResMap["return"] = token_ids::PAL_RES_RETURN;
+    palResMap["string"] = token_ids::PAL_RES_STRING;
+    palResMap["var"] = token_ids::PAL_RES_VAR;
+    palResMap["void"] = token_ids::PAL_RES_VOID;
 
     if(argc < 2){
         cerr << "Error: Tienes que pasar un archivo" << std::endl;
     }
 
-    std::ifstream file(argv[1]); 
+    std::ifstream file(argv[1], std::ios::binary); 
     
     // Check if the file is open
     if (!file.is_open()) {
@@ -123,9 +177,14 @@ int main(int argc, char* argv[]){
     char delimitadores[] = {';','\n',' ', '\t', '\0'}; // size = 5
     
     char a;
-    while(file >> a){
+    int valor_numerico = 0;
+    string valor_cadena = "";
+    bool eof = true;
+    int num_linea = 1; // Cambiar a 0 si las lineas empiezan en 0. Por ahora asumo que empiezan en 1
+    while(file.get(a)){
+        
+        //cout << "CURRENT " << a << endl;
         // a is the next char from the file
-        // file.seekg(-1, std::ios::cur); to go back one position (in case we dont want to do a reading operation)
 
         switch(estado){
             case 0: 
@@ -154,7 +213,7 @@ int main(int argc, char* argv[]){
                     generarToken(token_ids::PUNTO_Y_COMA);
                 }
                 else if(a == '!'){
-                    estado = 7; 
+                    estado = 0; 
                     generarToken(token_ids::OP_LOGICO_NEGACION);
                 }
                 else if(a == '-'){
@@ -176,14 +235,17 @@ int main(int argc, char* argv[]){
                 }
                 // Strings
                 else if(a == '"'){
+                    valor_cadena = "";
                     estado = 21;
                 }
                 // digitos
                 else if(contains(digitos, 10,  a)){
+                    valor_numerico = a-'0';
                     estado = 17;
                 }
                 // variables y pals reservadas
                 else if(contains(abc, 52, a)){
+                    valor_cadena += a;
                     estado = 19;
                 }
                 break;
@@ -199,7 +261,7 @@ int main(int argc, char* argv[]){
                 else{
                     // No es lectura -> retroceder en uno
                     generarToken(token_ids::OP_ARITMETICO_SUMA);
-                    file.seekg(-1, std::ios::cur);
+                    file.seekg(-1,std::ios::cur);
                     estado = 11;
                 }
                 break;
@@ -213,7 +275,7 @@ int main(int argc, char* argv[]){
                 else{
                     // No es lectura -> retroceder en uno
                     generarToken(token_ids::OP_ASIGNACION_SIMPLE);
-                    file.seekg(-1, std::ios::cur);
+                    file.seekg(-1,std::ios::cur);
                     estado = 14;
                 }
                 break;
@@ -225,6 +287,9 @@ int main(int argc, char* argv[]){
                     estado = 16;
                 }
                 else{
+                    error(1, file, file.tellg());
+                    file.seekg(-1,std::ios::cur);
+                    estado = 0;
                     // Lanzar error léxicos
                 }
                 break;
@@ -232,23 +297,33 @@ int main(int argc, char* argv[]){
             case 17: 
                 // estamos en un numero entre 0 e infinito de d
                 if(contains(digitos, 10, a)){
+                    valor_numerico = valor_numerico*10 + (a-'0');
                     estado = 17;
                 }
                 else{
-                    // GENTOKEN NUMERO
-                    file.seekg(-1, std::ios::cur); // no es operacion de lectura
+                    generarToken(token_ids::NUMERO, valor_numerico);
+                    valor_numerico = 0;
+                    file.seekg(-1,std::ios::cur);
                     estado = 18;
                 }
                 break;
             // 18 es un estado finak
             case 19: 
                 // estamos en l
-                if(contains(abc, 52, a)){
+                if(contains(abc, 52, a) || contains(digitos, 10, a)){
+                    valor_cadena += a;
                     estado = 19;
                 }
                 else{
-                    // GENTOKEN VAR O PAL RESERVADA
-                    file.seekg(-1, std::ios::cur); // no se lee -> retrocedemos uni
+                    std::map<std::string, token_ids>::iterator pal_res_id_it = palResMap.find(valor_cadena);
+                    if(pal_res_id_it != palResMap.end()){
+                        generarToken(pal_res_id_it->second);
+                    }
+                    else{
+                        generarToken(token_ids::IDENTIFICADOR, valor_cadena);
+                    }
+                    valor_cadena = "";
+                    file.seekg(-1,std::ios::cur);
                     estado = 20;
                 }
                 break;
@@ -256,10 +331,12 @@ int main(int argc, char* argv[]){
             case 21: 
                 // estamos en "
                 if(a == '"'){
-                    // GENTOKEN STRING
+                    generarToken(token_ids::CADENA, valor_cadena);
+                    valor_cadena = "";
                     estado = 22;
                 }
                 else{
+                    valor_cadena += a;
                     estado = 21;
                 }
                 break;
@@ -294,47 +371,45 @@ int main(int argc, char* argv[]){
             // 26 es un estado final
         }
 
-        cout << estado << endl;
-
-
         if(contains(finales, 17, estado)){
             estado = 0; // Si el estado al que ha llegado anteriormente es final -> vuelve al estado inicial
         }
+    
     }
     // Actualizar estado con EOF
-    if(file.eof()){
-        switch(estado){
-            case 9: 
-                estado = 11;
-                break;
-            case 12: 
-                estado = 14;
-                break;
-            case 15: 
-                // Lanzar error lexico
-                break;
-            case 17: 
-                estado = 18;
-                break;
-            case 19: 
-                estado = 20;
-                break;
-            case 21: 
-                // Lanzar error lexico
-                break;
-            case 23: 
-                // Lanzar error lexico
-                break;
-            case 24: 
-                // Lanzar error lexico
-                break;
-            case 25: 
-                // Lanzar error lexico
-                break;
-        }
+    switch(estado){
+        case 9:
+            generarToken(token_ids::OP_ARITMETICO_SUMA);
+            estado = 11;
+            break;
+        case 12: 
+            generarToken(token_ids::OP_ASIGNACION_SIMPLE);
+            estado = 14;
+            break;
+        case 15: 
+            error(1, file, file.tellg()); // Unfinished &&
+            break;
+        case 17:
+            estado = 18;
+            generarToken(token_ids::NUMERO, valor_numerico);
+            break;
+        case 19: 
+            estado = 20;
+            generarToken(token_ids::IDENTIFICADOR, valor_cadena);
+            break;
+        case 21: 
+            error(2, file, file.tellg()); // Unfinished string "..." (last " missing)
+            break;
+        case 23: 
+            error(3, file, file.tellg()); // '/' sin nada mas (no existe operador de division aqui)
+            break;
+        case 24: 
+            error(4, file, file.tellg()); // Comentario sin finalizar /* ...
+            break;
+        case 25: 
+            error(4, file, file.tellg()); // Comentario sin finalizar /*...*
+            break;
     }
-    
-    cout << estado << endl;
-
     return 1;
 }
+

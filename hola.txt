@@ -1,8 +1,13 @@
-{{}{}}()() ==  &!123456789holabuenas   asdtyfurt1234562sdgshsg  -  +  += 
-if(x == y){
-    print("kill yourself nigga");
-    &!24567
-    &!1323
-    boolean
+int x = 0;
+int y = 2;
+hol &!
+int z = x + y;
+z = x+y;
+z += 1;
+z = x/y;
+hola &!;
+boolean b;
+for(int i = 0; i == b; i+=1){
+    string a = "hola";
+    function print(a);
 }
-+=} "hol

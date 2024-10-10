@@ -27,7 +27,6 @@ enum class token_ids{
     PARENTESIS_CERRADA,     // )
     COMA,                   // ,
     PUNTO_Y_COMA,           // ;
-    OP_LOGICO_NEGACION,     // !
     OP_RELACIONAL_IGUAL,  // ==
     OP_LOGICO_ANDS,         // &&
     OP_ARITMETICO_RESTA,    // -
@@ -47,61 +46,75 @@ enum class token_ids{
     PAL_RES_RETURN,         // return
     PAL_RES_STRING,         // string
     PAL_RES_VAR,            // var
-    PAL_RES_VOID            // void
+    PAL_RES_VOID,           // void
+    PAL_RES_INT
 };
 
 
 // Function to convert enum to string
 std::string tokenToString(token_ids id) {
     switch (id) {
-        case token_ids::LLAVE_ABIERTA: return "LLAVE_ABIERTA";
-        case token_ids::LLAVE_CERRADA: return "LLAVE_CERRADA";
-        case token_ids::PARENTESIS_ABIERTA: return "PARENTESIS_ABIERTA";
-        case token_ids::PARENTESIS_CERRADA: return "PARENTESIS_CERRADA";
-        case token_ids::COMA: return "COMA";
-        case token_ids::PUNTO_Y_COMA: return "PUNTO_Y_COMA";
-        case token_ids::OP_LOGICO_NEGACION: return "OP_LOGICO_NEGACION";
-        case token_ids::OP_RELACIONAL_IGUAL: return "OP_RELACIONAL_IGUAL";
-        case token_ids::OP_LOGICO_ANDS: return "OP_LOGICO_ANDS";
-        case token_ids::OP_ARITMETICO_RESTA: return "OP_ARITMETICO_RESTA";
-        case token_ids::OP_ARITMETICO_SUMA: return "OP_ARITMETICO_SUMA";
-        case token_ids::OP_ASIGNACION_SIMPLE: return "OP_ASIGNACION_SIMPLE";
-        case token_ids::OP_ASIGNACION_SUMA: return "OP_ASIGNACION_SUMA";
-        case token_ids::CADENA: return "CADENA";
-        case token_ids::NUMERO: return "NUMERO";
-        case token_ids::IDENTIFICADOR: return "IDENTIFICADOR";
-        case token_ids::PAL_RES_BOOL: return "PAL_RES_BOOL";
-        case token_ids::PAL_RES_FOR: return "PAL_RES_FOR";
-        case token_ids::PAL_RES_FUNCTION: return "PAL_RES_FUNCTION";
-        case token_ids::PAL_RES_IF: return "PAL_RES_IF";
-        case token_ids::PAL_RES_INPUT: return "PAL_RES_INPUT";
-        case token_ids::PAL_RES_OUTPUT: return "PAL_RES_OUTPUT";
-        case token_ids::PAL_RES_RETURN: return "PAL_RES_RETURN";
-        case token_ids::PAL_RES_STRING: return "PAL_RES_STRING";
-        case token_ids::PAL_RES_VAR: return "PAL_RES_VAR";
-        case token_ids::PAL_RES_VOID: return "PAL_RES_VOID";
+        case token_ids::LLAVE_ABIERTA: return "LlaveAbierta";
+        case token_ids::LLAVE_CERRADA: return "LlaveCerrada";
+        case token_ids::PARENTESIS_ABIERTA: return "ParentesisAbierta";
+        case token_ids::PARENTESIS_CERRADA: return "ParentesisCerrada";
+        case token_ids::COMA: return "ComaSimple";
+        case token_ids::PUNTO_Y_COMA: return "PuntoYComa";
+        case token_ids::OP_RELACIONAL_IGUAL: return "OpRelacionalIgual";
+        case token_ids::OP_LOGICO_ANDS: return "OpLogicoAnd";
+        case token_ids::OP_ARITMETICO_RESTA: return "OpAritmeticoResta";
+        case token_ids::OP_ARITMETICO_SUMA: return "OpAritmeticoSuma";
+        case token_ids::OP_ASIGNACION_SIMPLE: return "OpAsignacionSimple";
+        case token_ids::OP_ASIGNACION_SUMA: return "OpAsignacionSuma";
+        case token_ids::CADENA: return "Cadena";
+        case token_ids::NUMERO: return "Numero";
+        case token_ids::IDENTIFICADOR: return "ID";
+        case token_ids::PAL_RES_BOOL: return "PalResBOOL";
+        case token_ids::PAL_RES_FOR: return "PalResFOR";
+        case token_ids::PAL_RES_FUNCTION: return "PalResFUNCTION";
+        case token_ids::PAL_RES_IF: return "PalResIF";
+        case token_ids::PAL_RES_INPUT: return "PalResINPUT";
+        case token_ids::PAL_RES_OUTPUT: return "PalResOUTPUT";
+        case token_ids::PAL_RES_RETURN: return "PalResRETURN";
+        case token_ids::PAL_RES_STRING: return "PalResSTRING";
+        case token_ids::PAL_RES_VAR: return "PalResVAR";
+        case token_ids::PAL_RES_VOID: return "PalResVOID";
+        case token_ids::PAL_RES_INT: return "PalResINT";
         default: return "UNKNOWN";
     }
 }
 
-int error(int cod_error, std::ifstream& file, std::streampos position){
+int error(int cod_error, std::ifstream& file, std::streampos position, std::ofstream& err_file){
     file.clear();
     file.seekg(0,std::ios::beg);
     // Ver en que fila esta
     int line = 0;
+    int column = 0;
     string a;
     // Get line num
     if(position == -1){ // if position == eol -> mirar todo
         while(getline(file,a)){
             line++;
         }
+        column = a.length();
     }
     else{
-        while(file.tellg() < position){
+        std::streampos lastline;
+        while(file.tellg() < position - (std::streampos)1){
             line++;
+            lastline = file.tellg();
             getline(file, a);
         }
+        // tellg() is on the start of the line right before the line with the position
+        file.seekg(lastline);
+        // Curr pos = line with postion 
+        while(file.tellg() < position-(std::streampos)1){
+            column++;
+            file.get();
+        }
+        // Check column
     }
+    file.seekg(position - (std::streampos)1); // ir a la pos del char de error
     // Gett err message
     string err_msg = "";
     switch(cod_error){
@@ -109,26 +122,24 @@ int error(int cod_error, std::ifstream& file, std::streampos position){
         case 2: err_msg = "Cadena sin terminar. Por favor pon \" para cerrarla"; break;
         case 3: err_msg = "Caracter invalido /"; break;
         case 4: err_msg = "Comentario sin finalizar. Recuerda poner \\* Al final de todo"; break;
+        case 5: err_msg = "Character invalido '"; err_msg += (char) file.peek(); err_msg += '\''; break;
+        case 6: err_msg = "Caracter invalido \'/\'. Querías iniciar un comentario de bloque /*...*/?"; break;
     }
     // Imprimir error
-    cout << "ERROR CON CODIGO: " << cod_error << " EN LINEA " << line << ":   " << err_msg << endl; 
+    err_file << "ERROR LEXICO CON CODIGO: " << cod_error << " EN (" << line << "," << column << "):   " << err_msg << endl; 
     // Volver a posición anterior
     file.seekg(position,std::ios::beg);
     return 0;
 }
 
-void generarToken(token_ids id, int valor){
-    std::cout << "<" << tokenToString(id) << ", " << valor << ">" << endl;
+void generarToken(token_ids id, int valor, std::ofstream& token_file){
+    token_file << "<" << tokenToString(id) << ", " << valor << ">" << endl;
 }
-void generarToken(token_ids id, string valor){
-    if(id == token_ids::IDENTIFICADOR){
-        std::cout << "<" << valor << ", " << "-" << ">" << endl;
-        return;
-    }
-    std::cout << "<" << tokenToString(id) << ", " << '\"' << valor << '\"' << ">" << endl;
+void generarToken(token_ids id, string valor, std::ofstream& token_file){
+    token_file << "<" << tokenToString(id) << ", " << '\"' << valor << '\"' << ">" << endl;
 }
-void generarToken(token_ids id){
-    std::cout << "<" << tokenToString(id) << ", " << "-" << ">" << endl;
+void generarToken(token_ids id, std::ofstream& token_file){
+    token_file << "<" << tokenToString(id) << ", " << ">" << endl;
 }
 
 // palabras reservadas
@@ -150,6 +161,7 @@ int main(int argc, char* argv[]){
     palResMap["string"] = token_ids::PAL_RES_STRING;
     palResMap["var"] = token_ids::PAL_RES_VAR;
     palResMap["void"] = token_ids::PAL_RES_VOID;
+    palResMap["int"] = token_ids::PAL_RES_INT;
 
     if(argc < 2){
         cerr << "Error: Tienes que pasar un archivo" << std::endl;
@@ -160,10 +172,28 @@ int main(int argc, char* argv[]){
     // Check if the file is open
     if (!file.is_open()) {
         std::cerr << "Error: Could not open the file!" << std::endl;
-        return 1;
+        return -1;
     }
     else{
         cout << "El archivo se ha abierto correctamente" << endl;
+    }
+
+    // Crear archivo para los tokens generados
+    std::ofstream token_file("token.txt", std::ios::trunc);//Abre el archivo de tokens en modo truncar -> borra contenido anterior. Si no existe lo crea.
+
+    // Check if the file is successfully opened
+    if (!token_file) {
+        std::cerr << "Error opening the file." << std::endl;
+        return -1;
+    }
+
+    // Crear archivo para los errores
+    std::ofstream err_file("errores.txt", std::ios::trunc);//Abre el archivo de tokens en modo truncar -> borra contenido anterior. Si no existe lo crea.
+
+    // Check if the file is successfully opened
+    if (!err_file) {
+        std::cerr << "Error opening the file." << std::endl;
+        return -1;
     }
 
     // Variables del AFD
@@ -175,50 +205,44 @@ int main(int argc, char* argv[]){
                   'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
                   // size = 52
     char delimitadores[] = {';','\n',' ', '\t', '\0'}; // size = 5
+    char valid[] = {'\n',' ', '\t', '\0', '\b', '\r'}; // Chars validos no mirados en otra condición
     
     char a;
     int valor_numerico = 0;
     string valor_cadena = "";
     bool eof = true;
     int num_linea = 1; // Cambiar a 0 si las lineas empiezan en 0. Por ahora asumo que empiezan en 1
+    int pos_tabla_simbolos = 0;
     while(file.get(a)){
-        
-        //cout << "CURRENT " << a << endl;
-        // a is the next char from the file
-
         switch(estado){
             case 0: 
                 if(a == '{'){
                     estado = 1;
-                    generarToken(token_ids::LLAVE_ABIERTA);
+                    generarToken(token_ids::LLAVE_ABIERTA, token_file);
                 }
                 else if(a == '}'){
                     estado = 2;
-                    generarToken(token_ids::LLAVE_CERRADA);
+                    generarToken(token_ids::LLAVE_CERRADA, token_file);
                 }
                 else if(a == '('){
                     estado = 3; 
-                    generarToken(token_ids::PARENTESIS_ABIERTA);
+                    generarToken(token_ids::PARENTESIS_ABIERTA, token_file);
                 }
                 else if(a == ')'){
                     estado = 4; 
-                    generarToken(token_ids::PARENTESIS_CERRADA);
+                    generarToken(token_ids::PARENTESIS_CERRADA, token_file);
                 }
                 else if(a == ','){
                     estado = 5; 
-                    generarToken(token_ids::COMA);
+                    generarToken(token_ids::COMA, token_file);
                 }
                 else if(a == ';'){
                     estado = 6; 
-                    generarToken(token_ids::PUNTO_Y_COMA);
-                }
-                else if(a == '!'){
-                    estado = 0; 
-                    generarToken(token_ids::OP_LOGICO_NEGACION);
+                    generarToken(token_ids::PUNTO_Y_COMA, token_file);
                 }
                 else if(a == '-'){
                     estado = 8; 
-                    generarToken(token_ids::OP_ARITMETICO_RESTA);
+                    generarToken(token_ids::OP_ARITMETICO_RESTA, token_file);
                 }
                 else if(a == '+'){
                     estado = 9;
@@ -248,6 +272,11 @@ int main(int argc, char* argv[]){
                     valor_cadena += a;
                     estado = 19;
                 }
+                else if(!contains(valid, 8, a)){
+                    estado = 0;
+                    file.clear();
+                    error(5, file, file.tellg(), err_file);
+                }
                 break;
                 // Si no -> el estado se mantiene en 0, lee el char y no hace nada y luego continua
             
@@ -256,11 +285,11 @@ int main(int argc, char* argv[]){
                 // estamos en +
                 if(a == '='){
                     estado = 10;
-                    generarToken(token_ids::OP_ASIGNACION_SUMA);
+                    generarToken(token_ids::OP_ASIGNACION_SUMA, token_file);
                 }
                 else{
                     // No es lectura -> retroceder en uno
-                    generarToken(token_ids::OP_ARITMETICO_SUMA);
+                    generarToken(token_ids::OP_ARITMETICO_SUMA, token_file);
                     file.seekg(-1,std::ios::cur);
                     estado = 11;
                 }
@@ -269,12 +298,12 @@ int main(int argc, char* argv[]){
             case 12: 
                 // estamos en =
                 if(a == '='){
-                    generarToken(token_ids::OP_RELACIONAL_IGUAL);
+                    generarToken(token_ids::OP_RELACIONAL_IGUAL, token_file);
                     estado = 13;
                 }
                 else{
                     // No es lectura -> retroceder en uno
-                    generarToken(token_ids::OP_ASIGNACION_SIMPLE);
+                    generarToken(token_ids::OP_ASIGNACION_SIMPLE, token_file);
                     file.seekg(-1,std::ios::cur);
                     estado = 14;
                 }
@@ -283,12 +312,12 @@ int main(int argc, char* argv[]){
             case 15: 
                 // Estamos en &
                 if(a == '&'){
-                    generarToken(token_ids::OP_LOGICO_ANDS);
+                    generarToken(token_ids::OP_LOGICO_ANDS, token_file);
                     estado = 16;
                 }
                 else{
-                    error(1, file, file.tellg());
-                    file.seekg(-1,std::ios::cur);
+                    error(1, file, file.tellg() - (std::streampos) 1, err_file);
+                    //file.seekg(-1,std::ios::cur); se retrocede en el error
                     estado = 0;
                     // Lanzar error léxicos
                 }
@@ -301,7 +330,7 @@ int main(int argc, char* argv[]){
                     estado = 17;
                 }
                 else{
-                    generarToken(token_ids::NUMERO, valor_numerico);
+                    generarToken(token_ids::NUMERO, valor_numerico, token_file);
                     valor_numerico = 0;
                     file.seekg(-1,std::ios::cur);
                     estado = 18;
@@ -317,10 +346,11 @@ int main(int argc, char* argv[]){
                 else{
                     std::map<std::string, token_ids>::iterator pal_res_id_it = palResMap.find(valor_cadena);
                     if(pal_res_id_it != palResMap.end()){
-                        generarToken(pal_res_id_it->second);
+                        generarToken(pal_res_id_it->second, token_file);
                     }
                     else{
-                        generarToken(token_ids::IDENTIFICADOR, valor_cadena);
+                        generarToken(token_ids::IDENTIFICADOR, pos_tabla_simbolos, token_file);
+                        pos_tabla_simbolos++;
                     }
                     valor_cadena = "";
                     file.seekg(-1,std::ios::cur);
@@ -331,7 +361,7 @@ int main(int argc, char* argv[]){
             case 21: 
                 // estamos en "
                 if(a == '"'){
-                    generarToken(token_ids::CADENA, valor_cadena);
+                    generarToken(token_ids::CADENA, valor_cadena, token_file);
                     valor_cadena = "";
                     estado = 22;
                 }
@@ -345,6 +375,11 @@ int main(int argc, char* argv[]){
                 // estamos en /
                 if(a == '*'){
                     estado = 24;
+                }
+                else{
+                    // error
+                    estado = 0;
+                    error(6, file, file.tellg(), err_file);
                 }
                 break;
             case 24: 
@@ -379,35 +414,35 @@ int main(int argc, char* argv[]){
     // Actualizar estado con EOF
     switch(estado){
         case 9:
-            generarToken(token_ids::OP_ARITMETICO_SUMA);
+            generarToken(token_ids::OP_ARITMETICO_SUMA, token_file);
             estado = 11;
             break;
         case 12: 
-            generarToken(token_ids::OP_ASIGNACION_SIMPLE);
+            generarToken(token_ids::OP_ASIGNACION_SIMPLE, token_file);
             estado = 14;
             break;
         case 15: 
-            error(1, file, file.tellg()); // Unfinished &&
+            error(1, file, file.tellg(), err_file); // Unfinished &&
             break;
         case 17:
             estado = 18;
-            generarToken(token_ids::NUMERO, valor_numerico);
+            generarToken(token_ids::NUMERO, valor_numerico, token_file);
             break;
         case 19: 
             estado = 20;
-            generarToken(token_ids::IDENTIFICADOR, valor_cadena);
+            generarToken(token_ids::IDENTIFICADOR, valor_cadena, token_file);
             break;
         case 21: 
-            error(2, file, file.tellg()); // Unfinished string "..." (last " missing)
+            error(2, file, file.tellg(), err_file); // Unfinished string "..." (last " missing)
             break;
         case 23: 
-            error(3, file, file.tellg()); // '/' sin nada mas (no existe operador de division aqui)
+            error(3, file, file.tellg(), err_file); // '/' sin nada mas (no existe operador de division aqui)
             break;
         case 24: 
-            error(4, file, file.tellg()); // Comentario sin finalizar /* ...
+            error(4, file, file.tellg(), err_file); // Comentario sin finalizar /* ...
             break;
         case 25: 
-            error(4, file, file.tellg()); // Comentario sin finalizar /*...*
+            error(4, file, file.tellg(), err_file); // Comentario sin finalizar /*...*
             break;
     }
     return 1;

@@ -8,6 +8,7 @@
 #include <math.h>
 #include <fstream>
 
+
 using namespace std;
 
 template <typename T>
@@ -19,6 +20,15 @@ bool contains(T list[], int size, T elem) {
     }
     return false;
 }
+
+//struct Tabla {
+//    string texto;
+//    int id;
+//};
+
+int contador=0;
+
+std::map <int, string> Tablas;
 
 enum class token_ids{
     LLAVE_ABIERTA,          // {
@@ -49,7 +59,7 @@ enum class token_ids{
     PAL_RES_VOID,           // void
     PAL_RES_INT
 };
-
+std::map <string, int> tabla;
 
 // Function to convert enum to string
 std::string tokenToString(token_ids id) {
@@ -142,6 +152,36 @@ void generarToken(token_ids id, std::ofstream& token_file){
     token_file << "<" << tokenToString(id) << ", " << ">" << endl;
 }
 
+void crearTabla(string nombre_tabla, std::ofstream& tabla_file){
+    //string texto = "";
+    //Tabla t = {texto, contador}
+    //Linea del identificador de la tabla
+    string titulo= nombre_tabla + " " + '#' + " "+  std::to_string(contador) + ':' + '\n'+'\n';
+    //contador++;
+    tabla_file << titulo;
+}
+
+
+void meterToken(token_ids id, string lex, int desplazamiento, std::ofstream& tabla_file){
+    //Si el token no es una Cadena o un numero o un identificador no se anade a la Tabla de simbolos
+    //if de asegurarse
+    if(tokenToString(id)=="Cadena" || tokenToString(id)=="Numero" || tokenToString(id)=="ID"){
+        //No esta el token en la tabla
+        if(tabla.find(lex)==tabla.end()){
+            string texto= "";
+            texto+="* LEXEMA: '" +lex+"'"+'\n'; 
+            texto+="    +despl: " + std::to_string(desplazamiento)+'\n';
+            tabla_file << texto;
+            tabla.insert_or_assign(lex, desplazamiento); 
+        }
+        else{
+            std::map<string, int>::iterator it = tabla.find(lex);
+            int desp = it->second;
+            cout << "El token ya esta en la tabla de simbolos, su posicion es: " + std::to_string(desp)+'\n';
+        }
+    }
+    
+}
 // palabras reservadas
 
 
@@ -189,13 +229,22 @@ int main(int argc, char* argv[]){
 
     // Crear archivo para los errores
     std::ofstream err_file("errores.txt", std::ios::trunc);//Abre el archivo de tokens en modo truncar -> borra contenido anterior. Si no existe lo crea.
-
+    
     // Check if the file is successfully opened
     if (!err_file) {
         std::cerr << "Error opening the file." << std::endl;
         return -1;
     }
 
+    // Crear archivo para los tokens generados
+    std::ofstream tabla_file("tabla.txt", std::ios::trunc);//Abre el archivo de tokens en modo truncar -> borra contenido anterior. Si no existe lo crea.
+
+    // Check if the file is successfully opened
+    if (!tabla_file) {
+        std::cerr << "Error opening the file." << std::endl;
+        return -1;
+    }
+    crearTabla("Tabla Inicial", tabla_file);
     // Variables del AFD
     int estado = 0;
     int finales[] = {1,2,3,4,5,6,7,8,10,11,13,14,16,26,22,20,18}; // size = 17
@@ -213,6 +262,7 @@ int main(int argc, char* argv[]){
     bool eof = true;
     int num_linea = 1; // Cambiar a 0 si las lineas empiezan en 0. Por ahora asumo que empiezan en 1
     int pos_tabla_simbolos = 0;
+    int desplazamiento =0 ; //igual que el de arriba pero quiero jugar con el a mi manera
     while(file.get(a)){
         switch(estado){
             case 0: 
@@ -346,11 +396,15 @@ int main(int argc, char* argv[]){
                 else{
                     std::map<std::string, token_ids>::iterator pal_res_id_it = palResMap.find(valor_cadena);
                     if(pal_res_id_it != palResMap.end()){
+                        meterToken(pal_res_id_it->second, valor_cadena, desplazamiento,tabla_file);
                         generarToken(pal_res_id_it->second, token_file);
+                        desplazamiento++;
                     }
                     else{
                         generarToken(token_ids::IDENTIFICADOR, pos_tabla_simbolos, token_file);
+                        meterToken(token_ids::IDENTIFICADOR, valor_cadena, desplazamiento, tabla_file);
                         pos_tabla_simbolos++;
+                        desplazamiento++;
                     }
                     valor_cadena = "";
                     file.seekg(-1,std::ios::cur);

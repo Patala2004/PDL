@@ -70,4 +70,95 @@ enum class reglas{
     D4  // 24
 };
 map<reglas,set<token_ids>> mapaFirst;
+map<reglas,set<token_ids>> mapaFollow;
+int main(){
+    mapaFirst[reglas::S] = {token_ids::PAL_RES_VAR, token_ids::IDENTIFICADOR, token_ids::PAL_RES_IF, 
+                            token_ids::PAL_RES_FOR, token_ids::PAL_RES_FUNCTION, token_ids::PAL_RES_INPUT, 
+                            token_ids::PAL_RES_OUTPUT, token_ids::PAL_RES_RETURN};
+
+
+    // Regla B
+    mapaFirst[reglas::B] = {token_ids::PAL_RES_VAR, token_ids::IDENTIFICADOR, token_ids::PAL_RES_IF, 
+                            token_ids::PAL_RES_FOR, token_ids::PAL_RES_FUNCTION, token_ids::PAL_RES_INPUT, 
+                            token_ids::PAL_RES_OUTPUT, token_ids::PAL_RES_RETURN};
+
+    // Regla D
+    mapaFirst[reglas::D] = {token_ids::PAL_RES_FUNCTION};
+
+    // Regla T
+    mapaFirst[reglas::T] = {token_ids::PAL_RES_BOOL, token_ids::PAL_RES_INT, token_ids::PAL_RES_STRING};
+
+    // Regla C
+    mapaFirst[reglas::C] = {token_ids::PUNTO_Y_COMA, token_ids::OP_ASIGNACION_SUMA, token_ids::OP_ASIGNACION_SIMPLE};
+
+    // Regla R
+    mapaFirst[reglas::R] = {token_ids::IDENTIFICADOR, token_ids::PARENTESIS_ABIERTA, token_ids::NUMERO, token_ids::CADENA};
+
+    // Regla U
+    mapaFirst[reglas::U] = {token_ids::IDENTIFICADOR, token_ids::PAL_RES_INPUT, token_ids::PAL_RES_OUTPUT, token_ids::PAL_RES_RETURN};
+
+    // Regla F1
+    mapaFirst[reglas::F1] = {token_ids::PAL_RES_VAR, token_ids::IDENTIFICADOR};
+
+    // Regla F2
+    mapaFirst[reglas::F2] = {token_ids::IDENTIFICADOR};
+
+    // Regla Q
+    mapaFirst[reglas::Q] = { token_ids::PAL_RES_VAR, token_ids::IDENTIFICADOR, 
+                            token_ids::PAL_RES_IF, token_ids::PAL_RES_FOR, token_ids::PAL_RES_INPUT, 
+                            token_ids::PAL_RES_OUTPUT, token_ids::PAL_RES_RETURN};
+    // Regla H
+    mapaFirst[reglas::H] = {token_ids::PAL_RES_VOID, token_ids::PAL_RES_BOOL, token_ids::PAL_RES_INT, token_ids::PAL_RES_STRING};
+
+    // Regla D1
+    mapaFirst[reglas::D1] = {token_ids::PAL_RES_VAR};  // Cambié lambda por un valor específico
+
+    // Regla L
+    mapaFirst[reglas::L] = {token_ids::OP_ASIGNACION_SUMA, token_ids::OP_ASIGNACION_SIMPLE};
+
+    // Regla R1
+    mapaFirst[reglas::R1] = {token_ids::IDENTIFICADOR, token_ids::NUMERO, token_ids::CADENA};
+
+    // Regla R2
+    mapaFirst[reglas::R2] = {token_ids::OP_RELACIONAL_IGUAL, token_ids::OP_LOGICO_AND, 
+                             token_ids::OP_ARITMETICO_RESTA, token_ids::OP_ARITMETICO_SUMA};
+
+    // Regla A
+    mapaFirst[reglas::A] = {token_ids::PARENTESIS_ABIERTA};  // Cambié lambda por un valor específico
+
+    // Regla O
+    mapaFirst[reglas::O] = {token_ids::OP_RELACIONAL_IGUAL, token_ids::OP_LOGICO_AND, 
+                            token_ids::OP_ARITMETICO_RESTA, token_ids::OP_ARITMETICO_SUMA};
+
+    // Regla A1
+    mapaFirst[reglas::A1] = {token_ids::IDENTIFICADOR, token_ids::PARENTESIS_ABIERTA, token_ids::NUMERO, 
+                             token_ids::CADENA};  // Cambié lambda por un valor específico
+
+    // Regla A2
+    mapaFirst[reglas::A2] = {token_ids::IDENTIFICADOR, token_ids::PARENTESIS_ABIERTA, 
+                             token_ids::NUMERO, token_ids::CADENA};
+
+    // Regla A3
+    mapaFirst[reglas::A3] = {token_ids::COMA};  // Cambié lambda por un valor específico
+
+    // Regla U2
+    mapaFirst[reglas::U2] = {token_ids::IDENTIFICADOR, token_ids::PARENTESIS_ABIERTA, 
+                             token_ids::NUMERO, token_ids::CADENA};  // Cambié lambda por un valor específico
+
+    // Regla U1
+    mapaFirst[reglas::U1] = {token_ids::PARENTESIS_ABIERTA, token_ids::OP_ASIGNACION_SUMA, 
+                             token_ids::OP_ASIGNACION_SIMPLE};  // Cambié lambda por un valor específico
+
+    // Regla D2
+    mapaFirst[reglas::D2] = {token_ids::PAL_RES_VAR};
+
+    // Regla D3
+    mapaFirst[reglas::D3] = {token_ids::PAL_RES_VAR};
+
+    // Regla D4
+    mapaFirst[reglas::D4] = {token_ids::COMA};
+
+
+    return 0;
+}
 

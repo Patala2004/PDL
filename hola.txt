@@ -1,10 +1,10 @@
-int x = 0;
-int y = 2;
-int z = x + y;
+var int x = 0;
+var int y = 2;
+var int z = x + y;
 z = x+y;
 z += 1;
-boolean b;
-for(int i = 0; i == b; i+=1){
-    string a = "hola";
-    function print(a);
+var boolean b;
+for(var int i = 0; i == b; i+=1){
+    var string a = "hola";
+    output b;
 }

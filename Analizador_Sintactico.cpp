@@ -145,7 +145,7 @@ int popularMapa(){
 
     // Regla B
     mapaFirst[reglas::B] = {token_ids::PAL_RES_VAR, token_ids::IDENTIFICADOR, token_ids::PAL_RES_IF, 
-                            token_ids::PAL_RES_FOR, token_ids::PAL_RES_FUNCTION, token_ids::PAL_RES_INPUT, 
+                            token_ids::PAL_RES_FOR, token_ids::PAL_RES_INPUT, 
                             token_ids::PAL_RES_OUTPUT, token_ids::PAL_RES_RETURN};
 
     // Regla D
@@ -183,7 +183,7 @@ int popularMapa(){
     mapaFirst[reglas::L] = {token_ids::OP_ASIGNACION_SUMA, token_ids::OP_ASIGNACION_SIMPLE};
 
     // Regla R1
-    mapaFirst[reglas::R1] = {token_ids::IDENTIFICADOR, token_ids::NUMERO, token_ids::CADENA};
+    mapaFirst[reglas::R1] = {token_ids::IDENTIFICADOR, token_ids::NUMERO, token_ids::CADENA, token_ids::PARENTESIS_ABIERTA};
 
     // Regla R2
     mapaFirst[reglas::R2] = {token_ids::OP_RELACIONAL_IGUAL, token_ids::OP_LOGICO_AND, 
@@ -410,6 +410,7 @@ bool equipara(token_ids& token, token_ids a_equiparar, reglas estado){
     if(token != a_equiparar){
         cerr << "TOKEN " << tokenToString(token) << " NO ES IGUAL A " << tokenToString(a_equiparar) << "EN EL ESTADO "
         << reglasToString(estado) <<endl;
+        exit(0);
     }
     cout << tokenToString(token) << endl;
     token = getToken(token_file); // avanzamos el token fuera de donde nos llamaron
@@ -498,6 +499,7 @@ bool noTerminal(reglas NT, token_ids& token){
                 equipara(token, token_ids::LLAVE_CERRADA, NT);
             }
             else{
+                cout << "hola";
                 error(token, NT);
             }
             break;
@@ -521,6 +523,7 @@ bool noTerminal(reglas NT, token_ids& token){
             else{
                 error(token, NT);
             }
+            break;
         case reglas::H:
                 /*
                 H -> T
@@ -612,20 +615,12 @@ bool noTerminal(reglas NT, token_ids& token){
         case reglas::R:
             /*
             R -> R1 R2
-            R -> ( R )
             */
             if(mapaFirst[reglas::R1].find(token) != mapaFirst[reglas::R1].end()){
                 // R -> R1 R2
                 parse_file << 18 << " ";
                 noTerminal(reglas::R1, token);
                 noTerminal(reglas::R2, token);
-            }
-            else if(token == token_ids::PARENTESIS_ABIERTA){
-                // R -> ( R )
-                parse_file << 19 << " ";
-                equipara(token, token_ids::PARENTESIS_ABIERTA, NT);
-                noTerminal(reglas::R, token);
-                equipara(token, token_ids::PARENTESIS_CERRADA, NT);                
             }
             else{
                 error(token, NT);
@@ -634,11 +629,19 @@ bool noTerminal(reglas NT, token_ids& token){
 
         case reglas::R1:
             /*
+            R1 -> ( R )
             R1 -> id A 
             R1 -> numero 
             R1 -> cadena
             */
-            if(token == token_ids::IDENTIFICADOR){
+            if(token == token_ids::PARENTESIS_ABIERTA){
+                // R1 -> ( R )
+                parse_file << 19 << " ";
+                equipara(token, token_ids::PARENTESIS_ABIERTA, NT);
+                noTerminal(reglas::R, token);
+                equipara(token, token_ids::PARENTESIS_CERRADA, NT);
+            }
+            else if(token == token_ids::IDENTIFICADOR){
                 // R1 -> id A 
                 parse_file << 20 << " ";
                 equipara(token, token_ids::IDENTIFICADOR, NT);
@@ -755,7 +758,7 @@ bool noTerminal(reglas NT, token_ids& token){
             /*
             A2 -> R A3
             */
-            if(mapaFirst[reglas::A3].find(token) != mapaFirst[reglas::A3].end()){
+            if(mapaFirst[reglas::R].find(token) != mapaFirst[reglas::R].end()){
                 // A2 -> R A3
                 parse_file << 33 << " ";
                 noTerminal(reglas::R, token);
@@ -951,7 +954,7 @@ bool noTerminal(reglas NT, token_ids& token){
                 parse_file << 51 << " ";
                 noTerminal(reglas::D2, token);
             }
-            else if(mapaFollow[reglas::D1].find(token) != mapaFollow[reglas::D1].end()){
+            else if(token == token_ids::PAL_RES_VOID){
                 // D1 -> void
                 parse_file << 52 << " ";
                 equipara(token, token_ids::PAL_RES_VOID, NT);
@@ -980,7 +983,7 @@ bool noTerminal(reglas NT, token_ids& token){
             /*
             D3 -> T id
             */
-            if(token == token_ids::PAL_RES_VAR){
+            if(mapaFirst[reglas::T].find(token) != mapaFirst[reglas::T].end()){
                 // D3 -> T id
                 parse_file << 54 << " ";
                 noTerminal(reglas::T, token);

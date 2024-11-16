@@ -1,6 +1,3 @@
-//// Prueba 0
-//// Prueba que muestra los conflictos de conjuntos FIRST y FOLLOW debidos 
-//// a la derivabilidad consecutiva de los distintos simbolos no terminales
 Terminales = { boolean for function if input int output return string var void numero cadena id += = , ; ( ) { } + - && == }
 
 NoTerminales = { S B D D1 D2 D3 D4 T H C L R R1 R2 O A A1 A2 A3 U U1 U2 F1 F2 Q }
@@ -26,7 +23,7 @@ C -> L R ;
 L -> += 
 L -> =
 R -> R1 R2
-R -> ( R )
+R1 -> ( R )
 R1 -> id A 
 R1 -> numero 
 R1 -> cadena

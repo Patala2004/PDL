@@ -1,13 +1,8 @@
-
-//// Prueba 0
-//// Prueba que muestra los conflictos de conjuntos FIRST y FOLLOW debidos 
-//// a la derivabilidad consecutiva de los distintos simbolos no terminales
-Axioma = S
-
 Terminales = { boolean for function if input int output return string var void numero cadena id += = , ; ( ) { } + - && == }
 
 NoTerminales = { S B D D1 D2 D3 D4 T H C L R R1 R2 O A A1 A2 A3 U U1 U2 F1 F2 Q }
 
+Axioma = S
 
 Producciones = {
 S -> B S
@@ -28,7 +23,7 @@ C -> L R ;
 L -> += 
 L -> =
 R -> R1 R2
-R -> ( R )
+R1 -> ( R )
 R1 -> id A 
 R1 -> numero 
 R1 -> cadena
@@ -61,9 +56,9 @@ F2 -> lambda
 Q -> B Q 
 Q -> lambda
 D1 -> D2
-D1 -> lambda
+D1 -> void
 D2 -> D3 D4
-D3 -> var T id
+D3 -> T id
 D4 -> , D2
 D4 -> lambda
 }

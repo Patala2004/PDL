@@ -8,3 +8,18 @@ for(var int i = 0; i == b; i+=1){
     var string a = "hola";
     output b;
 }
+function void Imprime (int a)
+{
+    output (a);
+    return;	
+}	
+function int factorial (int x) 
+{
+  hola();
+  if (x == 1) 
+    return x - factorial (x - 1);
+  return 1;
+}
+if((z == x) && 10 - 3 + 1 == 4 ) x += 5 - 3;
+function void SDSAD (void){}
+var string pepe = "cadsdsa";	

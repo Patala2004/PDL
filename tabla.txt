@@ -1,0 +1,16 @@
+Tabla Inicial # 0:
+
+* LEXEMA: 'x'
+    +despl: 1
+* LEXEMA: 'y'
+    +despl: 3
+* LEXEMA: 'z'
+    +despl: 5
+* LEXEMA: 'b'
+    +despl: 13
+* LEXEMA: 'i'
+    +despl: 16
+* LEXEMA: 'a'
+    +despl: 21
+* LEXEMA: 'print'
+    +despl: 23

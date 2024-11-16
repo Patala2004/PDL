@@ -103,6 +103,37 @@ string reglasToString(reglas r){
     }
 }
 
+int reglasToParseInt(reglas r){
+    switch(r){
+        case reglas::S:     return 1;
+        case reglas::B:     return 2;
+        case reglas::D:     return 3;
+        case reglas::T:     return 4;
+        case reglas::C:     return 5;
+        case reglas::R:     return 6;
+        case reglas::U:     return 7;
+        case reglas::F1:    return 8;
+        case reglas::F2:    return 9;
+        case reglas::Q:     return 10;
+        case reglas::H:     return 11;
+        case reglas::D1:    return 12;
+        case reglas::L:     return 13;
+        case reglas::R1:    return 14;
+        case reglas::R2:    return 15;
+        case reglas::A:     return 16;
+        case reglas::O:     return 17;
+        case reglas::A1:    return 18;
+        case reglas::A2:    return 19;
+        case reglas::A3:    return 20;
+        case reglas::U2:    return 21;
+        case reglas::U1:    return 22;
+        case reglas::D2:    return 23;
+        case reglas::D3:    return 24;
+        case reglas::D4:    return 25;
+        default: return -1;
+    }
+}
+
 map<reglas,set<token_ids>> mapaFirst;
 map<reglas,set<token_ids>> mapaFollow;
 
@@ -355,6 +386,7 @@ std::string tokenToString(token_ids id) {
 }
 
 ifstream token_file("token.txt", std::ios::binary);
+ofstream parse_file("parse.txt", std::ios::binary);
 
 token_ids getToken(std::ifstream& token_file){
     string token;
@@ -385,6 +417,12 @@ bool equipara(token_ids& token, token_ids a_equiparar, reglas estado){
 }
 
 bool noTerminal(reglas NT, token_ids& token){
+
+    // filestream_parse << NT_To_Parse(NT) << endl;
+    parse_file << reglasToParseInt(NT) << " ";
+
+
+
     switch(NT){
         case reglas::S:
             /*

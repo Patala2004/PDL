@@ -72,6 +72,7 @@ enum class reglas{
     D4  // 24
 };
 map<reglas,set<token_ids>> mapaFirst;
+map<reglas,set<token_ids>> mapaFollow;
 
 token_ids str_to_token(string s){
     if(s == "LlaveAbierta"){
@@ -394,7 +395,7 @@ bool noTerminal(reglas NT, token_ids& token){
             if(mapaFirst[reglas::O].find(token) != mapaFirst[reglas::O].end()){
                 // R2 -> O R 
             }
-            else if(){
+            else if(mapaFollow[reglas::R2].find(token) != mapaFollow[reglas::R2].end()){
                 // R2 -> lambda
             }
             else{
@@ -432,7 +433,7 @@ bool noTerminal(reglas NT, token_ids& token){
             if(token == token_ids::PARENTESIS_ABIERTA){
                 // A -> ( A1 )
             }
-            else if(){
+            else if(mapaFollow[reglas::A].find(token) != mapaFollow[reglas::A].end()){
                 // A -> lambda
             }
             else{
@@ -447,7 +448,7 @@ bool noTerminal(reglas NT, token_ids& token){
             if(mapaFirst[reglas::A2].find(token) != mapaFirst[reglas::A2].end()){
                 // A1 -> A2 
             }
-            else if(){
+            else if(mapaFollow[reglas::A1].find(token) != mapaFollow[reglas::A1].end()){
                 // A1 -> lambda
             }
             else{
@@ -473,7 +474,7 @@ bool noTerminal(reglas NT, token_ids& token){
             if(token == token_ids::COMA){
                 // A3 -> , A2
             }
-            else if(){
+            else if(mapaFollow[reglas::A3].find(token) != mapaFollow[reglas::A3].end()){
                 // A3 -> lambda
             }
             else{
@@ -526,7 +527,7 @@ bool noTerminal(reglas NT, token_ids& token){
             if(mapaFirst[reglas::R].find(token) != mapaFirst[reglas::R].end()){
                 // U2 -> R
             }
-            else if(){
+            else if(mapaFollow[reglas::U2].find(token) != mapaFollow[reglas::U2].end()){
                 // U2 -> lambda
             }
             else{
@@ -545,7 +546,7 @@ bool noTerminal(reglas NT, token_ids& token){
             else if(token == token_ids::IDENTIFICADOR){
                 // F1 -> id L R 
             }
-            else if(){
+            else if(mapaFollow[reglas::F1].find(token) != mapaFollow[reglas::F1].end()){
                 // F1 -> lambda
             }
             else{
@@ -560,7 +561,7 @@ bool noTerminal(reglas NT, token_ids& token){
             if(token == token_ids::IDENTIFICADOR){
                 // F2 -> id L R 
             }
-            else if(){
+            else if(mapaFollow[reglas::F2].find(token) != mapaFollow[reglas::F2].end()){
                 // F2 -> lambda
             }
             else{
@@ -575,7 +576,7 @@ bool noTerminal(reglas NT, token_ids& token){
             if(mapaFirst[reglas::B].find(token) != mapaFirst[reglas::B].end()){
                 // Q -> B Q 
             }
-            else if(){
+            else if(mapaFollow[reglas::Q].find(token) != mapaFollow[reglas::Q].end()){
                 // Q -> lambda
             }
             else{
@@ -590,7 +591,7 @@ bool noTerminal(reglas NT, token_ids& token){
             if(mapaFirst[reglas::D2].find(token) != mapaFirst[reglas::D2].end()){
                 // D1 -> D2
             }
-            else if(){
+            else if(mapaFollow[reglas::D1].find(token) != mapaFollow[reglas::D1].end()){
                 // D1 -> lambda
             }
             else{
@@ -627,7 +628,7 @@ bool noTerminal(reglas NT, token_ids& token){
             if(token == token_ids::COMA){
                 // D4 -> , D2
             }
-            else if(){
+            else if(mapaFollow[reglas::D4].find(token) != mapaFollow[reglas::D4].end()){
                 // D4 -> lambda
             }
             else{

@@ -23,3 +23,6 @@ function int factorial (int x)
 if((z == x) && 10 - 3 + 1 == 4 ) x += 5 - 3;
 function void SDSAD (void){}
 var string pepe = "cadsdsa";	
+input z ;
+output(((((((((ab + 9 + "fortnite")))))))));
+for(;true;){for(var int i = 0;i<10;b += 10){}}

@@ -7,10 +7,7 @@
 #include <algorithm>
 #include <math.h>
 #include <fstream>
-
-
 using namespace std;
-
 template <typename T>
 bool contains(T list[], int size, T elem) {
     for (int i = 0; i < size; ++i) {
@@ -20,16 +17,12 @@ bool contains(T list[], int size, T elem) {
     }
     return false;
 }
-
 //struct Tabla {
 //    string texto;
 //    int id;
 //};
-
 int contador=0;
-
 std::map <int, string> Tablas;
-
 enum class token_ids{
     LLAVE_ABIERTA,          // {
     LLAVE_CERRADA,          // }
@@ -60,7 +53,6 @@ enum class token_ids{
     PAL_RES_INT
 };
 std::map <string, int> tabla;
-
 // Function to convert enum to string
 std::string tokenToString(token_ids id) {
     switch (id) {
@@ -93,7 +85,6 @@ std::string tokenToString(token_ids id) {
         default: return "UNKNOWN";
     }
 }
-
 int error(int cod_error, std::ifstream& file, std::streampos position, std::ofstream& err_file){
     file.clear();
     file.seekg(0,std::ios::beg);
@@ -141,7 +132,6 @@ int error(int cod_error, std::ifstream& file, std::streampos position, std::ofst
     file.seekg(position,std::ios::beg);
     return 0;
 }
-
 void generarToken(token_ids id, int valor, std::ofstream& token_file){
     token_file << "<" << tokenToString(id) << ", " << valor << ">" << endl;
 }
@@ -151,7 +141,6 @@ void generarToken(token_ids id, string valor, std::ofstream& token_file){
 void generarToken(token_ids id, std::ofstream& token_file){
     token_file << "<" << tokenToString(id) << ", " << ">" << endl;
 }
-
 void crearTabla(string nombre_tabla, std::ofstream& tabla_file){
     //string texto = "";
     //Tabla t = {texto, contador}
@@ -160,8 +149,6 @@ void crearTabla(string nombre_tabla, std::ofstream& tabla_file){
     //contador++;
     tabla_file << titulo;
 }
-
-
 void meterToken(token_ids id, string lex, int desplazamiento, std::ofstream& tabla_file){
     //Si el token no es una Cadena o un numero o un identificador no se anade a la Tabla de simbolos
     //if de asegurarse
@@ -183,11 +170,6 @@ void meterToken(token_ids id, string lex, int desplazamiento, std::ofstream& tab
     
 }
 // palabras reservadas
-
-
-
-
-
 int main(int argc, char* argv[]){
     // Preparar palabras reservadas
     std::map<std::string, token_ids> palResMap;
@@ -202,11 +184,9 @@ int main(int argc, char* argv[]){
     palResMap["var"] = token_ids::PAL_RES_VAR;
     palResMap["void"] = token_ids::PAL_RES_VOID;
     palResMap["int"] = token_ids::PAL_RES_INT;
-
     if(argc < 2){
         cerr << "Error: Tienes que pasar un archivo" << std::endl;
     }
-
     std::ifstream file(argv[1], std::ios::binary); 
     
     // Check if the file is open
@@ -217,16 +197,13 @@ int main(int argc, char* argv[]){
     else{
         cout << "El archivo se ha abierto correctamente" << endl;
     }
-
     // Crear archivo para los tokens generados
     std::ofstream token_file("token.txt", std::ios::trunc);//Abre el archivo de tokens en modo truncar -> borra contenido anterior. Si no existe lo crea.
-
     // Check if the file is successfully opened
     if (!token_file) {
         std::cerr << "Error opening the file." << std::endl;
         return -1;
     }
-
     // Crear archivo para los errores
     std::ofstream err_file("errores.txt", std::ios::trunc);//Abre el archivo de tokens en modo truncar -> borra contenido anterior. Si no existe lo crea.
     
@@ -235,10 +212,8 @@ int main(int argc, char* argv[]){
         std::cerr << "Error opening the file." << std::endl;
         return -1;
     }
-
     // Crear archivo para los tokens generados
     std::ofstream tabla_file("tabla.txt", std::ios::trunc);//Abre el archivo de tokens en modo truncar -> borra contenido anterior. Si no existe lo crea.
-
     // Check if the file is successfully opened
     if (!tabla_file) {
         std::cerr << "Error opening the file." << std::endl;
@@ -459,7 +434,6 @@ int main(int argc, char* argv[]){
                 break;
             // 26 es un estado final
         }
-
         if(contains(finales, 17, estado)){
             estado = 0; // Si el estado al que ha llegado anteriormente es final -> vuelve al estado inicial
         }
@@ -501,4 +475,3 @@ int main(int argc, char* argv[]){
     }
     return 1;
 }
-

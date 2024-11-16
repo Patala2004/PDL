@@ -59,9 +59,9 @@ F2 -> lambda
 Q -> B Q 
 Q -> lambda
 D1 -> D2
-D1 -> lambda
+D1 -> void
 D2 -> D3 D4
-D3 -> var T id
+D3 -> T id
 D4 -> , D2
 D4 -> lambda
 }

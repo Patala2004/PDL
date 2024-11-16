@@ -108,25 +108,25 @@ int reglasToParseInt(reglas r){
         case reglas::S:     return 1;
         case reglas::B:     return 2;
         case reglas::D:     return 3;
-        case reglas::T:     return 4;
-        case reglas::C:     return 5;
-        case reglas::R:     return 6;
-        case reglas::U:     return 7;
-        case reglas::F1:    return 8;
-        case reglas::F2:    return 9;
-        case reglas::Q:     return 10;
-        case reglas::H:     return 11;
-        case reglas::D1:    return 12;
-        case reglas::L:     return 13;
-        case reglas::R1:    return 14;
-        case reglas::R2:    return 15;
-        case reglas::A:     return 16;
-        case reglas::O:     return 17;
-        case reglas::A1:    return 18;
-        case reglas::A2:    return 19;
-        case reglas::A3:    return 20;
-        case reglas::U2:    return 21;
-        case reglas::U1:    return 22;
+        case reglas::H:     return 4;
+        case reglas::T:     return 5;
+        case reglas::C:     return 6;
+        case reglas::L:     return 7;
+        case reglas::R:    return 8;
+        case reglas::R1:    return 9;
+        case reglas::R2:     return 10;
+        case reglas::O:     return 11;
+        case reglas::A:    return 12;
+        case reglas::A1:     return 13;
+        case reglas::A2:    return 14;
+        case reglas::A3:    return 15;
+        case reglas::U:     return 16;
+        case reglas::U1:     return 17;
+        case reglas::U2:    return 18;
+        case reglas::F1:    return 19;
+        case reglas::F2:    return 20;
+        case reglas::Q:    return 21;
+        case reglas::D1:    return 22;
         case reglas::D2:    return 23;
         case reglas::D3:    return 24;
         case reglas::D4:    return 25;
@@ -419,9 +419,6 @@ bool equipara(token_ids& token, token_ids a_equiparar, reglas estado){
 bool noTerminal(reglas NT, token_ids& token){
 
     // filestream_parse << NT_To_Parse(NT) << endl;
-    parse_file << reglasToParseInt(NT) << " ";
-
-
 
     switch(NT){
         case reglas::S:
@@ -433,11 +430,13 @@ bool noTerminal(reglas NT, token_ids& token){
             if(mapaFirst[reglas::B].find(token) != mapaFirst[reglas::B].end()){
                 // S -> B S
                 // token se encuentra en first de B
+                parse_file << 1 << " ";
                 noTerminal(reglas::B, token);
                 noTerminal(reglas::S, token);
             }
             else if(mapaFirst[reglas::D].find(token) != mapaFirst[reglas::D].end()){
                 // S -> D S 
+                parse_file << 2 << " ";
                 noTerminal(reglas::D, token);
                 noTerminal(reglas::S, token);
             }
@@ -447,6 +446,7 @@ bool noTerminal(reglas NT, token_ids& token){
                 // FOLLOW(S) = {$}
                 // x € FOLLOW(S) es lo mismo que x == EOF
                 // No hay que hacer nada, ya que no se avanza por ningun sitio
+                parse_file << 3 << " ";
             }
             else{
                 error(token, NT);
@@ -461,6 +461,7 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(token == token_ids::PAL_RES_VAR){
                 // var T id C
+                parse_file << 4 << " ";
                 equipara(token, token_ids::PAL_RES_VAR, NT); // compara, lanza error si no es y avanza un token
                 noTerminal(reglas::T, token);
                 equipara(token, token_ids::IDENTIFICADOR, NT);
@@ -468,6 +469,7 @@ bool noTerminal(reglas NT, token_ids& token){
             }
             else if(token == token_ids::PAL_RES_IF){
                 // B -> if ( R ) U
+                parse_file << 5 << " ";
                 equipara(token, token_ids::PAL_RES_IF, NT);
                 equipara(token, token_ids::PARENTESIS_ABIERTA, NT);
                 noTerminal(reglas::R, token);
@@ -476,10 +478,12 @@ bool noTerminal(reglas NT, token_ids& token){
             }
             else if(mapaFirst[reglas::U].find(token) != mapaFirst[reglas::U].end()){
                 // B -> U
+                parse_file << 6 << " ";
                 noTerminal(reglas::U, token);
             }
             else if(token == token_ids::PAL_RES_FOR){
                 // B -> for ( F1 ; R ; F2 ) { Q }
+                parse_file << 7 << " ";
                 equipara(token, token_ids::PAL_RES_FOR, NT);
                 equipara(token, token_ids::PARENTESIS_ABIERTA, NT);
                 noTerminal(reglas::F1, token);
@@ -503,6 +507,7 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(token == token_ids::PAL_RES_FUNCTION){
                 // D -> function H id ( D1 ) { Q }
+                parse_file << 8 << " ";
                 equipara(token, token_ids::PAL_RES_FUNCTION, NT);
                 noTerminal(reglas::H, token);
                 equipara(token, token_ids::IDENTIFICADOR, NT);
@@ -523,10 +528,12 @@ bool noTerminal(reglas NT, token_ids& token){
                 */
             if(mapaFirst[reglas::T].find(token) != mapaFirst[reglas::T].end()){
                 // H -> T
+                parse_file << 9 << " ";
                 noTerminal(reglas::T, token);
             }
             else if(token == token_ids::PAL_RES_VOID){
                 // H -> void
+                parse_file << 10 << " ";
                 equipara(token, token_ids::PAL_RES_VOID, NT);
             }
             else{
@@ -542,14 +549,17 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(token == token_ids::PAL_RES_BOOL){
                 // T -> boolean
+                parse_file << 11 << " ";
                 equipara(token, token_ids::PAL_RES_BOOL, NT);
             }
             else if(token == token_ids::PAL_RES_INT){
                 // T -> int
+                parse_file << 12 << " ";
                 equipara(token, token_ids::PAL_RES_INT, NT);
             }
             else if(token == token_ids::PAL_RES_STRING){
                 // T -> string
+                parse_file << 13 << " ";
                 equipara(token, token_ids::PAL_RES_STRING, NT);
             }
             else{
@@ -564,10 +574,12 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(token == token_ids::PUNTO_Y_COMA){
                 // C -> ; 
+                parse_file << 14 << " ";
                 equipara(token, token_ids::PUNTO_Y_COMA, NT);
             }
             else if(mapaFirst[reglas::L].find(token) != mapaFirst[reglas::L].end()){
                 // C -> L R ;
+                parse_file << 15 << " ";
                 noTerminal(reglas::L, token);
                 noTerminal(reglas::R, token);
                 equipara(token, token_ids::PUNTO_Y_COMA, NT);
@@ -584,10 +596,12 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(token == token_ids::OP_ASIGNACION_SUMA){
                 // L -> += 
+                parse_file << 16 << " ";
                 equipara(token, token_ids::OP_ASIGNACION_SUMA, NT);
             }
             else if(token == token_ids::OP_ASIGNACION_SIMPLE){
                 // L -> =
+                parse_file << 17 << " ";
                 equipara(token, token_ids::OP_ASIGNACION_SIMPLE, NT);
             }
             else{
@@ -602,11 +616,13 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(mapaFirst[reglas::R1].find(token) != mapaFirst[reglas::R1].end()){
                 // R -> R1 R2
+                parse_file << 18 << " ";
                 noTerminal(reglas::R1, token);
                 noTerminal(reglas::R2, token);
             }
             else if(token == token_ids::PARENTESIS_ABIERTA){
                 // R -> ( R )
+                parse_file << 19 << " ";
                 equipara(token, token_ids::PARENTESIS_ABIERTA, NT);
                 noTerminal(reglas::R, token);
                 equipara(token, token_ids::PARENTESIS_CERRADA, NT);                
@@ -624,15 +640,18 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(token == token_ids::IDENTIFICADOR){
                 // R1 -> id A 
+                parse_file << 20 << " ";
                 equipara(token, token_ids::IDENTIFICADOR, NT);
                 noTerminal(reglas::A, token);
             }
             else if(token == token_ids::NUMERO){
                 // R1 -> numero 
+                parse_file << 21 << " ";
                 equipara(token, token_ids::NUMERO, NT);
             }
             else if(token == token_ids::CADENA){
                 // R1 -> cadena
+                parse_file << 22 << " ";
                 equipara(token, token_ids::CADENA, NT);
             }
             else{
@@ -647,11 +666,13 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(mapaFirst[reglas::O].find(token) != mapaFirst[reglas::O].end()){
                 // R2 -> O R 
+                parse_file << 23 << " ";
                 noTerminal(reglas::O, token);
                 noTerminal(reglas::R, token);
             }
             else if(mapaFollow[reglas::R2].find(token) != mapaFollow[reglas::R2].end()){
                 // R2 -> lambda
+                parse_file << 24 << " ";
             }
             else{
                 error(token, NT);
@@ -667,18 +688,22 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(token == token_ids::OP_RELACIONAL_IGUAL){
                 // O -> == 
+                parse_file << 25 << " ";
                 equipara(token, token_ids::OP_RELACIONAL_IGUAL, NT);
             }
             else if(token == token_ids::OP_LOGICO_AND){
                 // O -> && 
+                parse_file << 26 << " ";
                 equipara(token, token_ids::OP_LOGICO_AND, NT);
             }
             else if(token == token_ids::OP_ARITMETICO_SUMA){
                 // O -> + 
+                parse_file << 27 << " ";
                 equipara(token, token_ids::OP_ARITMETICO_SUMA, NT);
             }
             else if(token == token_ids::OP_ARITMETICO_RESTA){
                 // O -> -
+                parse_file << 28 << " ";
                 equipara(token, token_ids::OP_ARITMETICO_RESTA, NT);
             }
             else{
@@ -693,12 +718,14 @@ bool noTerminal(reglas NT, token_ids& token){
             */ 
             if(token == token_ids::PARENTESIS_ABIERTA){
                 // A -> ( A1 )
+                parse_file << 29 << " ";
                 equipara(token, token_ids::PARENTESIS_ABIERTA, NT);
                 noTerminal(reglas::A1, token);
                 equipara(token, token_ids::PARENTESIS_CERRADA, NT);
             }
             else if(mapaFollow[reglas::A].find(token) != mapaFollow[reglas::A].end()){
                 // A -> lambda
+                parse_file << 30 << " ";
             }
             else{
                 error(token, NT);
@@ -712,10 +739,12 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(mapaFirst[reglas::A2].find(token) != mapaFirst[reglas::A2].end()){
                 // A1 -> A2 
+                parse_file << 31 << " ";
                 noTerminal(reglas::A2, token);
             }
             else if(mapaFollow[reglas::A1].find(token) != mapaFollow[reglas::A1].end()){
                 // A1 -> lambda
+                parse_file << 32 << " ";
             }
             else{
                 error(token, NT);
@@ -728,6 +757,7 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(mapaFirst[reglas::A3].find(token) != mapaFirst[reglas::A3].end()){
                 // A2 -> R A3
+                parse_file << 33 << " ";
                 noTerminal(reglas::R, token);
                 noTerminal(reglas::A3, token);
             }
@@ -743,11 +773,13 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(token == token_ids::COMA){
                 // A3 -> , A2
+                parse_file << 34 << " ";
                 equipara(token, token_ids::COMA, NT);
                 noTerminal(reglas::A2, token);
             }
             else if(mapaFollow[reglas::A3].find(token) != mapaFollow[reglas::A3].end()){
                 // A3 -> lambda
+                parse_file << 35 << " ";
             }
             else{
                 error(token, NT);
@@ -763,24 +795,28 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(token == token_ids::PAL_RES_INPUT){
                 // U -> input id ; 
+                parse_file << 36 << " ";
                 equipara(token, token_ids::PAL_RES_INPUT, NT);
                 equipara(token, token_ids::IDENTIFICADOR, NT);
                 equipara(token, token_ids::PUNTO_Y_COMA, NT);
             }
             else if(token == token_ids::PAL_RES_OUTPUT){
                 // U -> output R ; 
+                parse_file << 37 << " ";
                 equipara(token, token_ids::PAL_RES_OUTPUT, NT);
                 noTerminal(reglas::R, token);
                 equipara(token, token_ids::PUNTO_Y_COMA, NT);
             }
             else if(token == token_ids::PAL_RES_RETURN){
                 // U -> return U2 ; 
+                parse_file << 38 << " ";
                 equipara(token, token_ids::PAL_RES_RETURN, NT);
                 noTerminal(reglas::U2, token);
                 equipara(token, token_ids::PUNTO_Y_COMA, NT);
             }
             else if(token == token_ids::IDENTIFICADOR){
                 // U -> id U1
+                parse_file << 39 << " ";
                 equipara(token, token_ids::IDENTIFICADOR, NT);
                 noTerminal(reglas::U1, token);
             }
@@ -796,12 +832,14 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(mapaFirst[reglas::L].find(token) != mapaFirst[reglas::L].end()){
                 // U1 -> L R ; 
+                parse_file << 40 << " ";
                 noTerminal(reglas::L, token);
                 noTerminal(reglas::R, token);
                 equipara(token, token_ids::PUNTO_Y_COMA, NT);
             }
             else if(token == token_ids::PARENTESIS_ABIERTA){
                 // U1 -> ( A1 ) ;
+                parse_file << 41 << " ";
                 equipara(token, token_ids::PARENTESIS_ABIERTA, NT);
                 noTerminal(reglas::A1, token);
                 equipara(token, token_ids::PARENTESIS_CERRADA, NT);
@@ -819,10 +857,12 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(mapaFirst[reglas::R].find(token) != mapaFirst[reglas::R].end()){
                 // U2 -> R
+                parse_file << 42 << " ";
                 noTerminal(reglas::R, token);
             }
             else if(mapaFollow[reglas::U2].find(token) != mapaFollow[reglas::U2].end()){
                 // U2 -> lambda
+                parse_file << 43 << " ";
             }
             else{
                 error(token, NT);
@@ -837,6 +877,7 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(token == token_ids::PAL_RES_VAR){
                 // F1 -> var T id L R 
+                parse_file << 44 << " ";
                 equipara(token, token_ids::PAL_RES_VAR, NT);
                 noTerminal(reglas::T, token);
                 equipara(token, token_ids::IDENTIFICADOR, NT);
@@ -845,12 +886,14 @@ bool noTerminal(reglas NT, token_ids& token){
             }       
             else if(token == token_ids::IDENTIFICADOR){
                 // F1 -> id L R 
+                parse_file << 45 << " ";
                 equipara(token, token_ids::IDENTIFICADOR, NT);
                 noTerminal(reglas::L, token);
                 noTerminal(reglas::R, token);
             }
             else if(mapaFollow[reglas::F1].find(token) != mapaFollow[reglas::F1].end()){
                 // F1 -> lambda
+                parse_file << 46 << " ";
             }
             else{
                 error(token, NT);
@@ -864,12 +907,14 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(token == token_ids::IDENTIFICADOR){
                 // F2 -> id L R 
+                parse_file << 47 << " ";
                 equipara(token, token_ids::IDENTIFICADOR, NT);
                 noTerminal(reglas::L, token);
                 noTerminal(reglas::R, token);
             }
             else if(mapaFollow[reglas::F2].find(token) != mapaFollow[reglas::F2].end()){
                 // F2 -> lambda
+                parse_file << 48 << " ";
             }
             else{
                 error(token, NT);
@@ -883,11 +928,13 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(mapaFirst[reglas::B].find(token) != mapaFirst[reglas::B].end()){
                 // Q -> B Q 
+                parse_file << 49 << " ";
                 noTerminal(reglas::B, token);
                 noTerminal(reglas::Q, token);
             }
             else if(mapaFollow[reglas::Q].find(token) != mapaFollow[reglas::Q].end()){
                 // Q -> lambda
+                parse_file << 50 << " ";
             }
             else{
                 error(token, NT);
@@ -901,10 +948,12 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(mapaFirst[reglas::D2].find(token) != mapaFirst[reglas::D2].end()){
                 // D1 -> D2
+                parse_file << 51 << " ";
                 noTerminal(reglas::D2, token);
             }
             else if(mapaFollow[reglas::D1].find(token) != mapaFollow[reglas::D1].end()){
                 // D1 -> lambda
+                parse_file << 52 << " ";
             }
             else{
                 error(token, NT);
@@ -917,6 +966,7 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(mapaFirst[reglas::D3].find(token) != mapaFirst[reglas::D3].end()){
                 // D2 -> D3 D4
+                parse_file << 53 << " ";
                 noTerminal(reglas::D3, token);
                 noTerminal(reglas::D4, token);
             }
@@ -931,6 +981,7 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(token == token_ids::PAL_RES_VAR){
                 // D3 -> var T id
+                parse_file << 54 << " ";
                 equipara(token, token_ids::PAL_RES_VAR, NT);
                 noTerminal(reglas::T, token);
                 equipara(token, token_ids::IDENTIFICADOR, NT);
@@ -947,11 +998,13 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(token == token_ids::COMA){
                 // D4 -> , D2
+                parse_file << 55 << " ";
                 equipara(token, token_ids::COMA, NT);
                 noTerminal(reglas::D2, token);
             }
             else if(mapaFollow[reglas::D4].find(token) != mapaFollow[reglas::D4].end()){
                 // D4 -> lambda
+                parse_file << 56 << " ";
             }
             else{
                 error(token, NT);

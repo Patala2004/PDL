@@ -158,7 +158,49 @@ int main(){
     // Regla D4
     mapaFirst[reglas::D4] = {token_ids::COMA};
 
+    // FOLLOW de A1
+    mapaFollow[reglas::A1] = {token_ids::PARENTESIS_CERRADA};  // ) 
 
+    // FOLLOW de A2
+    mapaFollow[reglas::A2] = {token_ids::PARENTESIS_CERRADA};  // ) 
+
+    // FOLLOW de A3
+    mapaFollow[reglas::A3] = {token_ids::PARENTESIS_CERRADA};  // ) 
+
+    // FOLLOW de U2
+    mapaFollow[reglas::U2] = {token_ids::PUNTO_Y_COMA};  // ; 
+
+    // FOLLOW de F1
+    mapaFollow[reglas::F1] = {token_ids::PUNTO_Y_COMA};  // ; 
+
+    // FOLLOW de F2
+    mapaFollow[reglas::F2] = {token_ids::PARENTESIS_CERRADA};  // ) 
+
+    // FOLLOW de R
+    mapaFollow[reglas::R] = {token_ids::PARENTESIS_CERRADA, token_ids::PUNTO_Y_COMA,token_ids::COMA};  // ) , ;
+
+    // FOLLOW de R2
+    mapaFollow[reglas::R2] = {token_ids::PARENTESIS_CERRADA, token_ids::PUNTO_Y_COMA,token_ids::COMA};  // ) , ;
+
+    // FOLLOW de R1
+    mapaFollow[reglas::R1] = {token_ids::OP_LOGICO_AND, token_ids::PARENTESIS_CERRADA, token_ids::OP_ARITMETICO_SUMA, 
+                              token_ids::COMA, token_ids::OP_ARITMETICO_RESTA, token_ids::PUNTO_Y_COMA, token_ids::OP_RELACIONAL_IGUAL};  // && ) + , - ; ==
+
+    // FOLLOW de A
+    mapaFollow[reglas::A] = {token_ids::OP_LOGICO_AND, token_ids::PARENTESIS_CERRADA, token_ids::OP_ARITMETICO_SUMA, 
+                             token_ids::COMA, token_ids::OP_ARITMETICO_RESTA, token_ids::PUNTO_Y_COMA, token_ids::OP_RELACIONAL_IGUAL};  // && ) + , - ; ==
+
+    // FOLLOW de D1
+    mapaFollow[reglas::D1] = {token_ids::PARENTESIS_CERRADA};  // ) 
+
+    // FOLLOW de D2
+    mapaFollow[reglas::D2] = {token_ids::PARENTESIS_CERRADA};  // ) 
+
+    // FOLLOW de D4
+    mapaFollow[reglas::D4] = {token_ids::PARENTESIS_CERRADA};  // ) 
+
+    // FOLLOW de Q
+    mapaFollow[reglas::Q] = {token_ids::LLAVE_CERRADA}; // }
     return 0;
 }
 

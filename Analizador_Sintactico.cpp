@@ -1027,5 +1027,6 @@ int main(){
     popularMapa();
     reglas noTerminalState = reglas::S; // empieza en el axioma S
     token_ids token = getToken(token_file);
+    parse_file << "descendente ";
     noTerminal(noTerminalState, token);
 }

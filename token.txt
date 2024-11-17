@@ -187,7 +187,6 @@
 <Numero, 0>
 <PuntoYComa, >
 <ID, 35>
-<PuntoYComa, >
 <Numero, 10>
 <PuntoYComa, >
 <ID, 36>

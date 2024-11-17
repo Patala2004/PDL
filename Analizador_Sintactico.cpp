@@ -8,134 +8,18 @@
 #include <math.h>
 #include <fstream>
 #include <set>
-
+#include "aux_enums.hpp"
+#include "Analizador_Lexico.hpp"
 
 using namespace std;
 
-enum class token_ids{
-    LLAVE_ABIERTA,          // {
-    LLAVE_CERRADA,          // }
-    PARENTESIS_ABIERTA,     // (
-    PARENTESIS_CERRADA,     // )
-    COMA,                   // ,
-    PUNTO_Y_COMA,           // ;
-    OP_RELACIONAL_IGUAL,  // ==
-    OP_LOGICO_AND,         // &&
-    OP_ARITMETICO_RESTA,    // -
-    OP_ARITMETICO_SUMA,     // +
-    OP_ASIGNACION_SIMPLE,   // =
-    OP_ASIGNACION_SUMA,     // +=
-    CADENA,                 // "..."
-    NUMERO,                 // 0123456789
-    IDENTIFICADOR,          // varx
-    // Palabras reservadas:
-    PAL_RES_BOOL,           // boolean
-    PAL_RES_FOR,            // for
-    PAL_RES_FUNCTION,       // function
-    PAL_RES_IF,             // if
-    PAL_RES_INPUT,          // input
-    PAL_RES_OUTPUT,         // output
-    PAL_RES_RETURN,         // return
-    PAL_RES_STRING,         // string
-    PAL_RES_VAR,            // var
-    PAL_RES_VOID,           // void
-    PAL_RES_INT,
-    ERROR_TOKEN_NOT_RECOGNIZED,
-    ENDOFFILE
-};
 
-enum class reglas{
-    S,  // 0
-    B,  // 1
-    D,  // 2
-    T,  // 3
-    C,  // 4
-    R,  // 5
-    U,  // 6
-    F1, // 7
-    F2, // 8
-    Q,  // 9
-    H,  // 10
-    D1, // 11
-    L,  // 12
-    R1, // 13
-    R2, // 14
-    A,  // 15
-    O,  // 16
-    A1, // 17
-    A2, // 18
-    A3, // 19
-    U2, // 20
-    U1, // 21
-    D2, // 22
-    D3, // 23
-    D4  // 24
-};
 
-string reglasToString(reglas r){
-    switch(r){
-        case reglas::S:     return "S";
-        case reglas::B:     return "B";
-        case reglas::D:     return "D";
-        case reglas::T:     return "T";
-        case reglas::C:     return "C";
-        case reglas::R:     return "R";
-        case reglas::U:     return "U";
-        case reglas::F1:    return "F1";
-        case reglas::F2:    return "F2";
-        case reglas::Q:     return "Q";
-        case reglas::H:     return "H";
-        case reglas::D1:    return "D1";
-        case reglas::L:     return "L";
-        case reglas::R1:    return "R1";
-        case reglas::R2:    return "R2";
-        case reglas::A:     return "A";
-        case reglas::O:     return "O";
-        case reglas::A1:    return "A1";
-        case reglas::A2:    return "A2";
-        case reglas::A3:    return "A3";
-        case reglas::U2:    return "U2";
-        case reglas::U1:    return "U1";
-        case reglas::D2:    return "D2";
-        case reglas::D3:    return "D3";
-        case reglas::D4:    return "D4";
-        default: return "ERROR ESTADO NO ENCONTRADO";
-    }
-}
-
-int reglasToParseInt(reglas r){
-    switch(r){
-        case reglas::S:     return 1;
-        case reglas::B:     return 2;
-        case reglas::D:     return 3;
-        case reglas::H:     return 4;
-        case reglas::T:     return 5;
-        case reglas::C:     return 6;
-        case reglas::L:     return 7;
-        case reglas::R:    return 8;
-        case reglas::R1:    return 9;
-        case reglas::R2:     return 10;
-        case reglas::O:     return 11;
-        case reglas::A:    return 12;
-        case reglas::A1:     return 13;
-        case reglas::A2:    return 14;
-        case reglas::A3:    return 15;
-        case reglas::U:     return 16;
-        case reglas::U1:     return 17;
-        case reglas::U2:    return 18;
-        case reglas::F1:    return 19;
-        case reglas::F2:    return 20;
-        case reglas::Q:    return 21;
-        case reglas::D1:    return 22;
-        case reglas::D2:    return 23;
-        case reglas::D3:    return 24;
-        case reglas::D4:    return 25;
-        default: return -1;
-    }
-}
 
 map<reglas,set<token_ids>> mapaFirst;
 map<reglas,set<token_ids>> mapaFollow;
+
+AnalizadorLexico analizador("hola.txt");
 
 int popularMapa(){
     mapaFirst[reglas::S] = {token_ids::PAL_RES_VAR, token_ids::IDENTIFICADOR, token_ids::PAL_RES_IF, 
@@ -186,14 +70,14 @@ int popularMapa(){
     mapaFirst[reglas::R1] = {token_ids::IDENTIFICADOR, token_ids::NUMERO, token_ids::CADENA, token_ids::PARENTESIS_ABIERTA};
 
     // Regla R2
-    mapaFirst[reglas::R2] = {token_ids::OP_RELACIONAL_IGUAL, token_ids::OP_LOGICO_AND, 
+    mapaFirst[reglas::R2] = {token_ids::OP_RELACIONAL_IGUAL, token_ids::OP_LOGICO_ANDS, 
                              token_ids::OP_ARITMETICO_RESTA, token_ids::OP_ARITMETICO_SUMA};
 
     // Regla A
     mapaFirst[reglas::A] = {token_ids::PARENTESIS_ABIERTA};  // Cambié lambda por un valor específico
 
     // Regla O
-    mapaFirst[reglas::O] = {token_ids::OP_RELACIONAL_IGUAL, token_ids::OP_LOGICO_AND, 
+    mapaFirst[reglas::O] = {token_ids::OP_RELACIONAL_IGUAL, token_ids::OP_LOGICO_ANDS, 
                             token_ids::OP_ARITMETICO_RESTA, token_ids::OP_ARITMETICO_SUMA};
 
     // Regla A1
@@ -249,11 +133,11 @@ int popularMapa(){
     mapaFollow[reglas::R2] = {token_ids::PARENTESIS_CERRADA, token_ids::PUNTO_Y_COMA,token_ids::COMA};  // ) , ;
 
     // FOLLOW de R1
-    mapaFollow[reglas::R1] = {token_ids::OP_LOGICO_AND, token_ids::PARENTESIS_CERRADA, token_ids::OP_ARITMETICO_SUMA, 
+    mapaFollow[reglas::R1] = {token_ids::OP_LOGICO_ANDS, token_ids::PARENTESIS_CERRADA, token_ids::OP_ARITMETICO_SUMA, 
                               token_ids::COMA, token_ids::OP_ARITMETICO_RESTA, token_ids::PUNTO_Y_COMA, token_ids::OP_RELACIONAL_IGUAL};  // && ) + , - ; ==
 
     // FOLLOW de A
-    mapaFollow[reglas::A] = {token_ids::OP_LOGICO_AND, token_ids::PARENTESIS_CERRADA, token_ids::OP_ARITMETICO_SUMA, 
+    mapaFollow[reglas::A] = {token_ids::OP_LOGICO_ANDS, token_ids::PARENTESIS_CERRADA, token_ids::OP_ARITMETICO_SUMA, 
                              token_ids::COMA, token_ids::OP_ARITMETICO_RESTA, token_ids::PUNTO_Y_COMA, token_ids::OP_RELACIONAL_IGUAL};  // && ) + , - ; ==
 
     // FOLLOW de D1
@@ -293,7 +177,7 @@ token_ids str_to_token(string s){
         return token_ids::OP_RELACIONAL_IGUAL;
     }
     else if(s == "OpLogicoAnd"){
-        return token_ids::OP_LOGICO_AND;
+        return token_ids::OP_LOGICO_ANDS;
     }
     else if(s == "OpAritmeticoResta"){
         return token_ids::OP_ARITMETICO_RESTA;
@@ -353,54 +237,15 @@ token_ids str_to_token(string s){
         return token_ids::ERROR_TOKEN_NOT_RECOGNIZED;
     }
 }
-std::string tokenToString(token_ids id) {
-    switch (id) {
-        case token_ids::LLAVE_ABIERTA: return "LlaveAbierta";
-        case token_ids::LLAVE_CERRADA: return "LlaveCerrada";
-        case token_ids::PARENTESIS_ABIERTA: return "ParentesisAbierta";
-        case token_ids::PARENTESIS_CERRADA: return "ParentesisCerrada";
-        case token_ids::COMA: return "ComaSimple";
-        case token_ids::PUNTO_Y_COMA: return "PuntoYComa";
-        case token_ids::OP_RELACIONAL_IGUAL: return "OpRelacionalIgual";
-        case token_ids::OP_LOGICO_AND: return "OpLogicoAnd";
-        case token_ids::OP_ARITMETICO_RESTA: return "OpAritmeticoResta";
-        case token_ids::OP_ARITMETICO_SUMA: return "OpAritmeticoSuma";
-        case token_ids::OP_ASIGNACION_SIMPLE: return "OpAsignacionSimple";
-        case token_ids::OP_ASIGNACION_SUMA: return "OpAsignacionSuma";
-        case token_ids::CADENA: return "Cadena";
-        case token_ids::NUMERO: return "Numero";
-        case token_ids::IDENTIFICADOR: return "ID";
-        case token_ids::PAL_RES_BOOL: return "PalResBOOL";
-        case token_ids::PAL_RES_FOR: return "PalResFOR";
-        case token_ids::PAL_RES_FUNCTION: return "PalResFUNCTION";
-        case token_ids::PAL_RES_IF: return "PalResIF";
-        case token_ids::PAL_RES_INPUT: return "PalResINPUT";
-        case token_ids::PAL_RES_OUTPUT: return "PalResOUTPUT";
-        case token_ids::PAL_RES_RETURN: return "PalResRETURN";
-        case token_ids::PAL_RES_STRING: return "PalResSTRING";
-        case token_ids::PAL_RES_VAR: return "PalResVAR";
-        case token_ids::PAL_RES_VOID: return "PalResVOID";
-        case token_ids::PAL_RES_INT: return "PalResINT";
-        default: return "UNKNOWN";
-    }
-}
+
 
 ifstream token_file("token.txt", std::ios::binary);
 ofstream parse_file("parse.txt", std::ios::binary);
 
-token_ids getToken(std::ifstream& token_file){
-    string token;
-    if(!getline(token_file, token)){
-        return token_ids::ENDOFFILE;
-    }
-    token = token.substr(1, token.size() - 2);
-    token = token.substr(0, token.find(','));
-    // cout << token << endl;
-    return str_to_token(token);
-}
 
 void error(token_ids token, reglas estado){
-    cerr << "TOKEN " << tokenToString(token) << " NO ACEPTADO EN EL ESTADO " << reglasToString(estado) <<endl;
+    //cerr << "TOKEN " << tokenToString(token) << " NO ACEPTADO EN EL ESTADO " << reglasToString(estado) <<endl;
+    sintax_error(1);
     exit(0);
 }
 
@@ -413,7 +258,7 @@ bool equipara(token_ids& token, token_ids a_equiparar, reglas estado){
         exit(0);
     }
     cout << tokenToString(token) << endl;
-    token = getToken(token_file); // avanzamos el token fuera de donde nos llamaron
+    token = analizador.processNextChar(); // avanzamos el token fuera de donde nos llamaron
     return true;
 }
 
@@ -693,10 +538,10 @@ bool noTerminal(reglas NT, token_ids& token){
                 parse_file << 25 << " ";
                 equipara(token, token_ids::OP_RELACIONAL_IGUAL, NT);
             }
-            else if(token == token_ids::OP_LOGICO_AND){
+            else if(token == token_ids::OP_LOGICO_ANDS){
                 // O -> && 
                 parse_file << 26 << " ";
-                equipara(token, token_ids::OP_LOGICO_AND, NT);
+                equipara(token, token_ids::OP_LOGICO_ANDS, NT);
             }
             else if(token == token_ids::OP_ARITMETICO_SUMA){
                 // O -> + 
@@ -1040,9 +885,11 @@ bool noTerminal(reglas NT, token_ids& token){
 
 
 int main(){
+    std::cout << "Tokens generated successfully." << std::endl;
+
     popularMapa();
     reglas noTerminalState = reglas::S; // empieza en el axioma S
-    token_ids token = getToken(token_file);
+    token_ids token = analizador.processNextChar();
     parse_file << "descendente ";
     noTerminal(noTerminalState, token);
 }

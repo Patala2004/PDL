@@ -1,0 +1,3 @@
+ERROR LEXICO CON CODIGO: 1 EN (5,8):   Caracter invalido '&'. Querias poner operador logico and '&&'?
+ERROR LEXICO CON CODIGO: 5 EN (5,9):   Character invalido '!'
+ERROR LEXICO CON CODIGO: 5 EN (28,32):   Character invalido '<'

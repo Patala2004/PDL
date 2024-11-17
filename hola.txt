@@ -2,7 +2,7 @@ var int x = 0;
 var int y = 2;
 var int z = x + y;
 z = x+y;
-z += 1;
+z += 1; &!
 var boolean b;
 for(var int i = 0; i == b; i+=1){
     var string a = "hola";
@@ -25,4 +25,4 @@ function void SDSAD (void){}
 var string pepe = "cadsdsa";	
 input z ;
 output(((((((((ab + 9 + "fortnite")))))))));
-for(;true;){for(var int i = 0;i<10;b += 10){}}
+for(;true;){for(var int i = 0;i;<10;b += 10){}}

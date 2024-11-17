@@ -15,6 +15,8 @@ function void Imprime (int a)
 }	
 function int factorial (int x) 
 {
+
+  555 + hola() - 4 + "saddsa" - hola(221,1212,1221,"hola");
   hola();
   if (x == 1) 
     return x - factorial (x - 1);
@@ -26,3 +28,5 @@ var string pepe = "cadsdsa";
 input z ;
 output(((((((((ab + 9 + "fortnite")))))))));
 for(;true;){for(var int i = 0;i==10;b += 10){}}
+if(true)
+"hola" + 1 + 2123321 + 2121;

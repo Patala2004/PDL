@@ -19,10 +19,10 @@ Tabla Inicial # 0:
 * LEXEMA: 'hola'
     +despl: 43
 * LEXEMA: 'SDSAD'
-    +despl: 57
+    +despl: 59
 * LEXEMA: 'pepe'
-    +despl: 61
+    +despl: 63
 * LEXEMA: 'ab'
-    +despl: 65
-* LEXEMA: 'true'
     +despl: 67
+* LEXEMA: 'true'
+    +despl: 69

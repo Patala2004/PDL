@@ -40,6 +40,8 @@ A1 -> lambda
 A2 -> R A3
 A3 -> , A2
 A3 -> lambda
+U -> cadena R2 ;
+U -> numero R2 ;
 U -> input id ; 
 U -> output R ; 
 U -> return U2 ; 

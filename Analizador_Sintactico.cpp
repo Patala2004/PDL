@@ -494,7 +494,6 @@ bool noTerminal(reglas NT, token_ids& token){
                 noTerminal(reglas::F2, token);
                 equipara(token, token_ids::PARENTESIS_CERRADA, NT);
                 equipara(token, token_ids::LLAVE_ABIERTA, NT);
-                cout << "agsegwewerwyghse" << endl;
                 noTerminal(reglas::Q, token);
                 equipara(token, token_ids::LLAVE_CERRADA, NT);
             }

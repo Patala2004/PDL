@@ -187,6 +187,7 @@
 <Numero, 0>
 <PuntoYComa, >
 <ID, 35>
+<OpRelacionalIgual, >
 <Numero, 10>
 <PuntoYComa, >
 <ID, 36>

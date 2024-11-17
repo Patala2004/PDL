@@ -1,0 +1,805 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+<HEAD>
+  <META http-equiv="Content-Type" content="text/html; charset=windows-1252">
+  <TITLE>Tabla sintáctica para gramatica.ll1</TITLE>
+  <STYLE type="text/css">
+    DIV.tabla { text-align: center; font-size: 12pt; font-family: Arial }
+    H2.titulo { text-align: center; font-family: Arial }
+    TABLE { text-align: center; }
+    TH { background: silver; }
+  </STYLE>
+</HEAD>
+
+<BODY style="font-family: Arial">
+
+  <P><BR></P>
+  <H2 class=titulo>Tabla sintáctica para gramatica.ll1</H2>
+  <P><BR></P>
+
+  <DIV class = tabla>
+    <TABLE border="1" cellpadding="5" width="90%">
+      <TR>
+        <TD>
+        <TH>&amp;&amp;</TH>
+        <TH>(</TH>
+        <TH>)</TH>
+        <TH>+</TH>
+        <TH>+=</TH>
+        <TH>,</TH>
+        <TH>-</TH>
+        <TH>;</TH>
+        <TH>=</TH>
+        <TH>==</TH>
+        <TH>boolean</TH>
+        <TH>cadena</TH>
+        <TH>for</TH>
+        <TH>function</TH>
+        <TH>id</TH>
+        <TH>if</TH>
+        <TH>input</TH>
+        <TH>int</TH>
+        <TH>numero</TH>
+        <TH>output</TH>
+        <TH>return</TH>
+        <TH>string</TH>
+        <TH>var</TH>
+        <TH>void</TH>
+        <TH>{</TH>
+        <TH>}</TH>
+        <TH> $ (final de cadena)</TH>
+      </TR>
+      <TR>
+        <TH>A</TH>
+        <TD>A &rarr; lambda</TD>
+        <TD>A &rarr; ( A1 )</TD>
+        <TD>A &rarr; lambda</TD>
+        <TD>A &rarr; lambda</TD>
+        <TD>--</TD>
+        <TD>A &rarr; lambda</TD>
+        <TD>A &rarr; lambda</TD>
+        <TD>A &rarr; lambda</TD>
+        <TD>--</TD>
+        <TD>A &rarr; lambda</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>A1</TH>
+        <TD>--</TD>
+        <TD>A1 &rarr; A2</TD>
+        <TD>A1 &rarr; lambda</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>A1 &rarr; A2</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>A1 &rarr; A2</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>A1 &rarr; A2</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>A2</TH>
+        <TD>--</TD>
+        <TD>A2 &rarr; R A3</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>A2 &rarr; R A3</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>A2 &rarr; R A3</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>A2 &rarr; R A3</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>A3</TH>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>A3 &rarr; lambda</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>A3 &rarr; , A2</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>B</TH>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>B &rarr; U</TD>
+        <TD>B &rarr; for ( F1 ; R ; F2 ) { Q }</TD>
+        <TD>--</TD>
+        <TD>B &rarr; U</TD>
+        <TD>B &rarr; if ( R ) U</TD>
+        <TD>B &rarr; U</TD>
+        <TD>--</TD>
+        <TD>B &rarr; U</TD>
+        <TD>B &rarr; U</TD>
+        <TD>B &rarr; U</TD>
+        <TD>--</TD>
+        <TD>B &rarr; var T id C</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>C</TH>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>C &rarr; L R ;</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>C &rarr; ;</TD>
+        <TD>C &rarr; L R ;</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>D</TH>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>D &rarr; function H id ( D1 ) { Q }</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>D1</TH>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>D1 &rarr; D2</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>D1 &rarr; D2</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>D1 &rarr; D2</TD>
+        <TD>--</TD>
+        <TD>D1 &rarr; void</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>D2</TH>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>D2 &rarr; D3 D4</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>D2 &rarr; D3 D4</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>D2 &rarr; D3 D4</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>D3</TH>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>D3 &rarr; T id</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>D3 &rarr; T id</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>D3 &rarr; T id</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>D4</TH>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>D4 &rarr; lambda</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>D4 &rarr; , D2</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>F1</TH>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>F1 &rarr; lambda</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>F1 &rarr; id L R</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>F1 &rarr; var T id L R</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>F2</TH>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>F2 &rarr; lambda</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>F2 &rarr; id L R</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>H</TH>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>H &rarr; T</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>H &rarr; T</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>H &rarr; T</TD>
+        <TD>--</TD>
+        <TD>H &rarr; void</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>L</TH>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>L &rarr; +=</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>L &rarr; =</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>O</TH>
+        <TD>O &rarr; &amp;&amp;</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>O &rarr; +</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>O &rarr; -</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>O &rarr; ==</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>Q</TH>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>Q &rarr; B Q</TD>
+        <TD>Q &rarr; B Q</TD>
+        <TD>--</TD>
+        <TD>Q &rarr; B Q</TD>
+        <TD>Q &rarr; B Q</TD>
+        <TD>Q &rarr; B Q</TD>
+        <TD>--</TD>
+        <TD>Q &rarr; B Q</TD>
+        <TD>Q &rarr; B Q</TD>
+        <TD>Q &rarr; B Q</TD>
+        <TD>--</TD>
+        <TD>Q &rarr; B Q</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>Q &rarr; lambda</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>R</TH>
+        <TD>--</TD>
+        <TD>R &rarr; R1 R2</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>R &rarr; R1 R2</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>R &rarr; R1 R2</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>R &rarr; R1 R2</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>R1</TH>
+        <TD>--</TD>
+        <TD>R1 &rarr; ( R )</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>R1 &rarr; cadena</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>R1 &rarr; id A</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>R1 &rarr; numero</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>R2</TH>
+        <TD>R2 &rarr; O R</TD>
+        <TD>--</TD>
+        <TD>R2 &rarr; lambda</TD>
+        <TD>R2 &rarr; O R</TD>
+        <TD>--</TD>
+        <TD>R2 &rarr; lambda</TD>
+        <TD>R2 &rarr; O R</TD>
+        <TD>R2 &rarr; lambda</TD>
+        <TD>--</TD>
+        <TD>R2 &rarr; O R</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>S</TH>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>S &rarr; B S</TD>
+        <TD>S &rarr; B S</TD>
+        <TD>S &rarr; D S</TD>
+        <TD>S &rarr; B S</TD>
+        <TD>S &rarr; B S</TD>
+        <TD>S &rarr; B S</TD>
+        <TD>--</TD>
+        <TD>S &rarr; B S</TD>
+        <TD>S &rarr; B S</TD>
+        <TD>S &rarr; B S</TD>
+        <TD>--</TD>
+        <TD>S &rarr; B S</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>S &rarr; lambda</TD>
+      </TR>
+      <TR>
+        <TH>T</TH>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>T &rarr; boolean</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>T &rarr; int</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>T &rarr; string</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>U</TH>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>U &rarr; cadena R2 ;</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>U &rarr; id U1</TD>
+        <TD>--</TD>
+        <TD>U &rarr; input id ;</TD>
+        <TD>--</TD>
+        <TD>U &rarr; numero R2 ;</TD>
+        <TD>U &rarr; output R ;</TD>
+        <TD>U &rarr; return U2 ;</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>U1</TH>
+        <TD>--</TD>
+        <TD>U1 &rarr; ( A1 ) ;</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>U1 &rarr; L R ;</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>U1 &rarr; L R ;</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+      <TR>
+        <TH>U2</TH>
+        <TD>--</TD>
+        <TD>U2 &rarr; R</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>U2 &rarr; lambda</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>U2 &rarr; R</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>U2 &rarr; R</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>U2 &rarr; R</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+        <TD>--</TD>
+      </TR>
+    </TABLE>
+  </DIV>
+</BODY>
+</HTML>

@@ -1,0 +1,8 @@
+function int factorial (int x) 
+{
+  555 + hola() - 4 + "saddsa" - hola(221,1212,1221,"hola");
+  hola();
+  if (x == 1) 
+    return x - factorial (x - 1);
+  return 1;
+}

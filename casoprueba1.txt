@@ -1,0 +1,7 @@
+var int x = 0;
+var boolean b;
+for(var int i = 0; i == b; i+=1){
+    var string a = "hola";
+    input x;
+    output b + 1;
+}

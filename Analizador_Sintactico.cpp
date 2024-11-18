@@ -245,7 +245,8 @@ ofstream parse_file("parse.txt", std::ios::binary);
 
 void error(token_ids token, reglas estado){
     //cerr << "TOKEN " << tokenToString(token) << " NO ACEPTADO EN EL ESTADO " << reglasToString(estado) <<endl;
-    sintax_error(1);
+    int linea = analizador.sintax_error(1);
+    cout << "ERROR SINTACTICO EN LA LINEA " << linea << " CON EL TOKEN " << tokenToString(token) << endl;
     exit(0);
 }
 
@@ -257,7 +258,7 @@ bool equipara(token_ids& token, token_ids a_equiparar, reglas estado){
         << reglasToString(estado) <<endl;
         exit(0);
     }
-    cout << tokenToString(token) << endl;
+    //cout << tokenToString(token) << endl;
     token = analizador.processNextChar(); // avanzamos el token fuera de donde nos llamaron
     return true;
 }
@@ -885,8 +886,6 @@ bool noTerminal(reglas NT, token_ids& token){
 
 
 int main(){
-    std::cout << "Tokens generated successfully." << std::endl;
-
     popularMapa();
     reglas noTerminalState = reglas::S; // empieza en el axioma S
     token_ids token = analizador.processNextChar();

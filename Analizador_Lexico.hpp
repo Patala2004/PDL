@@ -43,7 +43,7 @@ public:
     // Public method to process characters
     token_ids processNextChar();
 
-    void sintax_error2(int cod);
+    int sintax_error(int cod);
 
 };
 

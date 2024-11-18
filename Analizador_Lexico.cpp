@@ -8,6 +8,7 @@
 #include <math.h>
 #include <fstream>
 #include "aux_enums.hpp"
+#include "Analizador_Lexico.hpp"
 
 using namespace std;
 
@@ -168,29 +169,8 @@ void meterToken(token_ids id, string lex, int desplazamiento, std::ofstream &tab
 }
 // palabras reservadas
 
-class AnalizadorLexico
-{
-private:
-    // ficheros
-    std::ifstream file;
-    std::ofstream token_file, err_file, tabla_file;
 
-    int estado;
-    int valor_numerico;
-    std::string valor_cadena;
-    int num_linea;
-    int pos_tabla_simbolos;
-    int desplazamiento;
-    char a;
-    bool eof;
-
-    // Mapas
-    std::map<std::string, token_ids> palResMap;
-    std::vector<int> finales;
-
-public:
-    // constructor
-    AnalizadorLexico(const std::string &input_file) : estado(0), valor_numerico(0), valor_cadena(""), num_linea(1), pos_tabla_simbolos(0), desplazamiento(0), eof(false)
+    AnalizadorLexico::AnalizadorLexico(const std::string &input_file) : estado(0), valor_numerico(0), valor_cadena(""), num_linea(1), pos_tabla_simbolos(0), desplazamiento(0), eof(false)
     {
         // Open files
         file.open(input_file, std::ios::binary);
@@ -217,7 +197,7 @@ public:
     }
 
     // DESTRUCTOR NO TRIVIAL LETS GOOO
-    ~AnalizadorLexico()
+    AnalizadorLexico::~AnalizadorLexico()
     {
         // Close files
         if (file.is_open())
@@ -230,7 +210,7 @@ public:
             tabla_file.close();
     }
 
-    token_ids processNextChar()
+    token_ids AnalizadorLexico::processNextChar()
     {
 
         bool tokenGenerated = false;
@@ -556,11 +536,11 @@ public:
         return res_token; // Indicate that processing can continue
     }
 
-};
 
-void sintax_error(int cod)
+int AnalizadorLexico::sintax_error(int cod)
 {
-    cout << "ERROR SINTACTICO CON CODIGO " << cod << endl;
+    int linea = error(cod, file, file.tellg(), err_file);
+    return linea;
 }
 
 int main3(int argc, char *argv[])

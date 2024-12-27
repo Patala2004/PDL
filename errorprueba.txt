@@ -1,0 +1,7 @@
+var int x = 10;
+x = 5 + 7 + hola();
+"hola";
+function int hola (void){ 
+ return 5;
+}
+;

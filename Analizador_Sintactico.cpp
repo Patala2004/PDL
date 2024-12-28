@@ -21,16 +21,20 @@ map<reglas,set<token_ids>> mapaFollow;
 
 AnalizadorLexico analizador("hola.txt");
 
-int popularMapa(){
+int popularMapa()
+{
+    // Regla J
+    mapaFirst[reglas::J] = {token_ids::OP_ARITMETICO_SUMA,token_ids::OP_ARITMETICO_RESTA};
+    // Regla S
     mapaFirst[reglas::S] = {token_ids::PAL_RES_VAR, token_ids::IDENTIFICADOR, token_ids::PAL_RES_IF, 
                             token_ids::PAL_RES_FOR, token_ids::PAL_RES_FUNCTION, token_ids::PAL_RES_INPUT, 
-                            token_ids::PAL_RES_OUTPUT, token_ids::PAL_RES_RETURN,token_ids::NUMERO, token_ids::CADENA};
+                            token_ids::PAL_RES_OUTPUT, token_ids::PAL_RES_RETURN};
 
 
     // Regla B
     mapaFirst[reglas::B] = {token_ids::PAL_RES_VAR, token_ids::IDENTIFICADOR, token_ids::PAL_RES_IF, 
                             token_ids::PAL_RES_FOR, token_ids::PAL_RES_INPUT, 
-                            token_ids::PAL_RES_OUTPUT, token_ids::PAL_RES_RETURN,token_ids::NUMERO, token_ids::CADENA};
+                            token_ids::PAL_RES_OUTPUT, token_ids::PAL_RES_RETURN};
 
     // Regla D
     mapaFirst[reglas::D] = {token_ids::PAL_RES_FUNCTION};
@@ -43,12 +47,21 @@ int popularMapa(){
 
     // Regla R
     mapaFirst[reglas::R] = {token_ids::IDENTIFICADOR, token_ids::PARENTESIS_ABIERTA, token_ids::NUMERO, token_ids::CADENA};
-
+    // Regla R1
+    mapaFirst[reglas::R1] = {token_ids::OP_LOGICO_ANDS};
+    // Regla R2
+     mapaFirst[reglas::R2] = {token_ids::IDENTIFICADOR, token_ids::PARENTESIS_ABIERTA, token_ids::NUMERO, token_ids::CADENA};
+    // Regla R3
+     mapaFirst[reglas::R3] = {token_ids::OP_RELACIONAL_IGUAL};
+    // Regla R4
+     mapaFirst[reglas::R4] = {token_ids::IDENTIFICADOR, token_ids::PARENTESIS_ABIERTA, token_ids::NUMERO, token_ids::CADENA};
+    // Regla R5
+     mapaFirst[reglas::R5] = {token_ids::OP_ARITMETICO_SUMA,token_ids::OP_ARITMETICO_RESTA};
     // Regla U
-    mapaFirst[reglas::U] = {token_ids::IDENTIFICADOR, token_ids::PAL_RES_INPUT, token_ids::PAL_RES_OUTPUT, token_ids::PAL_RES_RETURN,token_ids::NUMERO, token_ids::CADENA};
+    mapaFirst[reglas::U] = {token_ids::IDENTIFICADOR, token_ids::PAL_RES_INPUT, token_ids::PAL_RES_OUTPUT, token_ids::PAL_RES_RETURN};
 
     // Regla F1
-    mapaFirst[reglas::F1] = {token_ids::PAL_RES_VAR, token_ids::IDENTIFICADOR};
+    mapaFirst[reglas::F1] = {token_ids::IDENTIFICADOR};
 
     // Regla F2
     mapaFirst[reglas::F2] = {token_ids::IDENTIFICADOR};
@@ -66,30 +79,18 @@ int popularMapa(){
     // Regla L
     mapaFirst[reglas::L] = {token_ids::OP_ASIGNACION_SUMA, token_ids::OP_ASIGNACION_SIMPLE};
 
-    // Regla R1
-    mapaFirst[reglas::R1] = {token_ids::IDENTIFICADOR, token_ids::NUMERO, token_ids::CADENA, token_ids::PARENTESIS_ABIERTA};
-
-    // Regla R2
-    mapaFirst[reglas::R2] = {token_ids::OP_RELACIONAL_IGUAL, token_ids::OP_LOGICO_ANDS, 
-                             token_ids::OP_ARITMETICO_RESTA, token_ids::OP_ARITMETICO_SUMA};
-
     // Regla A
     mapaFirst[reglas::A] = {token_ids::PARENTESIS_ABIERTA};  // Cambié lambda por un valor específico
 
     // Regla O
-    mapaFirst[reglas::O] = {token_ids::OP_RELACIONAL_IGUAL, token_ids::OP_LOGICO_ANDS, 
-                            token_ids::OP_ARITMETICO_RESTA, token_ids::OP_ARITMETICO_SUMA};
+    mapaFirst[reglas::O] = {token_ids::PARENTESIS_ABIERTA,token_ids::CADENA,token_ids::IDENTIFICADOR,token_ids::NUMERO};
 
     // Regla A1
     mapaFirst[reglas::A1] = {token_ids::IDENTIFICADOR, token_ids::PARENTESIS_ABIERTA, token_ids::NUMERO, 
                              token_ids::CADENA};  // Cambié lambda por un valor específico
 
     // Regla A2
-    mapaFirst[reglas::A2] = {token_ids::IDENTIFICADOR, token_ids::PARENTESIS_ABIERTA, 
-                             token_ids::NUMERO, token_ids::CADENA};
-
-    // Regla A3
-    mapaFirst[reglas::A3] = {token_ids::COMA};  // Cambié lambda por un valor específico
+    mapaFirst[reglas::A2] = {token_ids::COMA};
 
     // Regla U2
     mapaFirst[reglas::U2] = {token_ids::IDENTIFICADOR, token_ids::PARENTESIS_ABIERTA, 
@@ -114,9 +115,6 @@ int popularMapa(){
     // FOLLOW de A2
     mapaFollow[reglas::A2] = {token_ids::PARENTESIS_CERRADA};  // ) 
 
-    // FOLLOW de A3
-    mapaFollow[reglas::A3] = {token_ids::PARENTESIS_CERRADA};  // ) 
-
     // FOLLOW de U2
     mapaFollow[reglas::U2] = {token_ids::PUNTO_Y_COMA};  // ; 
 
@@ -128,17 +126,22 @@ int popularMapa(){
 
     // FOLLOW de R
     mapaFollow[reglas::R] = {token_ids::PARENTESIS_CERRADA, token_ids::PUNTO_Y_COMA,token_ids::COMA};  // ) , ;
-
-    // FOLLOW de R2
-    mapaFollow[reglas::R2] = {token_ids::PARENTESIS_CERRADA, token_ids::PUNTO_Y_COMA,token_ids::COMA};  // ) , ;
-
     // FOLLOW de R1
-    mapaFollow[reglas::R1] = {token_ids::OP_LOGICO_ANDS, token_ids::PARENTESIS_CERRADA, token_ids::OP_ARITMETICO_SUMA, 
-                              token_ids::COMA, token_ids::OP_ARITMETICO_RESTA, token_ids::PUNTO_Y_COMA, token_ids::OP_RELACIONAL_IGUAL};  // && ) + , - ; ==
-
+    mapaFollow[reglas::R1] = {token_ids::PARENTESIS_CERRADA, token_ids::PUNTO_Y_COMA,token_ids::COMA};  // ) , ;
+    // FOLLOW de R2
+    mapaFollow[reglas::R2] = {token_ids::OP_LOGICO_ANDS,token_ids::PARENTESIS_CERRADA, token_ids::PUNTO_Y_COMA,token_ids::COMA};  // ) , ;
+    // FOLLOW de R3
+    mapaFollow[reglas::R3] = {token_ids::OP_LOGICO_ANDS,token_ids::PARENTESIS_CERRADA, token_ids::PUNTO_Y_COMA,token_ids::COMA};
+    // FOLLOW de R4
+    mapaFollow[reglas::R4] = {token_ids::OP_RELACIONAL_IGUAL,token_ids::OP_LOGICO_ANDS,token_ids::PARENTESIS_CERRADA, token_ids::PUNTO_Y_COMA,token_ids::COMA};
+    // FOLLOW de R5
+    mapaFollow[reglas::R5] = {token_ids::OP_RELACIONAL_IGUAL,token_ids::OP_LOGICO_ANDS,token_ids::PARENTESIS_CERRADA, token_ids::PUNTO_Y_COMA,token_ids::COMA};
+    // FOLLOW de O
+    mapaFollow[reglas::O] = {token_ids::OP_RELACIONAL_IGUAL,token_ids::OP_LOGICO_ANDS,token_ids::PARENTESIS_CERRADA, token_ids::PUNTO_Y_COMA,token_ids::COMA,
+                            token_ids::OP_ARITMETICO_RESTA,token_ids::OP_ARITMETICO_SUMA};
     // FOLLOW de A
-    mapaFollow[reglas::A] = {token_ids::OP_LOGICO_ANDS, token_ids::PARENTESIS_CERRADA, token_ids::OP_ARITMETICO_SUMA, 
-                             token_ids::COMA, token_ids::OP_ARITMETICO_RESTA, token_ids::PUNTO_Y_COMA, token_ids::OP_RELACIONAL_IGUAL};  // && ) + , - ; ==
+    mapaFollow[reglas::A] = {token_ids::OP_RELACIONAL_IGUAL,token_ids::OP_LOGICO_ANDS,token_ids::PARENTESIS_CERRADA, token_ids::PUNTO_Y_COMA,token_ids::COMA,
+                            token_ids::OP_ARITMETICO_RESTA,token_ids::OP_ARITMETICO_SUMA};
 
     // FOLLOW de D1
     mapaFollow[reglas::D1] = {token_ids::PARENTESIS_CERRADA};  // ) 
@@ -459,13 +462,13 @@ bool noTerminal(reglas NT, token_ids& token){
 
         case reglas::R:
             /*
-            R -> R1 R2
+            R -> R2 R1
             */
-            if(mapaFirst[reglas::R1].find(token) != mapaFirst[reglas::R1].end()){
-                // R -> R1 R2
+            if(mapaFirst[reglas::R2].find(token) != mapaFirst[reglas::R2].end()){
+                // R -> R2 R1
                 parse_file << 18 << " ";
-                noTerminal(reglas::R1, token);
                 noTerminal(reglas::R2, token);
+                noTerminal(reglas::R1, token);
             }
             else{
                 error(token, NT);
@@ -474,33 +477,19 @@ bool noTerminal(reglas NT, token_ids& token){
 
         case reglas::R1:
             /*
-            R1 -> ( R )
-            R1 -> id A 
-            R1 -> numero 
-            R1 -> cadena
+           R1 -> && R2 R1
+           R1 -> lambda
             */
-            if(token == token_ids::PARENTESIS_ABIERTA){
-                // R1 -> ( R )
+            if(token == token_ids::OP_LOGICO_ANDS){
+                // R1 -> && R2 R1
                 parse_file << 19 << " ";
-                equipara(token, token_ids::PARENTESIS_ABIERTA, NT);
-                noTerminal(reglas::R, token);
-                equipara(token, token_ids::PARENTESIS_CERRADA, NT);
+                equipara(token, token_ids::OP_LOGICO_ANDS, NT);
+                noTerminal(reglas::R2, token);
+                noTerminal(reglas::R1, token);
             }
-            else if(token == token_ids::IDENTIFICADOR){
-                // R1 -> id A 
+            else if(mapaFollow[reglas::R1].find(token) != mapaFollow[reglas::R1].end()){
+                // R1 -> lambda
                 parse_file << 20 << " ";
-                equipara(token, token_ids::IDENTIFICADOR, NT);
-                noTerminal(reglas::A, token);
-            }
-            else if(token == token_ids::NUMERO){
-                // R1 -> numero 
-                parse_file << 21 << " ";
-                equipara(token, token_ids::NUMERO, NT);
-            }
-            else if(token == token_ids::CADENA){
-                // R1 -> cadena
-                parse_file << 22 << " ";
-                equipara(token, token_ids::CADENA, NT);
             }
             else{
                 error(token, NT);
@@ -509,50 +498,120 @@ bool noTerminal(reglas NT, token_ids& token){
 
         case reglas::R2:
             /*
-            R2 -> O R 
-            R2 -> lambda
+            R2 -> R4 R3
             */
-            if(mapaFirst[reglas::O].find(token) != mapaFirst[reglas::O].end()){
-                // R2 -> O R 
-                parse_file << 23 << " ";
-                noTerminal(reglas::O, token);
-                noTerminal(reglas::R, token);
-            }
-            else if(mapaFollow[reglas::R2].find(token) != mapaFollow[reglas::R2].end()){
-                // R2 -> lambda
-                parse_file << 24 << " ";
+            if(mapaFirst[reglas::R4].find(token) != mapaFirst[reglas::R4].end()){
+                // R2 -> R4 R3
+                parse_file << 21 << " ";
+                noTerminal(reglas::R4, token);
+                noTerminal(reglas::R3, token);
             }
             else{
                 error(token, NT);
             }
             break;
-
-        case reglas::O:
+        case reglas::R3:
             /*
-            O -> == 
-            O -> && 
-            O -> + 
-            O -> -
+            R3 -> == R4 R3
+            R3 -> lambda
             */
-            if(token == token_ids::OP_RELACIONAL_IGUAL){
-                // O -> == 
-                parse_file << 25 << " ";
+           if(token == token_ids::OP_RELACIONAL_IGUAL){
+                // R3 -> == R4 R3
+                parse_file << 22 << " ";
                 equipara(token, token_ids::OP_RELACIONAL_IGUAL, NT);
+                noTerminal(reglas::R4, token);
+                noTerminal(reglas::R3, token);
             }
-            else if(token == token_ids::OP_LOGICO_ANDS){
-                // O -> && 
+            else if(mapaFollow[reglas::R3].find(token) != mapaFollow[reglas::R3].end()){
+                // R3 -> lambda
+                parse_file << 23 << " ";
+            }
+            else{
+                error(token, NT);
+            }
+            break;
+        case reglas::R4:
+            /*
+            R4 -> O R5
+            */
+            if(mapaFirst[reglas::O].find(token) != mapaFirst[reglas::O].end()){
+                // R4 -> O R5
+                parse_file << 24 << " ";
+                noTerminal(reglas::O, token);
+                noTerminal(reglas::R5, token);
+            }
+            else{
+                error(token, NT);
+            }
+            break;
+        case reglas::R5:
+            /*
+            R5 -> J O R5
+            R5 -> lambda
+            */
+            if(mapaFirst[reglas::J].find(token) != mapaFirst[reglas::J].end()){
+                // R5 -> J O R5
+                parse_file << 25 << " ";
+                noTerminal(reglas::J, token);
+                noTerminal(reglas::O, token);
+                noTerminal(reglas::R5, token);
+            }
+            else if(mapaFollow[reglas::R5].find(token) != mapaFollow[reglas::R5].end()){
+                // R5 -> lambda
                 parse_file << 26 << " ";
-                equipara(token, token_ids::OP_LOGICO_ANDS, NT);
             }
-            else if(token == token_ids::OP_ARITMETICO_SUMA){
-                // O -> + 
+            else{
+                error(token, NT);
+            }
+            break;
+        case reglas::J:
+            /*
+            J -> +
+            J -> -
+            */
+            if(token == token_ids::OP_ARITMETICO_SUMA){
+                // J -> +
                 parse_file << 27 << " ";
                 equipara(token, token_ids::OP_ARITMETICO_SUMA, NT);
             }
             else if(token == token_ids::OP_ARITMETICO_RESTA){
-                // O -> -
+                // J -> -
                 parse_file << 28 << " ";
                 equipara(token, token_ids::OP_ARITMETICO_RESTA, NT);
+            }
+            else{
+                error(token, NT);
+            }
+            break;
+        case reglas::O:
+            /*
+            O -> ( R )
+            O -> id A
+            O -> numero
+            O -> cadena
+            */
+            if(token == token_ids::PARENTESIS_ABIERTA){
+                // O -> ( R )
+                parse_file << 29 << " ";
+                equipara(token, token_ids::PARENTESIS_ABIERTA, NT);
+                noTerminal(reglas::R,token);
+                equipara(token, token_ids::PARENTESIS_CERRADA,NT);
+            }
+            else if(token == token_ids::IDENTIFICADOR){
+                // O -> id A
+                parse_file << 30 << " ";
+                equipara(token, token_ids::IDENTIFICADOR, NT);
+                noTerminal(reglas::A,token);
+            }
+            else if(token == token_ids::NUMERO){
+                // O -> numero
+                parse_file << 31 << " ";
+                equipara(token, token_ids::NUMERO, NT);
+            }
+            else if(token == token_ids::CADENA){
+                // O -> cadena
+                parse_file << 32 << " ";
+                equipara(token, token_ids::CADENA, NT);
             }
             else{
                 error(token, NT);
@@ -566,14 +625,14 @@ bool noTerminal(reglas NT, token_ids& token){
             */ 
             if(token == token_ids::PARENTESIS_ABIERTA){
                 // A -> ( A1 )
-                parse_file << 29 << " ";
+                parse_file << 33 << " ";
                 equipara(token, token_ids::PARENTESIS_ABIERTA, NT);
                 noTerminal(reglas::A1, token);
                 equipara(token, token_ids::PARENTESIS_CERRADA, NT);
             }
             else if(mapaFollow[reglas::A].find(token) != mapaFollow[reglas::A].end()){
                 // A -> lambda
-                parse_file << 30 << " ";
+                parse_file << 34 << " ";
             }
             else{
                 error(token, NT);
@@ -582,17 +641,18 @@ bool noTerminal(reglas NT, token_ids& token){
 
         case reglas::A1:
             /*
-            A1 -> A2 
+            A1 -> R A2
             A1 -> lambda
             */
-            if(mapaFirst[reglas::A2].find(token) != mapaFirst[reglas::A2].end()){
-                // A1 -> A2 
-                parse_file << 31 << " ";
+            if(mapaFirst[reglas::R].find(token) != mapaFirst[reglas::R].end()){
+                // A1 -> R A2
+                parse_file << 35 << " ";
+                noTerminal(reglas::R, token);
                 noTerminal(reglas::A2, token);
             }
             else if(mapaFollow[reglas::A1].find(token) != mapaFollow[reglas::A1].end()){
                 // A1 -> lambda
-                parse_file << 32 << " ";
+                parse_file << 36 << " ";
             }
             else{
                 error(token, NT);
@@ -601,33 +661,19 @@ bool noTerminal(reglas NT, token_ids& token){
 
         case reglas::A2:
             /*
-            A2 -> R A3
-            */
-            if(mapaFirst[reglas::R].find(token) != mapaFirst[reglas::R].end()){
-                // A2 -> R A3
-                parse_file << 33 << " ";
-                noTerminal(reglas::R, token);
-                noTerminal(reglas::A3, token);
-            }
-            else{
-                error(token, NT);
-            }
-            break;
-
-        case reglas::A3:
-            /*
-            A3 -> , A2
-            A3 -> lambda
+            A2 -> , R A2
+            A2 -> lambda
             */
             if(token == token_ids::COMA){
-                // A3 -> , A2
-                parse_file << 34 << " ";
+                // A2 -> , R A2
+                parse_file << 37 << " ";
                 equipara(token, token_ids::COMA, NT);
+                noTerminal(reglas::R, token);
                 noTerminal(reglas::A2, token);
             }
-            else if(mapaFollow[reglas::A3].find(token) != mapaFollow[reglas::A3].end()){
-                // A3 -> lambda
-                parse_file << 35 << " ";
+            else if(mapaFollow[reglas::A2].find(token) != mapaFollow[reglas::A2].end()){
+                // A2 -> lambda
+                parse_file << 38 << " ";
             }
             else{
                 error(token, NT);
@@ -636,51 +682,35 @@ bool noTerminal(reglas NT, token_ids& token){
 
         case reglas::U:
             /*
-            U -> cadena R2 ;
-            U -> numero R2 ;
             U -> input id ; 
             U -> output R ; 
             U -> return U2 ; 
             U -> id U1
             */
-            if(token == token_ids::CADENA){
-                //U -> cadena R2 ;
-                parse_file << 36 << " ";
-                equipara(token, token_ids::CADENA, NT);
-                noTerminal(reglas::R2, token);
-                equipara(token, token_ids::PUNTO_Y_COMA, NT);
-            }
-            else if(token == token_ids::NUMERO){
-                //U -> numero R2 ;
-                parse_file << 37 << " ";
-                equipara(token, token_ids::NUMERO, NT);
-                noTerminal(reglas::R2, token);
-                equipara(token, token_ids::PUNTO_Y_COMA, NT);
-            }
-            else if(token == token_ids::PAL_RES_INPUT){
+            if(token == token_ids::PAL_RES_INPUT){
                 // U -> input id ; 
-                parse_file << 38 << " ";
+                parse_file << 39 << " ";
                 equipara(token, token_ids::PAL_RES_INPUT, NT);
                 equipara(token, token_ids::IDENTIFICADOR, NT);
                 equipara(token, token_ids::PUNTO_Y_COMA, NT);
             }
             else if(token == token_ids::PAL_RES_OUTPUT){
                 // U -> output R ; 
-                parse_file << 39 << " ";
+                parse_file << 40 << " ";
                 equipara(token, token_ids::PAL_RES_OUTPUT, NT);
                 noTerminal(reglas::R, token);
                 equipara(token, token_ids::PUNTO_Y_COMA, NT);
             }
             else if(token == token_ids::PAL_RES_RETURN){
                 // U -> return U2 ; 
-                parse_file << 40 << " ";
+                parse_file << 41 << " ";
                 equipara(token, token_ids::PAL_RES_RETURN, NT);
                 noTerminal(reglas::U2, token);
                 equipara(token, token_ids::PUNTO_Y_COMA, NT);
             }
             else if(token == token_ids::IDENTIFICADOR){
                 // U -> id U1
-                parse_file << 41 << " ";
+                parse_file << 42 << " ";
                 equipara(token, token_ids::IDENTIFICADOR, NT);
                 noTerminal(reglas::U1, token);
             }
@@ -696,14 +726,14 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(mapaFirst[reglas::L].find(token) != mapaFirst[reglas::L].end()){
                 // U1 -> L R ; 
-                parse_file << 42 << " ";
+                parse_file << 43 << " ";
                 noTerminal(reglas::L, token);
                 noTerminal(reglas::R, token);
                 equipara(token, token_ids::PUNTO_Y_COMA, NT);
             }
             else if(token == token_ids::PARENTESIS_ABIERTA){
                 // U1 -> ( A1 ) ;
-                parse_file << 43 << " ";
+                parse_file << 44 << " ";
                 equipara(token, token_ids::PARENTESIS_ABIERTA, NT);
                 noTerminal(reglas::A1, token);
                 equipara(token, token_ids::PARENTESIS_CERRADA, NT);
@@ -721,12 +751,12 @@ bool noTerminal(reglas NT, token_ids& token){
             */
             if(mapaFirst[reglas::R].find(token) != mapaFirst[reglas::R].end()){
                 // U2 -> R
-                parse_file << 44 << " ";
+                parse_file << 45 << " ";
                 noTerminal(reglas::R, token);
             }
             else if(mapaFollow[reglas::U2].find(token) != mapaFollow[reglas::U2].end()){
                 // U2 -> lambda
-                parse_file << 45 << " ";
+                parse_file << 46 << " ";
             }
             else{
                 error(token, NT);
@@ -735,20 +765,10 @@ bool noTerminal(reglas NT, token_ids& token){
 
         case reglas::F1:
             /*
-            F1 -> var T id L R 
             F1 -> id L R 
             F1 -> lambda
             */
-            if(token == token_ids::PAL_RES_VAR){
-                // F1 -> var T id L R 
-                parse_file << 46 << " ";
-                equipara(token, token_ids::PAL_RES_VAR, NT);
-                noTerminal(reglas::T, token);
-                equipara(token, token_ids::IDENTIFICADOR, NT);
-                noTerminal(reglas::L, token);
-                noTerminal(reglas::R, token);
-            }       
-            else if(token == token_ids::IDENTIFICADOR){
+            if(token == token_ids::IDENTIFICADOR){
                 // F1 -> id L R 
                 parse_file << 47 << " ";
                 equipara(token, token_ids::IDENTIFICADOR, NT);

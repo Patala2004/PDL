@@ -93,16 +93,19 @@ enum class reglas{
     L,  // 12
     R1, // 13
     R2, // 14
-    A,  // 15
-    O,  // 16
-    A1, // 17
-    A2, // 18
-    A3, // 19
-    U2, // 20
-    U1, // 21
-    D2, // 22
-    D3, // 23
-    D4  // 24
+    R3, // 15
+    R4, // 16
+    R5, // 17
+    A,  // 18
+    O,  // 19
+    A1, // 20
+    A2, // 21
+    U2, // 22
+    U1, // 23
+    D2, // 24
+    D3, // 25
+    D4,  // 26
+    J // 27 
 };
 
 string reglasToString(reglas r){
@@ -126,12 +129,15 @@ string reglasToString(reglas r){
         case reglas::O:     return "O";
         case reglas::A1:    return "A1";
         case reglas::A2:    return "A2";
-        case reglas::A3:    return "A3";
         case reglas::U2:    return "U2";
         case reglas::U1:    return "U1";
         case reglas::D2:    return "D2";
         case reglas::D3:    return "D3";
         case reglas::D4:    return "D4";
+        case reglas::J:     return "J";
+        case reglas::R3:    return "R3";
+        case reglas::R4:    return "R4";
+        case reglas::R5:    return "R5";
         default: return "ERROR ESTADO NO ENCONTRADO";
     }
 }

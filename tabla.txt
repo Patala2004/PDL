@@ -1,20 +1,2 @@
 * LEXEMA: 'booleano'
     +despl: 2
-* LEXEMA: 'bisiesto'
-    +despl: 6
-* LEXEMA: 'a'
-    +despl: 8
-* LEXEMA: 'bis'
-    +despl: 11
-* LEXEMA: 'dias'
-    +despl: 19
-* LEXEMA: 'm'
-    +despl: 21
-* LEXEMA: 'dd'
-    +despl: 26
-* LEXEMA: 'esFechaCorrecta'
-    +despl: 44
-* LEXEMA: 'd'
-    +despl: 46
-* LEXEMA: 'demo'
-    +despl: 58

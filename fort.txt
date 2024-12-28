@@ -1,0 +1,58 @@
+S -> B S
+S -> D S 
+S -> lambda
+B -> var T id C 
+B -> if ( R ) U
+B -> U
+B -> for ( F1 ; R ; F2 ) { Q }
+D -> function H id ( D1 ) { Q }
+H -> T
+H -> void
+T -> boolean
+T -> int
+T -> string
+C -> ; 
+C -> L R ;
+L -> += 
+L -> =
+R -> R2 R1
+R1 -> && R2 R1
+R1 -> lambda
+R2 -> R4 R3
+R3 -> == R4 R3
+R3 -> lambda
+R4 -> O R5
+R5 -> J O R5
+R5 -> lambda
+J -> +
+J -> -
+O -> ( R )
+O -> id A
+O -> numero
+O -> cadena
+A -> ( A1 ) 
+A -> lambda
+A1 -> R A2
+A1 -> lambda
+A2 -> , R A2
+A2 -> lambda
+U -> input id ; 
+U -> output R ; 
+U -> return U2 ; 
+U -> id U1
+U1 -> L R ; 
+U1 -> ( A1 ) ;
+U2 -> R
+U2 -> lambda
+F1 -> id L R 
+F1 -> lambda
+F2 -> id L R 
+F2 -> lambda
+Q -> B Q 
+Q -> lambda
+D1 -> D2
+D1 -> void
+D2 -> D3 D4
+D3 -> T id
+D4 -> , D2
+D4 -> lambda

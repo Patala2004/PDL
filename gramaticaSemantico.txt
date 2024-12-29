@@ -1,0 +1,59 @@
+S' -> {TSG=CreaTabla(); desplG=0} S {LiberaTabla(TSG)}
+S -> B S {}
+S -> D S {}
+S -> lambda {}
+B -> var T id C {if(C.tipo==vacio){B.tipo=T.tipo}else{if(T.tipo==C.tipo){B.tipo=T.tipo}else{LanzarError("No has asignado correctamente el tipo de variable")}}}
+B -> if ( R ) U {if(R.tipo==booleano){#nosequeponer}else{LanzarError("La condicion tiene que ser una expresion booleana")}}
+B -> U {B.tipo=S.tipo}
+B -> for ( F1 ; R ; F2 ) { Q }
+D -> function H id ( D1 ) { Q } #segurohayqueponermascosas{if(R.tipo==booleano){#nosequeponer}else{LanzarError("La condicion tiene que ser una expresion booleana")}}
+H -> T {H.tipo=T.tipo} 
+H -> void {H.tipo=vacio}
+T -> boolean {T.tipo=logico T.ancho=1}
+T -> int {T.tipo=entero T.ancho=1}
+T -> string {T.tipo=cadena T.ancho=64}
+C -> ; {C.tipo=vacio}
+C -> L R ; {C.tipo=R.tipo}
+L -> += #nosequeponer
+L -> = #nosequeponer
+R -> R2 R1 #dificil
+R1 -> && R2 R1 #dificil
+R1 -> lambda #dificil
+R2 -> R4 R3 #dificil
+R3 -> == R4 R3 #dificil
+R3 -> lambda #dificil
+R4 -> O R5 #dificil
+R5 -> J O R5 #dificil
+R5 -> lambda #dificil
+J -> + #dificil
+J -> - #dificil
+O -> ( R ) {O.tipo=R.tipo}
+O -> id A {O.tipo=BuscaTipoTS(id.pos)}
+O -> numero {O.tipo=entero O.ancho=1}
+O -> cadena {O.tipo=cadena O.ancho=64}
+A -> ( A1 ) #dificil
+A -> lambda #dificil
+A1 -> R A2 #dificil
+A1 -> lambda #dificil
+A2 -> , R A2 #dificil
+A2 -> lambda #dificil
+U -> input id ; {if(BuscaTipoTS(id.pos)==entero || BuscaTipoTS(id.pos)==cadena){U.tipo=tipo_ok}else{LanzarError("no se puede guardar un booleano")}}
+U -> output R ; {if(R.tipo==entero || R.tipo==cadena){U.tipo=tipo_ok}else{LanzarError("no se puede imprimir un booleano")}}
+U -> return U2 ; {U.tipo=U2.tipo}
+U -> id U1 #dificil
+U1 -> L R ; #dificil
+U1 -> ( A1 ) ; #dificil
+U2 -> R {U2.tipo=R.tipo}
+U2 -> lambda {U2.tipo=vacio}
+F1 -> id L R #dificil
+F1 -> lambda #dificil
+F2 -> id L R #dificil
+F2 -> lambda #dificil
+Q -> B Q #dificil
+Q -> lambda #dificil
+D1 -> D2 #dificil
+D1 -> void #dificil
+D2 -> D3 D4 #dificil
+D3 -> T id #dificil
+D4 -> , D2 #dificil
+D4 -> lambda #dificil

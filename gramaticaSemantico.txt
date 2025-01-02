@@ -4,8 +4,8 @@ S -> D S {}
 S -> lambda {}
 B -> var T id C {if(C.tipo==vacio){B.tipo=T.tipo}else{if(T.tipo==C.tipo){B.tipo=T.tipo}else{LanzarError("No has asignado correctamente el tipo de variable")}}}
 B -> if ( R ) U {if(R.tipo==booleano){#nosequeponer}else{LanzarError("La condicion tiene que ser una expresion booleana")}}
-B -> U {B.tipo=S.tipo}
-B -> for ( F1 ; R ; F2 ) { Q }
+B -> U {B.tipo=U.tipo}
+B -> for ( F1 ; R ; F2 ) { Q } # dificil
 D -> function H id ( D1 ) { Q } #segurohayqueponermascosas{if(R.tipo==booleano){#nosequeponer}else{LanzarError("La condicion tiene que ser una expresion booleana")}}
 H -> T {H.tipo=T.tipo} 
 H -> void {H.tipo=vacio}

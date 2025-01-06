@@ -2,58 +2,212 @@ S' -> {TSG=CreaTabla(); desplG=0} S {LiberaTabla(TSG)}
 S -> B S {}
 S -> D S {}
 S -> lambda {}
-B -> var T id C {if(C.tipo==vacio){B.tipo=T.tipo}else{if(T.tipo==C.tipo){B.tipo=T.tipo}else{LanzarError("No has asignado correctamente el tipo de variable")}}}
-B -> if ( R ) U {if(R.tipo==booleano){#nosequeponer}else{LanzarError("La condicion tiene que ser una expresion booleana")}}
-B -> U {B.tipo=U.tipo}
-B -> for ( F1 ; R ; F2 ) { Q } # dificil
-D -> function H id ( D1 ) { Q } #segurohayqueponermascosas{if(R.tipo==booleano){#nosequeponer}else{LanzarError("La condicion tiene que ser una expresion booleana")}}
+B -> var {zona_decl:=true}
+     T
+     id {id.tipo = BuscaTipoTS(id.pos)
+        if(id.tipo == null)then
+            AñadeTipo(id.pos,T.tipo)
+            if (TSL == NULL) then # si no hay tabla temporal
+                AñadeDespl(id.pos,despG)
+                despG += T.ancho; # Actualizamos el desplazamiento global
+            else
+                AñadeDespl(id.pos,despL)
+                despL += T.ancho; # Actualizamos el desplazamiento de la tabla de la funcion
+        else 
+            LanzarError("Esa variable ya ha sido declarada")
+        zona_decl:= false
+        } 
+        
+     C {if(T.tipo != C.tipo && C.tipo != vacio) then
+            LanzarError("La variable asignada no coincide con el tipo de la asignacion")
+     }
+B -> if ( R ) U {
+                if(R.tipo!=booleano)
+                    LanzarError("La condicion tiene que ser una expresion booleana")
+                }
+B -> U  {
+        B.tipoRet=U.tipoRet
+        }
+B -> for ( F1 ; R ; F2 ) { Q } 
+                {
+                if(R.tipo!=booleano)
+                    LanzarError("La condicion tiene que ser una expresion booleana")
+                }
+D -> function {zona_decl:= true}
+     H id
+    {
+    TSL:= CreaTabla()
+    desplL:=0
+    }
+    ( D1 
+    {
+    AñadeTipo(id.pos, D1.tipo->H.tipo);
+    AñadeEtiq(id.pos, nuevaetiq())
+    zona_decl:= false
+    }
+    ) { Q } 
+    {
+    if(Q.tipoRet != H.tipo && !(H.tipo == void && Q.tipoRet == null))then 
+        LanzarError("El tipo de retorno no coincide con el tipo de la funcion")  
+    LiberaTabla(TSL)
+    }
 H -> T {H.tipo=T.tipo} 
-H -> void {H.tipo=vacio}
+H -> void {H.tipo=void}
 T -> boolean {T.tipo=logico T.ancho=1}
 T -> int {T.tipo=entero T.ancho=1}
 T -> string {T.tipo=cadena T.ancho=64}
 C -> ; {C.tipo=vacio}
 C -> L R ; {C.tipo=R.tipo}
-L -> += #nosequeponer
-L -> = #nosequeponer
-R -> R2 R1 #dificil
-R1 -> && R2 R1 #dificil
-R1 -> lambda #dificil
-R2 -> R4 R3 #dificil
-R3 -> == R4 R3 #dificil
-R3 -> lambda #dificil
-R4 -> O R5 #dificil
-R5 -> J O R5 #dificil
-R5 -> lambda #dificil
-J -> + #dificil
-J -> - #dificil
+L -> += # Ver si hay que comprobar que sea int para hacer esto
+L -> = 
+R -> R2 R1 
+            {
+            if(R1.tipo != vacio)then
+                R.tipo := booleano
+                if(R2.tipo != booleano && R1.tipo != booleano) then
+                    LanzarError("Cuando hay un and debe haber un booleano")
+            else
+                R.tipo := R2.tipo
+            }
+R1 -> && R2 R1 
+            {R1.tipo := R2.tipo
+            if (R1'.tipo != vacio && R1'.tipo != booleano)then # IMPORTANTE comprobar si solo se pueden sumar enteros
+                LanzarError("No puedes hacer un AND de algo que no sea booleano")
+            }
+R1 -> lambda {R1.tipo := vacio}
+R2 -> R4 R3 
+            {
+            if(R3 != vacio)then
+                R2.tipo := booleano
+                if(R3.tipo != R4.tipo)then
+                    LanzarError("No puedes igualar datos de distinto tipo")
+            else
+                R2.tipo := R4.tipo
+            }
+R3 -> == R4 R3
+            {R3.tipo := R4.tipo
+            if (R3'.tipo != vacio && R3'.tipo != R4.tipo)then # IMPORTANTE comprobar si solo se pueden sumar enteros
+                LanzarError("No puedes igualar datos de distinto tipo")
+            }
+R3 -> lambda {R3.tipo := vacio}
+R4 -> O R5 
+            {R4.tipo := O.tipo
+            if (R5.tipo != vacio && R5.tipo != O.tipo)then # IMPORTANTE comprobar si solo se pueden sumar enteros
+                LanzarError("No puedes sumar/restar datos de distinto tipo")
+            }
+R5 -> J O R5
+            {R5.tipo := O.tipo
+            if (R5'.tipo != vacio && R5'.tipo != O.tipo)then # IMPORTANTE comprobar si solo se pueden sumar enteros
+                LanzarError("No puedes sumar/restar datos de distinto tipo")
+            }
+R5 -> lambda {R5.tipo := vacio}
+J -> + 
+J -> - 
 O -> ( R ) {O.tipo=R.tipo}
-O -> id A {O.tipo=BuscaTipoTS(id.pos)}
+O -> id A 
+        {
+        if (A.tipo != null)then
+            if(A.tipo == BuscaTipoTS(id.pos)) then # Aqui lo que queremos comparar es que los parametros coincidan con
+                                                los tipos ejemplo: L.tipo de la funcion a la que estamos llamando
+                                                coincida con A1: funcion ejemplo(int a,string x) == ejemplo(1,4)
+                                                que coincidan los parametros con los tipos si no devolvemos error
+            O.tipo := BuscaTipoTS(id.pos)
+            else 
+                LanzarError("Los parametros no son correctos para la funcion")
+        else
+            O.tipo := BuscaTipoTS(id.pos)
+        }
 O -> numero {O.tipo=entero O.ancho=1}
 O -> cadena {O.tipo=cadena O.ancho=64}
-A -> ( A1 ) #dificil
-A -> lambda #dificil
-A1 -> R A2 #dificil
-A1 -> lambda #dificil
-A2 -> , R A2 #dificil
-A2 -> lambda #dificil
-U -> input id ; {if(BuscaTipoTS(id.pos)==entero || BuscaTipoTS(id.pos)==cadena){U.tipo=tipo_ok}else{LanzarError("no se puede guardar un booleano")}}
-U -> output R ; {if(R.tipo==entero || R.tipo==cadena){U.tipo=tipo_ok}else{LanzarError("no se puede imprimir un booleano")}}
-U -> return U2 ; {U.tipo=U2.tipo}
-U -> id U1 #dificil
-U1 -> L R ; #dificil
-U1 -> ( A1 ) ; #dificil
+A -> ( A1 ) {A.tipo := A1.tipo}
+A -> lambda 
+A1 -> R A2 
+            {
+            if(A2.tipo == null)then
+                A1.tipo = R.tipo
+            else 
+                A1.tipo = R.tipo x A2.tipo
+            }
+A1 -> lambda 
+A2 -> , R A2 
+            {
+            if(A2.tipo == null)then
+                A1.tipo = R.tipo
+            else 
+                A1.tipo = R.tipo x A2.tipo
+            }
+A2 -> lambda 
+U -> input id ; 
+            {
+            if(BuscaTipoTS(id.pos)!=entero && BuscaTipoTS(id.pos)!=cadena)then
+                LanzarError("no se puede guardar algo que no sea cadena o entero")
+            }
+U -> output R ; 
+            {
+            if(R.tipo!=entero && R.tipo!=cadena)then
+                LanzarError("no se puede imprimir algo que no sea cadena o entero")
+            }
+U -> return U2 ; 
+            {
+            U.tipoRet=U2.tipo
+            if(TSL == NULL)then
+                LanzarError("no puedes llamara a return fuera de una funcion")
+            }
+U -> id U1 
+            {
+            # Se complica porque puede ser tanto funcion como variable
+            if(U1.tipo != BuscaTipoTS(id.pos)) then # Aqui lo que queremos comparar es que los parametros coincidan con
+                                                    los tipos ejemplo: L.tipo de la funcion a la que estamos llamando
+                                                    coincida con A1: funcion ejemplo(int a,string x) == ejemplo(1,4)
+                                                    que coincidan los parametros con los tipos si no devolvemos error
+            LanzarError("Los parametros no son correctos para la funcion/no ha sido asignado correctamente")
+            }
+U1 -> L R ; {U1.tipo := R.tipo}
+U1 -> ( A1 ) ; {U1.tipo := A1.tipo}
 U2 -> R {U2.tipo=R.tipo}
-U2 -> lambda {U2.tipo=vacio}
-F1 -> id L R #dificil
-F1 -> lambda #dificil
-F2 -> id L R #dificil
-F2 -> lambda #dificil
-Q -> B Q #dificil
-Q -> lambda #dificil
-D1 -> D2 #dificil
-D1 -> void #dificil
-D2 -> D3 D4 #dificil
-D3 -> T id #dificil
-D4 -> , D2 #dificil
-D4 -> lambda #dificil
+U2 -> lambda {U2.tipo=void}
+F1 -> id L R 
+            {
+            if(R.tipo != BuscaTipoTS(id.pos)) then
+                LanzarError("El id no coincide con el tipo de su asignacion)
+            }
+F1 -> lambda 
+F2 -> id L R
+            {
+            if(R.tipo != BuscaTipoTS(id.pos)) then
+                LanzarError("El id no coincide con el tipo de su asignacion)
+            }
+F2 -> lambda 
+Q -> B Q 
+        {
+        if(Q'.tipoRet == B.tipoRet || Q'.tipoRet == null)then
+            Q.tipoRet := B.tipoRet
+        else if(B.tipoRet == null)then
+            Q.tipoRet := Q'.tipoRet
+        else
+            LanzarError("Los return no son del mismo tipo")
+        }
+Q -> lambda {Q.tipoRet := null}
+D1 -> D2 {D1.tipo := D2.tipo}
+D1 -> void {D1.tipo := void}
+D2 -> D3 D4 
+            {
+            if(D4.tipo == null) then   
+                D2.tipo := D3.tipo
+            else
+                D2.tipo := D3.tipo x D4.tipo
+            }
+
+D3 -> T id 
+            {
+            id.tipo = BuscaTipoTS(id.pos)
+            if(id.tipo == null)then
+                AñadeTipo(id.pos,T.tipo)
+                AñadeDespl(id.pos,despL)
+                despL += T.ancho; # Actualizamos el desplazamiento de la tabla de la funcion
+                D3.tipo = T.tipo
+            else 
+                LanzarError("Esa variable ya ha sido declarada")
+            }   
+D4 -> , D2 {D4.tipo := D2.tipo}
+D4 -> lambda 

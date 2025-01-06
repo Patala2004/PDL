@@ -1,2 +1,42 @@
 
 output 5+5==5;
+/* Ejemplo de Prueba... */
+
+var int int1;
+var string cadena;input cadena;
+var boolean logico1;var boolean logico2 ;
+
+int1 = 000000378;
+
+int2 = int1;
+cadena = "string";
+
+function  string ff(string ss)
+{
+	logico2 =  logico1;
+	if (logico2) cadena = ff (ss);
+	varglobal = 78;
+	return cadena;
+}
+		
+
+output
+
+(
+
+"https://muss.fi.upm.es/" /**/
+
+)
+
+;
+function string funciOn (string logico2)
+{	var string let 	;
+
+  for (logico2="";int1 == int2;int2 = int1){
+	logico1 = int1 == int2;output((0));
+  }
+  
+  return logico2;
+}
+output((ff((funciOn((cadena))))));
+

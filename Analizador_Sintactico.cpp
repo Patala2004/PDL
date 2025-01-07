@@ -711,7 +711,13 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             //semantico
             if(R1["tipo"] != "vacio"){
                 (*atrs_semanticos)["tipo"] = "booleano";
-                if(R2["tipo"] != "booleano" && R1["tipo"] != "booleano")
+                if(R2["tipo"] != "booleano"){
+                    cout << "ERROR SEMANTICO: LAS DOS PARTES DE UN AND DEBEN DE SER VALORES BOOLEANOS" << endl;
+                    exit(0);
+                }
+            }
+            else{
+                (*atrs_semanticos)["tipo"] = R2["tipo"];
             }
             //finsemantico
         }

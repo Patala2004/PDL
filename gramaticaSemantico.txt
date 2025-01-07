@@ -62,18 +62,24 @@ L -> += {L.operador := suma}
 L -> = 
 R -> R2 R1 
             {
+            R1.tipo = R2.tipo # paso a R1 el valor de R2 para que en caso de que haya un AND pueda comprobar si R2 es booleano o no 
+            # esto se hace para leer de izquierda a derecha los tipo
+
             if(R1.tipo != vacio)then
                 R.tipo := booleano
-                if(R2.tipo != booleano) then
-                    LanzarError("Cuando hay un and debe haber un booleano")
             else
                 R.tipo := R2.tipo
             }
 R1 -> && R2 R1 
-            {R1.tipo := R2.tipo
-            if (R2.tipo != booleano)then # IMPORTANTE comprobar si solo se pueden sumar enteros
+            {
+
+            if(R1.tipo != booleano) then
+                LanzarError("Cuando hay un and debe haber un booleano")
+            
+            if (R2.tipo != booleano)then
                 LanzarError("No puedes hacer un AND de algo que no sea booleano")
             }
+            R1'.tipo = booleano # Porque la parte izquierda del nuevo and va a ser el resultado de otro and, que va a ser booleano
 R1 -> lambda {R1.tipo := vacio}
 R2 -> R4 R3 
             {

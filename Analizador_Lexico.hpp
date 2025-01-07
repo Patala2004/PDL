@@ -41,7 +41,7 @@ public:
     ~AnalizadorLexico();
 
     // Public method to process characters
-    token_ids processNextChar();
+    Token processNextChar();
 
     int sintax_error(int cod);
 

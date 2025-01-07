@@ -2,6 +2,7 @@
 #define TOKEN_UTILS_HPP
 
 #include <string>
+#include <variant>
 
 using namespace std;
 
@@ -38,6 +39,18 @@ enum class token_ids
     PAL_RES_INT,
     ERROR_TOKEN_NOT_RECOGNIZED,
     ENDOFFILE
+};
+
+class Token
+{
+    public:
+    token_ids id;
+    variant<int,string,float> valor;
+
+    Token(token_ids token_id, int value) : id(token_id), valor(value) {}
+    Token(token_ids token_id, string value) : id(token_id), valor(value) {}
+    Token(token_ids token_id, float value) : id(token_id), valor(value) {}
+    Token(token_ids token_id) : id(token_id), valor("") {};
 };
 
 // Function to convert token_ids to string

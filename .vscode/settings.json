@@ -51,6 +51,7 @@
         "streambuf": "cpp",
         "typeinfo": "cpp",
         "set": "cpp",
-        "cstdarg": "cpp"
+        "cstdarg": "cpp",
+        "variant": "cpp"
     }
 }

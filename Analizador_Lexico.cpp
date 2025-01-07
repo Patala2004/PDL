@@ -119,20 +119,20 @@ int error(int cod_error, std::ifstream &file, std::streampos position, std::ofst
     return line;
 }
 
-token_ids generarToken(token_ids id, int valor, std::ofstream &token_file)
+Token generarToken(token_ids id, int valor, std::ofstream &token_file)
 {
     token_file << "<" << tokenToString(id) << ", " << valor << ">" << endl;
-    return id;
+    return Token(id,valor);
 }
-token_ids generarToken(token_ids id, string valor, std::ofstream &token_file)
+Token generarToken(token_ids id, string valor, std::ofstream &token_file)
 {
     token_file << "<" << tokenToString(id) << ", " << '\"' << valor << '\"' << ">" << endl;
-    return id;
+    return Token(id,valor);
 }
-token_ids generarToken(token_ids id, std::ofstream &token_file)
+Token generarToken(token_ids id, std::ofstream &token_file)
 {
     token_file << "<" << tokenToString(id) << ", " << ">" << endl;
-    return id;
+    return Token(id);
 }
 
 void crearTabla(string nombre_tabla, std::ofstream &tabla_file)
@@ -210,7 +210,7 @@ void meterToken(token_ids id, string lex, int desplazamiento, std::ofstream &tab
             tabla_file.close();
     }
 
-    token_ids AnalizadorLexico::processNextChar()
+    Token AnalizadorLexico::processNextChar()
     {
 
         bool tokenGenerated = false;
@@ -223,10 +223,10 @@ void meterToken(token_ids id, string lex, int desplazamiento, std::ofstream &tab
 
         if (eof)
         {
-            return token_ids::ENDOFFILE;
+            return Token(token_ids::ENDOFFILE);
         }
 
-        token_ids res_token = token_ids::ENDOFFILE;
+        Token res_token = Token(token_ids::ENDOFFILE);
 
         while (!tokenGenerated)
         {
@@ -554,7 +554,7 @@ int main3(int argc, char *argv[])
     try
     {
         AnalizadorLexico analyzer(argv[1]);
-        while (analyzer.processNextChar() != token_ids::ENDOFFILE)
+        while (analyzer.processNextChar().id != token_ids::ENDOFFILE)
         {
             // Continuously process characters
         }

@@ -147,9 +147,9 @@ void crearTabla(string nombre_tabla, std::ofstream &tabla_file)
 
 void meterToken(token_ids id, string lex, int desplazamiento, std::ofstream &tabla_file)
 {
-    // Si el token no es una Cadena o un numero o un identificador no se anade a la Tabla de simbolos
+    // Si el token no es un identificador no se anade a la Tabla de simbolos
     // if de asegurarse
-    if (tokenToString(id) == "Cadena" || tokenToString(id) == "Numero" || tokenToString(id) == "ID")
+    if (tokenToString(id) == "ID")
     {
         // No esta el token en la tabla
         if (tabla.find(lex) == tabla.end())
@@ -449,7 +449,6 @@ void meterToken(token_ids id, string lex, int desplazamiento, std::ofstream &tab
                     std::map<std::string, token_ids>::iterator pal_res_id_it = palResMap.find(valor_cadena);
                     if (pal_res_id_it != palResMap.end())
                     {
-                        meterToken(pal_res_id_it->second, valor_cadena, desplazamiento, tabla_file);
                         tokenGenerated = true;
                         res_token = generarToken(pal_res_id_it->second, token_file);
                         desplazamiento++;
@@ -457,8 +456,8 @@ void meterToken(token_ids id, string lex, int desplazamiento, std::ofstream &tab
                     else
                     {
                         tokenGenerated = true;
-                        res_token = generarToken(token_ids::IDENTIFICADOR, pos_tabla_simbolos, token_file);
-                        meterToken(token_ids::IDENTIFICADOR, valor_cadena, desplazamiento, tabla_file);
+                        res_token = generarToken(token_ids::IDENTIFICADOR, valor_cadena, token_file);
+                        meterToken(token_ids::IDENTIFICADOR, valor_cadena, desplazamiento, tabla_file); // Meter a TS
                         pos_tabla_simbolos++;
                         desplazamiento++;
                     }

@@ -1,42 +1,33 @@
+var string texto;
+var int aa_aa ;
+var  int iiii;
+var string s64 ;
+var boolean bo;
 
-output 5+5==5;
-/* Ejemplo de Prueba... */
-
-var int int1;
-var string cadena;input cadena;
-var boolean logico1;var boolean logico2 ;
-
-int1 = 000000378;
-
-int2 = int1;
-cadena = "string";
-
-function  string ff(string ss)
+function int ffff  (void)
 {
-	logico2 =  logico1;
-	if (logico2) cadena = ff (ss);
-	varglobal = 78;
-	return cadena;
+aa_aa=11  
+
+aa_aa= iiii  +  33;
+
+return aa_aa;
+}	
+
+output  iiii ;
+
+iiii=aa_aa;
+	
+output ffff();
+function void put(string m_s_g)
+{
+	output "Mensaje introducido:";
+	output m_s_g;
 }
-		
-
-output
-
-(
-
-"https://muss.fi.upm.es/" /**/
-
-)
-
-;
-function string funciOn (string logico2)
-{	var string let 	;
-
-  for (logico2="";int1 == int2;int2 = int1){
-	logico1 = int1 == int2;output((0));
-  }
-  
-  return logico2;
+function void pideTexto ( void )
+{
+	output "Introduce un texto corto";
+	input texto;
 }
-output((ff((funciOn((cadena))))));
-
+pideTexto();
+  put
+	(texto);

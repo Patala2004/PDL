@@ -85,20 +85,23 @@ R2 -> R4 R3
                 R2.tipo := R4.tipo
             }
 R3 -> == R4 R3
-            {R3.tipo := R4.tipo
+            {
             if (R3'.tipo != vacio && R3'.tipo != R4.tipo)then # IMPORTANTE comprobar si solo se pueden sumar enteros
                 LanzarError("No puedes igualar datos de distinto tipo")
+            R3.tipo := R4.tipo
             }
 R3 -> lambda {R3.tipo := vacio}
 R4 -> O R5 
-            {R4.tipo := O.tipo
-            if (R5.tipo != vacio && R5.tipo != O.tipo)then # IMPORTANTE comprobar si solo se pueden sumar enteros
-                LanzarError("No puedes sumar/restar datos de distinto tipo")
+            {
+            if (R5.tipo != vacio && R5'.tipo != entero)then # IMPORTANTE comprobar si solo se pueden sumar enteros
+                LanzarError("No puedes sumar/restar datos que no sean enteros")
+            R4.tipo := O.tipo
             }
 R5 -> J O R5
-            {R5.tipo := O.tipo
-            if (R5'.tipo != vacio && R5'.tipo != O.tipo)then # IMPORTANTE comprobar si solo se pueden sumar enteros
-                LanzarError("No puedes sumar/restar datos de distinto tipo")
+            {
+            if (R5'.tipo != vacio  && R5'.tipo != entero)then # IMPORTANTE comprobar si solo se pueden sumar enteros
+                LanzarError("No puedes sumar/restar datos que no sean enteros")
+            R4.tipo := O.tipo
             }
 R5 -> lambda {R5.tipo := vacio}
 J -> + 

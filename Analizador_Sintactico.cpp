@@ -43,7 +43,7 @@ int popularMapa()
     mapaFirst[reglas::T] = {token_ids::PAL_RES_BOOL, token_ids::PAL_RES_INT, token_ids::PAL_RES_STRING};
 
     // Regla C
-    mapaFirst[reglas::C] = {token_ids::PUNTO_Y_COMA, token_ids::OP_ASIGNACION_SUMA, token_ids::OP_ASIGNACION_SIMPLE};
+    mapaFirst[reglas::C] = {token_ids::PUNTO_Y_COMA, token_ids::OP_ASIGNACION_SIMPLE};
 
     // Regla R
     mapaFirst[reglas::R] = {token_ids::IDENTIFICADOR, token_ids::PARENTESIS_ABIERTA, token_ids::NUMERO, token_ids::CADENA};
@@ -257,8 +257,9 @@ void error(token_ids token, reglas estado){
 // compara token actual con un token, lanza error y finaliza programa si no es y avanza al siguiente token si si es 
 bool equipara(token_ids& token, token_ids a_equiparar, reglas estado){
     if(token != a_equiparar){
+        int linea = analizador.sintax_error(1);
         cerr << "TOKEN " << tokenToString(token) << " NO ES IGUAL A " << tokenToString(a_equiparar) << "EN EL ESTADO "
-        << reglasToString(estado) <<endl;
+        << reglasToString(estado) << " en la linea: " << linea <<endl;
         exit(0);
     }
     //cout << tokenToString(token) << endl;
@@ -421,17 +422,17 @@ bool noTerminal(reglas NT, token_ids& token){
         case reglas::C:
             /*
             C -> ; 
-            C -> L R ;
+            C -> = R ;
             */
             if(token == token_ids::PUNTO_Y_COMA){
                 // C -> ; 
                 parse_file << 14 << " ";
                 equipara(token, token_ids::PUNTO_Y_COMA, NT);
             }
-            else if(mapaFirst[reglas::L].find(token) != mapaFirst[reglas::L].end()){
-                // C -> L R ;
+            else if(token == token_ids::OP_ASIGNACION_SIMPLE){
+                // C -> = R ;
                 parse_file << 15 << " ";
-                noTerminal(reglas::L, token);
+                equipara(token, token_ids::OP_ASIGNACION_SIMPLE, NT);
                 noTerminal(reglas::R, token);
                 equipara(token, token_ids::PUNTO_Y_COMA, NT);
             }
@@ -768,14 +769,14 @@ bool noTerminal(reglas NT, token_ids& token){
 
         case reglas::F1:
             /*
-            F1 -> id L R 
+            F1 -> id = R 
             F1 -> lambda
             */
             if(token == token_ids::IDENTIFICADOR){
-                // F1 -> id L R 
+                // F1 -> id = R 
                 parse_file << 47 << " ";
                 equipara(token, token_ids::IDENTIFICADOR, NT);
-                noTerminal(reglas::L, token);
+                equipara(token, token_ids::OP_ASIGNACION_SIMPLE, NT);
                 noTerminal(reglas::R, token);
             }
             else if(mapaFollow[reglas::F1].find(token) != mapaFollow[reglas::F1].end()){

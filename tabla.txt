@@ -8,5 +8,15 @@
     +despl: 11
 * LEXEMA: 'bo'
     +despl: 14
-* LEXEMA: 'ffff'
+* LEXEMA: 'sdadas'
     +despl: 17
+* LEXEMA: 'i'
+    +despl: 19
+* LEXEMA: 'ffff'
+    +despl: 23
+* LEXEMA: 'put'
+    +despl: 38
+* LEXEMA: 'm_s_g'
+    +despl: 40
+* LEXEMA: 'pideTexto'
+    +despl: 46

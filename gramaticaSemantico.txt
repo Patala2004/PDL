@@ -57,7 +57,7 @@ T -> boolean {T.tipo=logico T.ancho=1}
 T -> int {T.tipo=entero T.ancho=1}
 T -> string {T.tipo=cadena T.ancho=64}
 C -> ; {C.tipo=vacio}
-C -> L R ; {C.tipo=R.tipo}
+C -> = R ; {C.tipo=R.tipo}
 L -> += # Ver si hay que comprobar que sea int para hacer esto
 L -> = 
 R -> R2 R1 
@@ -169,7 +169,7 @@ U1 -> L R ; {U1.tipo := R.tipo}
 U1 -> ( A1 ) ; {U1.tipo := A1.tipo}
 U2 -> R {U2.tipo=R.tipo}
 U2 -> lambda {U2.tipo=void}
-F1 -> id L R 
+F1 -> id = R 
             {
             if(R.tipo != BuscaTipoTS(id.pos)) then
                 LanzarError("El id no coincide con el tipo de su asignacion)

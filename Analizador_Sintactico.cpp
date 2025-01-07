@@ -715,6 +715,7 @@ bool noTerminal(reglas NT, token_ids& token){
                 noTerminal(reglas::U1, token);
             }
             else{
+                cout << "MANDARINA" << endl;
                 error(token, NT);
             }
             break;
@@ -740,6 +741,7 @@ bool noTerminal(reglas NT, token_ids& token){
                 equipara(token, token_ids::PUNTO_Y_COMA, NT);
             }
             else{
+                cout << "AZUL" << endl;
                 error(token, NT);
             }
             break;
@@ -759,6 +761,7 @@ bool noTerminal(reglas NT, token_ids& token){
                 parse_file << 46 << " ";
             }
             else{
+                cout << "YELLOW" << endl;
                 error(token, NT);
             }     
             break;       

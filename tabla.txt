@@ -1,4 +1,12 @@
 * LEXEMA: 'texto'
     +despl: 2
-* LEXEMA: 'aa'
+* LEXEMA: 'aa_aa'
     +despl: 5
+* LEXEMA: 'iiii'
+    +despl: 8
+* LEXEMA: 's64'
+    +despl: 11
+* LEXEMA: 'bo'
+    +despl: 14
+* LEXEMA: 'ffff'
+    +despl: 17

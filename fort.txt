@@ -12,7 +12,7 @@ T -> boolean
 T -> int
 T -> string
 C -> ; 
-C -> L R ;
+C -> = R ;
 L -> += 
 L -> =
 R -> R2 R1
@@ -44,7 +44,7 @@ U1 -> L R ;
 U1 -> ( A1 ) ;
 U2 -> R
 U2 -> lambda
-F1 -> id L R 
+F1 -> id = R 
 F1 -> lambda
 F2 -> id L R 
 F2 -> lambda

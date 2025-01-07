@@ -1,2 +1,0 @@
-ERROR. COD: 5 EN (2,10):   Character invalido '_'
-ERROR. COD: 1 EN (2,12):   Caracter invalido '&'. Querias poner operador logico and '&&'?

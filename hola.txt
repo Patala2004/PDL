@@ -3,11 +3,11 @@ var int aa_aa ;
 var  int iiii;
 var string s64 ;
 var boolean bo;
-
+var int sdadas = 12;
+for(i = 1;12;i+=1){}
 function int ffff  (void)
 {
-aa_aa=11  
-
+aa_aa=11;
 aa_aa= iiii  +  33;
 
 return aa_aa;

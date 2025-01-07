@@ -439,7 +439,7 @@ void meterToken(token_ids id, string lex, int desplazamiento, std::ofstream &tab
             // 18 es un estado finak
             case 19:
                 // estamos en l
-                if (contains(abc, 52, a) || contains(digitos, 10, a))
+                if (contains(abc, 52, a) || contains(digitos, 10, a) || a == '_')
                 {
                     valor_cadena += a;
                     estado = 19;

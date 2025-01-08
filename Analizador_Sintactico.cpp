@@ -1126,7 +1126,17 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             // U -> input id ;
             parse_file << 39 << " ";
             equipara(token, token_ids::PAL_RES_INPUT, NT);
+            string id = get<string>(token.valor);
             equipara(token, token_ids::IDENTIFICADOR, NT);
+
+            //semantico
+            string tipo = BuscaTipo(id);
+            if(tipo != "entero" && tipo != "cadena"){
+                cout << "ERROR SEMANTICO: SOLO SE PUEDEN LEER ENTEROS O CADENAS USANDO INPUT" << endl;
+                exit(0);
+            }
+            //finsemantico
+
             equipara(token, token_ids::PUNTO_Y_COMA, NT);
         }
         else if (token.id == token_ids::PAL_RES_OUTPUT)
@@ -1134,7 +1144,16 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             // U -> output R ;
             parse_file << 40 << " ";
             equipara(token, token_ids::PAL_RES_OUTPUT, NT);
-            noTerminal(reglas::R, token);
+            map<string,string> R = {};
+            noTerminal(reglas::R, token, &R);
+
+            //semantico
+            if(R["tipo"] != "entero" && R["tipo"] != "cadena"){
+                cout << "ERROR SEMANTICO: SOLO SE PUEDEN IMPRIMIR ENTEROS O CADENAS" << endl;
+                exit(0);
+            }
+            //finsemantico
+
             equipara(token, token_ids::PUNTO_Y_COMA, NT);
         }
         else if (token.id == token_ids::PAL_RES_RETURN)
@@ -1142,7 +1161,20 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             // U -> return U2 ;
             parse_file << 41 << " ";
             equipara(token, token_ids::PAL_RES_RETURN, NT);
-            noTerminal(reglas::U2, token);
+
+            //semantico
+            if(TSL == NULL){
+                cout << "ERROR SEMANTICO: SOLO SE PUEDEN USAR RETURNS DENTRO DE FUNCIONES" << endl;
+            }
+            //finsemantico
+
+            map<string,string> U2 = {};
+            noTerminal(reglas::U2, token, &U2);
+
+            //semantico
+            (*atrs_semanticos)["tipoRet"] = U2["tipo"];
+            //finsemantico
+
             equipara(token, token_ids::PUNTO_Y_COMA, NT);
         }
         else if (token.id == token_ids::IDENTIFICADOR)

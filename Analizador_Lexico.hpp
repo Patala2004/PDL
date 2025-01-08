@@ -36,6 +36,7 @@ private:
 public:
     int linea;
     int linea_last_tok;
+    int linea_last_finished_tok;
     // Constructor
     AnalizadorLexico(const std::string &input_file);
 

@@ -170,7 +170,7 @@ void meterToken(token_ids id, string lex, int desplazamiento, std::ofstream &tab
 // palabras reservadas
 
 
-    AnalizadorLexico::AnalizadorLexico(const std::string &input_file) : estado(0), valor_numerico(0), valor_cadena(""), num_linea(1), linea(1), linea_last_tok(1), pos_tabla_simbolos(0), desplazamiento(0), eof(false)
+    AnalizadorLexico::AnalizadorLexico(const std::string &input_file) : estado(0), valor_numerico(0), valor_cadena(""), num_linea(1), linea(1), linea_last_tok(1), linea_last_finished_tok(1), pos_tabla_simbolos(0), desplazamiento(0), eof(false)
     {
         // Open files
         file.open(input_file, std::ios::binary);
@@ -272,6 +272,7 @@ void meterToken(token_ids id, string lex, int desplazamiento, std::ofstream &tab
                     error(4, file, file.tellg(), err_file); // Comentario sin finalizar /*...*
                     break;
                 }
+                linea_last_finished_tok = linea_last_tok;
                 linea_last_tok = linea;
                 return res_token;
             }
@@ -538,6 +539,7 @@ void meterToken(token_ids id, string lex, int desplazamiento, std::ofstream &tab
             }
         }
 
+        linea_last_finished_tok = linea_last_tok;
         linea_last_tok = linea;
         return res_token; // Indicate that processing can continue
     }

@@ -1,2 +1,0 @@
-* LEXEMA: 'texto'
-    +despl: 2

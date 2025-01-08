@@ -22,14 +22,16 @@ B -> var {zona_decl:=true}
             LanzarError("La variable asignada no coincide con el tipo de la asignacion")
      }
 B -> if ( R ) U {
+                U.tipoRet := B.tipoRet
                 if(R.tipo!=booleano)
                     LanzarError("La condicion tiene que ser una expresion booleana")
                 }
 B -> U  {
-        B.tipoRet=U.tipoRet
+        U.tipoRet := B.tipoRet # Regla cambiada
         }
 B -> for ( F1 ; R ; F2 ) { Q } 
                 {
+                Q.tipoRet := B.tipoRet
                 if(R.tipo!=booleano)
                     LanzarError("La condicion tiene que ser una expresion booleana")
                 }
@@ -44,11 +46,10 @@ D -> function {zona_decl:= true}
     AñadeTipo(id.pos, D1.tipo->H.tipo);
     AñadeEtiq(id.pos, nuevaetiq())
     zona_decl:= false
+    Q.tipo := H.tipo # SASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
     }
     ) { Q } 
     {
-    if(Q.tipoRet != H.tipo && !(H.tipo == void && Q.tipoRet == null))then 
-        LanzarError("El tipo de retorno no coincide con el tipo de la funcion")  
     LiberaTabla(TSL)
     }
 H -> T {H.tipo=T.tipo} 
@@ -164,7 +165,7 @@ U -> output R ;
             }
 U -> return U2 ; 
             {
-            U.tipoRet=U2.tipo
+            U2.tipoRet := U.tipoRet
             if(TSL == NULL)then
                 LanzarError("no puedes llamara a return fuera de una funcion")
             }
@@ -185,7 +186,12 @@ U1 -> L R ;
                 U1.tipo := R.tipo
             }
 U1 -> ( A1 ) ; {U1.tipo := A1.tipo}
-U2 -> R {U2.tipo=R.tipo}
+U2 -> R 
+            {
+            if(U2.tipoRet != R.tipo) then
+                LanzarError("El tipo del return no coincide con el valor de retorno de la funcion")
+            U2.tipo=R.tipo
+            }
 U2 -> lambda {U2.tipo=void}
 F1 -> id = R 
             {
@@ -201,14 +207,10 @@ F2 -> id L R
 F2 -> lambda 
 Q -> B Q 
         {
-        if(Q'.tipoRet == B.tipoRet || Q'.tipoRet == null)then
-            Q.tipoRet := B.tipoRet
-        else if(B.tipoRet == null)then
-            Q.tipoRet := Q'.tipoRet
-        else
-            LanzarError("Los return no son del mismo tipo")
+        B.tipoRet := Q.tipoRet
+        Q'.tipoRet := Q.tipoRet
         }
-Q -> lambda {Q.tipoRet := null}
+Q -> lambda # Regla quitada
 D1 -> D2 {D1.tipo := D2.tipo}
 D1 -> void {D1.tipo := void}
 D2 -> D3 D4 

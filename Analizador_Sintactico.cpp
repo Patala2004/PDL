@@ -1183,8 +1183,16 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         {
             // U -> id U1
             parse_file << 42 << " ";
+
+            map<string,string> U1 = {};
+
+            string id = get<string>(token.valor);
             equipara(token, token_ids::IDENTIFICADOR, NT);
-            noTerminal(reglas::U1, token);
+            noTerminal(reglas::U1, token,&U1);
+
+            if(U1["tipo"] != BuscaTipo(id)){
+                // ERROR SEMANTICO
+            }
         }
         else
         {
@@ -1201,18 +1209,34 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         {
             // U1 -> L R ;
             parse_file << 43 << " ";
-            noTerminal(reglas::L, token);
-            noTerminal(reglas::R, token);
+            map<string,string> L = {};
+            map<string,string> R = {};
+            noTerminal(reglas::L, token,&L);
+            noTerminal(reglas::R, token,&R);
+            //semantico
+            if(L["operador"] == "suma" && R["tipo"] != "entero"){
+                // ERROR SEMANTICO
+            }else{
+                (*atrs_semanticos)["tipo"] = R["tipo"];
+            }
+            //fin semantico
             equipara(token, token_ids::PUNTO_Y_COMA, NT);
         }
         else if (token.id == token_ids::PARENTESIS_ABIERTA)
         {
             // U1 -> ( A1 ) ;
             parse_file << 44 << " ";
+
+            map<string,string> A1 = {};
+
             equipara(token, token_ids::PARENTESIS_ABIERTA, NT);
-            noTerminal(reglas::A1, token);
+            noTerminal(reglas::A1, token,&A1);
             equipara(token, token_ids::PARENTESIS_CERRADA, NT);
             equipara(token, token_ids::PUNTO_Y_COMA, NT);
+
+            //semantico
+            (*atrs_semanticos)["tipo"] = A1["tipo"];
+            //finsemantico
         }
         else
         {
@@ -1263,9 +1287,19 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         {
             // F1 -> id = R
             parse_file << 47 << " ";
+
+            map<string,string> R = {};
+
+            string id = get<string>(token.valor);
             equipara(token, token_ids::IDENTIFICADOR, NT);
             equipara(token, token_ids::OP_ASIGNACION_SIMPLE, NT);
-            noTerminal(reglas::R, token);
+            noTerminal(reglas::R, token,&R);
+
+            //semantico
+            if(R["tipo"] != BuscaTipo(id)){
+                // ERROR SEMANTICO
+            }
+            //finsemantico
         }
         else if (mapaFollow[reglas::F1].find(token.id) != mapaFollow[reglas::F1].end())
         {
@@ -1287,9 +1321,23 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         {
             // F2 -> id L R
             parse_file << 49 << " ";
+            map<string,string> R = {};
+            map<string,string> L = {};
+
+            string id = get<string>(token.valor);
             equipara(token, token_ids::IDENTIFICADOR, NT);
-            noTerminal(reglas::L, token);
-            noTerminal(reglas::R, token);
+            noTerminal(reglas::L, token,&L);
+            noTerminal(reglas::R, token,&R);
+
+            //semantico
+            if(L["operador"] == "suma" && R["tipo"] != "entero"){
+                // ERROR SEMANTICO
+            }
+
+            if(R["tipo"] != BuscaTipo(id)){
+                // ERROR SEMANTICO
+            }
+            //finsemantico
         }
         else if (mapaFollow[reglas::F2].find(token.id) != mapaFollow[reglas::F2].end())
         {

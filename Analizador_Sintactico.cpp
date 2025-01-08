@@ -1162,17 +1162,14 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             equipara(token, token_ids::PAL_RES_RETURN, NT);
 
             //semantico
+            map<string,string> U2 = {};
+            U2["tipo"] = (*atrs_semanticos)["tipoRet"];
             if(TSL == NULL){
                 cout << "ERROR SEMANTICO: SOLO SE PUEDEN USAR RETURNS DENTRO DE FUNCIONES" << endl;
             }
             //finsemantico
 
-            map<string,string> U2 = {};
             noTerminal(reglas::U2, token, &U2);
-
-            //semantico
-            (*atrs_semanticos)["tipoRet"] = U2["tipo"];
-            //finsemantico
 
             equipara(token, token_ids::PUNTO_Y_COMA, NT);
         }
@@ -1185,7 +1182,6 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            cout << "MANDARINA" << endl;
             error(token.id, NT);
         }
         break;
@@ -1214,7 +1210,6 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            cout << "AZUL" << endl;
             error(token.id, NT);
         }
         break;
@@ -1228,16 +1223,27 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         {
             // U2 -> R
             parse_file << 45 << " ";
-            noTerminal(reglas::R, token);
+            map<string,string> R = {};
+            noTerminal(reglas::R, token,&R);
+
+            //semantico
+            if((*atrs_semanticos)["tipoRet"] != R["tipo"]){
+                cout << "El tipo del return no coincide con el valor de retorno de la funcion" ;
+                exit(0);
+            }
+            (*atrs_semanticos)["tipo"] = R["tipo"];
+            //fin semantico
         }
         else if (mapaFollow[reglas::U2].find(token.id) != mapaFollow[reglas::U2].end())
         {
             // U2 -> lambda
             parse_file << 46 << " ";
+            //semantico
+            (*atrs_semanticos)["tipo"] = "void";
+            //fin semantico
         }
         else
         {
-            cout << "YELLOW" << endl;
             error(token.id, NT);
         }
         break;

@@ -406,7 +406,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             map<string,string> T = {};
                         
             equipara(token, token_ids::PAL_RES_VAR, NT); // compara, lanza error si no es y avanza un token
-            noTerminal(reglas::T, token);
+            noTerminal(reglas::T, token, &T);
             string id = get<string>(token.valor);
             equipara(token, token_ids::IDENTIFICADOR, NT);
 
@@ -448,11 +448,13 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             parse_file << 5 << " ";
 
             map<string,string> R = {};
+            map<string,string> U = {};
             equipara(token, token_ids::PAL_RES_IF, NT);
             equipara(token, token_ids::PARENTESIS_ABIERTA, NT);
             noTerminal(reglas::R, token, &R);
 
             // semantico
+            U["tipoRet"] = (*atrs_semanticos)["tipoRet"];
             if(R["tipo"] != "booleano"){
                 cout << "ERROR SEMANTICO: LA CONDICION TIENE QUE SER UNA EXPRESION BOOLEANA" << endl;
             }
@@ -465,19 +467,18 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         {
             // B -> U
             parse_file << 6 << " ";
-
-            map<string,string> U = {};
-            noTerminal(reglas::U, token, &U);
-
             //semantico
-            (*atrs_semanticos)["tipoRet"] = U["tipoRet"];
+            map<string,string> U = {};
+            U["tipoRet"] = (*atrs_semanticos)["tipoRet"];
             //finsemantico
+            noTerminal(reglas::U, token, &U);
         }
         else if (token.id == token_ids::PAL_RES_FOR)
         {
             // B -> for ( F1 ; R ; F2 ) { Q }
             parse_file << 7 << " ";
-
+            map<string,string> Q = {};
+            Q["tipoRet"] = (*atrs_semanticos)["tipoRet"];
             equipara(token, token_ids::PAL_RES_FOR, NT);
             equipara(token, token_ids::PARENTESIS_ABIERTA, NT);
             noTerminal(reglas::F1, token);
@@ -522,6 +523,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             //finsemantico
 
             map<string,string> H = {};
+            map<string,string> Q = {};
             noTerminal(reglas::H, token, &H);
             string id = get<string>(token.valor);
             equipara(token, token_ids::IDENTIFICADOR, NT);
@@ -540,18 +542,15 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             AñadeTipoFunc(id, D1["tipo"], H["tipo"]);
             AñadeEtiq(id,nuevaetiq());
             zona_decl = false;
+            Q["tipo"] = H["tipo"];
             //finsemantico
 
             equipara(token, token_ids::PARENTESIS_CERRADA, NT);
             equipara(token, token_ids::LLAVE_ABIERTA, NT);
-            map<string,string> Q = {};
             noTerminal(reglas::Q, token, &Q);
             equipara(token, token_ids::LLAVE_CERRADA, NT);
 
             //semantico
-            if(Q["tipoRet"] != H["tipo"] && !(H["tipo"] == "void" && Q["tipoRet"] == "null")){
-                cout << "ERROR SEMANTICO: EL TIPO DE RETORNO NO COINCIDE CON EL TIPO DE LA FUNCION" << endl;
-            }
             liberarTabla(TSL);
             //finsemantico
         }

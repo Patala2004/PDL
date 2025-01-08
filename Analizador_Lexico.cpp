@@ -170,7 +170,7 @@ void meterToken(token_ids id, string lex, int desplazamiento, std::ofstream &tab
 // palabras reservadas
 
 
-    AnalizadorLexico::AnalizadorLexico(const std::string &input_file) : estado(0), valor_numerico(0), valor_cadena(""), num_linea(1), linea(1), pos_tabla_simbolos(0), desplazamiento(0), eof(false)
+    AnalizadorLexico::AnalizadorLexico(const std::string &input_file) : estado(0), valor_numerico(0), valor_cadena(""), num_linea(1), linea(1), linea_last_tok(1), pos_tabla_simbolos(0), desplazamiento(0), eof(false)
     {
         // Open files
         file.open(input_file, std::ios::binary);
@@ -232,9 +232,6 @@ void meterToken(token_ids id, string lex, int desplazamiento, std::ofstream &tab
         {
             if (!file.get(a))
             {
-                if(a == '\n'){
-                    cout << "SALTO DE LINEA" << endl;
-                }
                 eof = true;
                 // Handle EOF state transitions
                 switch (estado)
@@ -275,7 +272,13 @@ void meterToken(token_ids id, string lex, int desplazamiento, std::ofstream &tab
                     error(4, file, file.tellg(), err_file); // Comentario sin finalizar /*...*
                     break;
                 }
+                linea_last_tok = linea;
                 return res_token;
+            }
+
+
+            if(a == '\n'){
+                AnalizadorLexico::linea++;
             }
 
             // Main processing logic (refactor the switch-case from your code)
@@ -535,6 +538,7 @@ void meterToken(token_ids id, string lex, int desplazamiento, std::ofstream &tab
             }
         }
 
+        linea_last_tok = linea;
         return res_token; // Indicate that processing can continue
     }
 

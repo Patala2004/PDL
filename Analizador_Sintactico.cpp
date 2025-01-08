@@ -795,13 +795,13 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             map<string,string> R4 = {};
             map<string,string> R3 = {};
-            noTerminal(reglas::R4, token);
+            noTerminal(reglas::R4, token, &R4);
 
             //semantico
             R3["tipo"] = R4["tipo"];
             //finsemantico
 
-            noTerminal(reglas::R3, token);
+            noTerminal(reglas::R3, token, &R3);
             //semantico
             if(R3["tipo"] != "vacio"){
                 (*atrs_semanticos)["tipo"] = "booleano";

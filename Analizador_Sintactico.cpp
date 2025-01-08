@@ -1090,8 +1090,18 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             // A2 -> , R A2
             parse_file << 37 << " ";
             equipara(token, token_ids::COMA, NT);
-            noTerminal(reglas::R, token);
-            noTerminal(reglas::A2, token);
+            map<string,string> R = {};
+            noTerminal(reglas::R, token, &R);
+            map<string,string> A2 = {};
+            noTerminal(reglas::A2, token, &A2);
+
+            //string
+            if(A2["tipo"] == ""){
+                (*atrs_semanticos)["tipo"] = R["tipo"];
+            }
+            else{
+                (*atrs_semanticos)["tipo"] = R["tipo"] + "," + A2["tipo"];
+            }
         }
         else if (mapaFollow[reglas::A2].find(token.id) != mapaFollow[reglas::A2].end())
         {

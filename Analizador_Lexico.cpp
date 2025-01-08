@@ -170,7 +170,7 @@ void meterToken(token_ids id, string lex, int desplazamiento, std::ofstream &tab
 // palabras reservadas
 
 
-    AnalizadorLexico::AnalizadorLexico(const std::string &input_file) : estado(0), valor_numerico(0), valor_cadena(""), num_linea(1), pos_tabla_simbolos(0), desplazamiento(0), eof(false)
+    AnalizadorLexico::AnalizadorLexico(const std::string &input_file) : estado(0), valor_numerico(0), valor_cadena(""), num_linea(1), linea(1), pos_tabla_simbolos(0), desplazamiento(0), eof(false)
     {
         // Open files
         file.open(input_file, std::ios::binary);
@@ -232,6 +232,9 @@ void meterToken(token_ids id, string lex, int desplazamiento, std::ofstream &tab
         {
             if (!file.get(a))
             {
+                if(a == '\n'){
+                    cout << "SALTO DE LINEA" << endl;
+                }
                 eof = true;
                 // Handle EOF state transitions
                 switch (estado)

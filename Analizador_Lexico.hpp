@@ -34,6 +34,7 @@ private:
     std::vector<int> finales;
 
 public:
+    int linea;
     // Constructor
     AnalizadorLexico(const std::string &input_file);
 

@@ -429,8 +429,8 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
                 }
             }
             else{
-                // cout << "ERROR SEMANTICO: LA VARIABLE YA HA SIDO DECLARADA" << endl;
-                // exit(0);
+                cout << "ERROR SEMANTICO: LA VARIABLE YA HA SIDO DECLARADA EN LA LINEA " << analizador.linea_last_finished_tok << endl;
+                exit(0);
             }
             zona_decl = false;
             //finsemantico
@@ -441,8 +441,8 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             // semantico
             if(T["tipo"] != C["tipo"] && C["tipo"] != "vacio"){
-                // cout << "ERROR SEMANTICO: LA VARIABLE ASIGNADA NO COINCIDE CON EL TIPO DE LA ASIGNACION" << endl;
-                // exit(0);
+                cout << "ERROR SEMANTICO: LA VARIABLE ASIGNADA NO COINCIDE CON EL TIPO DE LA ASIGNACION" << endl;
+                exit(0);
             }
             
         }
@@ -460,8 +460,8 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             // semantico
             U["tipoRet"] = (*atrs_semanticos)["tipoRet"];
             if(R["tipo"] != "booleano"){
-                // cout << "ERROR SEMANTICO: LA CONDICION TIENE QUE SER UNA EXPRESION BOOLEANA" << endl;
-                // exit(0);
+                cout << "ERROR SEMANTICO: LA CONDICION TIENE QUE SER UNA EXPRESION BOOLEANA" << endl;
+                exit(0);
             }
             // finsemantico
 
@@ -494,8 +494,8 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             //semantico
             if(R["tipo"]!="booleano"){
-                // cout << "ERROR SEMANTICO: LA CONDICION TIENE QUE SER UNA EXPRESION BOOLEANA" << endl;
-                // exit(0);
+                cout << "ERROR SEMANTICO: LA CONDICION TIENE QUE SER UNA EXPRESION BOOLEANA" << endl;
+                exit(0);
             }
 
             equipara(token, token_ids::PUNTO_Y_COMA, NT);
@@ -752,7 +752,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             //semantico
             if((*atrs_semanticos)["tipo"] != "booleano"){
-                // cout << "ERROR SEMANTICO: VALOR NO BOOLEANO EN UN AND" << endl;
+                cout << "ERROR SEMANTICO: VALOR NO BOOLEANO EN UN AND" << endl;
             }
             //finsemantico
 
@@ -762,7 +762,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             //semantico
             if(R2["tipo"] != "booleano"){
-                // cout << "ERROR SEMANTICO: VALOR NO BOOLEANO EN UN AND EN LA PARTE DERECHA" << endl;
+                cout << "ERROR SEMANTICO: VALOR NO BOOLEANO EN UN AND EN LA PARTE DERECHA" << endl;
             }
             //nosemantico
 
@@ -838,8 +838,8 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             
             //semantico
             if((*atrs_semanticos)["tipo"] != R4["tipo"]){
-                // cout << "ERROR SEMANTICO: NO PUEDES IGUALAR DATOS DE DISTINTOS TIPOS" << endl;
-                // exit(0);
+                cout << "ERROR SEMANTICO: NO PUEDES IGUALAR DATOS DE DISTINTOS TIPOS" << endl;
+                exit(0);
             }
             R3["tipo"] = "booleano"; // Si sigue habiendo mas comparaciones (x == y == z) la parte izquierda va a ser el booleana porque es el resultado de una comparacion
             //finsemantico
@@ -895,8 +895,8 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             parse_file << 25 << " ";
 
             if((*atrs_semanticos)["tipo"] != "entero"){
-                // cout << "ERROR SEMANTICO: OPERACION ARITMETICA CON DATO NO ENTERO" << endl;
-                // exit(0);
+                cout << "ERROR SEMANTICO: OPERACION ARITMETICA CON DATO NO ENTERO" << endl;
+                exit(0);
             }
             noTerminal(reglas::J, token);
             map<string,string> O = {};
@@ -905,8 +905,8 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             //semantico
             if(O["tipo"] != "entero"){
-                // cout << "ERROR SEMANTICO: OPERACION ARITMETICA CON DATO NO ENTERO A LA DERECHA" << endl;
-                // exit(0);
+                cout << "ERROR SEMANTICO: OPERACION ARITMETICA CON DATO NO ENTERO A LA DERECHA" << endl;
+                exit(0);
             }
             R5["tipo"] = "entero"; // si hay mas operaciones aritmeticas la parte izquierda sera el resultado de otra op. aritm. -> entero
             //finsemantico
@@ -984,8 +984,8 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
                     (*atrs_semanticos)["tipo"] = BuscaTipoFuncRet(id); // tipo de O es el tipo de retorno de la func
                 }
                 else{
-                    // cout << "ERROR SEMANTICO: LOS PARAMETROS NO SON CORRECTOS PARA ESTA FUNCION" << endl;
-                    // exit(0);
+                    cout << "ERROR SEMANTICO: LOS PARAMETROS NO SON CORRECTOS PARA ESTA FUNCION" << endl;
+                    exit(0);
                 }
             }
             else{
@@ -1136,8 +1136,8 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             //semantico
             string tipo = BuscaTipo(id);
             if(tipo != "entero" && tipo != "cadena"){
-                // cout << "ERROR SEMANTICO: SOLO SE PUEDEN LEER ENTEROS O CADENAS USANDO INPUT" << endl;
-                // exit(0);
+                cout << "ERROR SEMANTICO: SOLO SE PUEDEN LEER ENTEROS O CADENAS USANDO INPUT" << endl;
+                exit(0);
             }
             //finsemantico
 
@@ -1153,8 +1153,8 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             //semantico
             if(R["tipo"] != "entero" && R["tipo"] != "cadena"){
-                // cout << "ERROR SEMANTICO: SOLO SE PUEDEN IMPRIMIR ENTEROS O CADENAS" << endl;
-                // exit(0);
+                cout << "ERROR SEMANTICO: SOLO SE PUEDEN IMPRIMIR ENTEROS O CADENAS" << endl;
+                exit(0);
             }
             //finsemantico
 
@@ -1170,7 +1170,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             map<string,string> U2 = {};
             U2["tipo"] = (*atrs_semanticos)["tipoRet"];
             if(TSL == NULL){
-                // cout << "ERROR SEMANTICO: SOLO SE PUEDEN USAR RETURNS DENTRO DE FUNCIONES" << endl;
+                cout << "ERROR SEMANTICO: SOLO SE PUEDEN USAR RETURNS DENTRO DE FUNCIONES" << endl;
                 // exit(0)
             }
             //finsemantico
@@ -1259,7 +1259,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             //semantico
             if((*atrs_semanticos)["tipoRet"] != R["tipo"]){
                 // cout << "El tipo del return no coincide con el valor de retorno de la funcion" ;
-                // exit(0);
+                exit(0);
             }
             (*atrs_semanticos)["tipo"] = R["tipo"];
             //fin semantico
@@ -1398,13 +1398,23 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         {
             // D1 -> D2
             parse_file << 53 << " ";
-            noTerminal(reglas::D2, token);
+
+            map<string,string> D2 = {};
+            noTerminal(reglas::D2, token, &D2);
+
+            //semantico
+            (*atrs_semanticos)["tipo"] = D2["tipo"];
+            //finsemantico
         }
         else if (token.id == token_ids::PAL_RES_VOID)
         {
             // D1 -> void
             parse_file << 54 << " ";
             equipara(token, token_ids::PAL_RES_VOID, NT);
+
+            //semantico
+            (*atrs_semanticos)["tipo"] = "void";
+            //finsemantico
         }
         else
         {
@@ -1420,8 +1430,18 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         {
             // D2 -> D3 D4
             parse_file << 55 << " ";
-            noTerminal(reglas::D3, token);
-            noTerminal(reglas::D4, token);
+
+            map<string,string> D4 = {};
+            map<string,string> D3 = {};
+            noTerminal(reglas::D3, token, &D3);
+            noTerminal(reglas::D4, token, &D4);
+
+            if(D4["tipo"] == ""){
+                (*atrs_semanticos)["tipo"] = D3["tipo"];
+            }
+            else{
+                (*atrs_semanticos)["tipo"] = D3["tipo"] + "," + D4["tipo"];
+            }
         }
         else
         {
@@ -1437,8 +1457,22 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         {
             // D3 -> T id
             parse_file << 56 << " ";
-            noTerminal(reglas::T, token);
+            map<string,string> T = {};
+            noTerminal(reglas::T, token, &T);
+            string id = get<string>(token.valor);
             equipara(token, token_ids::IDENTIFICADOR, NT);
+
+            //semantico
+            if(BuscaTipo(id) == "null"){ // Si lo ha metido el lexico pero todavia ningun semantico
+                AñadeTipo(id, T["tipo"]);
+                AñadeDespl(id, despL);
+                despL += stoi(T["ancho"]);
+                (*atrs_semanticos)["tipo"] = T["tipo"];
+            }
+            else{
+                cout << "ERROR SEMANTICO: VARIABLE YA DECLARADA EN LA LINEA " << analizador.linea_last_finished_tok << endl;
+                exit(0);
+            }
         }
         else
         {
@@ -1456,7 +1490,12 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             // D4 -> , D2
             parse_file << 57 << " ";
             equipara(token, token_ids::COMA, NT);
-            noTerminal(reglas::D2, token);
+            map<string,string> D2 = {};
+            noTerminal(reglas::D2, token, &D2);
+
+            //semantico
+            (*atrs_semanticos)["tipo"] = D2["tipo"];
+            //finsemantico
         }
         else if (mapaFollow[reglas::D4].find(token.id) != mapaFollow[reglas::D4].end())
         {

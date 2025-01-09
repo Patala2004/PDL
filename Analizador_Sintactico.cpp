@@ -1236,7 +1236,6 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             //semantico
             if(R["tipo"] != "entero" && R["tipo"] != "cadena"){
                 cout << R["tipo"] << endl;
-                cout << *TSL << endl;
                 cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": SOLO SE PUEDEN IMPRIMIR ENTEROS O CADENAS" << endl;
                 exit(0);
             }

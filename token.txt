@@ -40,6 +40,14 @@
 <ParentesisCerrada, >
 <LlaveAbierta, >
 <LlaveCerrada, >
+<PalResIF, >
+<ParentesisAbierta, >
+<ID, "bo">
+<ParentesisCerrada, >
+<ID, "i">
+<OpAsignacionSimple, >
+<Numero, 1>
+<PuntoYComa, >
 <PalResFUNCTION, >
 <PalResINT, >
 <ID, "ffff">
@@ -71,6 +79,9 @@
 <ID, "hola">
 <OpAsignacionSimple, >
 <Numero, 10>
+<PuntoYComa, >
+<PalResINPUT, >
+<ID, "sdadas">
 <PuntoYComa, >
 <PalResOUTPUT, >
 <ID, "ffff">

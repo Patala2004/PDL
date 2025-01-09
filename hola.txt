@@ -4,7 +4,8 @@ var  int iiii;
 var string s64 ;
 var boolean bo;
 var int sdadas = 12;
-for(i = 1;10 == 10;i+=1){}
+for(i = 1;10==10;i+=1){}
+if(bo) i = 1;
 function int ffff  (void)
 {
 aa_aa=11;
@@ -18,7 +19,7 @@ output  iiii ;
 iiii=aa_aa;
 
 hola = 10;
-	
+output 10 == 10;
 output ffff();
 function void put(string m_s_g, int s_m_g2)
 {

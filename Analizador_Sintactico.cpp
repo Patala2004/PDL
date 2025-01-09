@@ -824,6 +824,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             //semantico
             if((*atrs_semanticos)["tipo"] != "booleano"){
                 cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": VALOR NO BOOLEANO EN UN AND" << endl;
+                exit(0);
             }
             //finsemantico
 
@@ -834,6 +835,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             //semantico
             if(R2["tipo"] != "booleano"){
                 cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": VALOR NO BOOLEANO EN UN AND EN LA PARTE DERECHA" << endl;
+                exit(0);
             }
             //nosemantico
 

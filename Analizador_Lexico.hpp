@@ -35,6 +35,9 @@ class Entrada{
 class Tabla{
     public: 
 
+    string nombre;
+    int contador = -1;
+
     list<Entrada> entradas = {};
 
     string BuscaTipo(string id);

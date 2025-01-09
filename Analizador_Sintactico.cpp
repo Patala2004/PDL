@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 #include <array>
 #include <vector>
 #include <map>
@@ -23,17 +24,49 @@ AnalizadorLexico analizador("hola.txt");
 
 
 std::ostream& operator<<(std::ostream& os, const Entrada& e) {
-    os << "Nombre: " << e.nombre << ", Tipo: " << e.tipo << ", Desplazamiento: " << e.desplazamiento;
+    // os << "Nombre: " << e.nombre << ", Tipo: " << e.tipo << ", Desplazamiento: " << e.desplazamiento;
+
     if(e.tipo == "funcion"){
-        os << ", TipoRet: " << e.tipoRetorno << ", TipoParams: " << e.tipoParams;
+        os << " * '" << e.nombre << "'" << endl;
+        
+        os << "   + tipo:  '" << e.tipo <<"'" << endl;
+
+        int numParam = e.tipoParams == "void"? 0:count(e.tipoParams.begin(), e.tipoParams.end(), ',') + 1;
+        
+        os << "       + numParam:  " << numParam << endl;
+
+        stringstream ss(e.tipoParams);
+        for(int i = 0; i < numParam; i++){
+            string aux;
+            getline(ss, aux, ',');
+            os << "          + tipoParam:  '" << aux << "'" << endl;
+        }
+
+        os << "        + tipoRetorno:  '" << e.tipoRetorno << "'" << endl;
+
+        os << "        + etiqFuncion:  '" << e.etiqfuncion << "'" << endl;
+
+        os << "   --------------------------" << endl;
+    }
+    else{
+        os << " * '" << e.nombre << "'" << endl; 
+        if(e.tipo == "null"){
+            os << "   + tipo:  '-'" << endl;
+        }
+        else{
+            os << "   + tipo:  '" << e.tipo <<"'" << endl;
+        }
+        os << "   + despl:  " << e.desplazamiento << endl;
+
+        os << "   --------------------------" << endl;
     }
     return os;
 }
 
 std::ostream& operator<<(std::ostream& os, const Tabla& t) {
-    os << "_____TABLA_____" << endl;
+    os << t.nombre << " # " << t.contador <<":" << endl << endl;
     for(Entrada e : t.entradas){
-        os << e << endl;
+        os << e;
     }
     return os;
 }
@@ -297,6 +330,7 @@ int despL = 0;
 Tabla* TSG = new Tabla();
 // tsl
 Tabla* TSL = nullptr;
+int contadorTablas = 0;
 
 
 
@@ -367,8 +401,11 @@ Entrada& AñadeEntrada(string id, Tabla* tabla){
     return TSG->AñadeEntrada(id);
 }
 
-Tabla* crearTabla(){
-    return new Tabla();
+Tabla* crearTabla(string nombre = "TABLA SIN NOMBRE"){
+    Tabla* ret = new Tabla();
+    ret->contador = contadorTablas++;
+    ret->nombre = nombre;
+    return ret;
 }
 
 Tabla* liberarTabla(){
@@ -599,7 +636,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             }
 
             Entrada& id = AñadeEntrada(get<string>(iden.valor), TSG); // AÑadimos a la tabnla
-            TSL = crearTabla();
+            TSL = crearTabla("TABLA DE LA FUNCION " + get<string>(iden.valor));
             despL = 0;
             //finsemantico
 
@@ -1678,6 +1715,8 @@ int main()
     popularMapa();
     reglas noTerminalState = reglas::S; // empieza en el axioma S
     analizador.tsg = TSG;
+    TSG->nombre = "TABLA GLOBAL";
+    TSG->contador = contadorTablas++;
     Token token = analizador.processNextChar();
 
     parse_file << "descendente ";

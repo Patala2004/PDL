@@ -1,0 +1,75 @@
+TABLA GLOBAL # 0:
+
+
+ * 'texto'
+   + tipo:  'cadena'
+   + despl:  0
+   --------------------------
+ * 'aa_aa'
+   + tipo:  'entero'
+   + despl:  64
+   --------------------------
+ * 'iiii'
+   + tipo:  'entero'
+   + despl:  65
+   --------------------------
+ * 's64'
+   + tipo:  'cadena'
+   + despl:  66
+   --------------------------
+ * 'bo'
+   + tipo:  'booleano'
+   + despl:  130
+   --------------------------
+ * 'sdadas'
+   + tipo:  'entero'
+   + despl:  131
+   --------------------------
+ * 'i'
+   + tipo:  'entero'
+   + despl:  1
+   --------------------------
+ * 'ffff'
+   + tipo:  'funcion'
+       + numParam:  0
+        + tipoRetorno:  'entero'
+        + etiqFuncion:  'function0'
+   --------------------------
+ * 'hola'
+   + tipo:  'entero'
+   + despl:  132
+   --------------------------
+ * 'put'
+   + tipo:  'funcion'
+       + numParam:  2
+          + tipoParam1:  'cadena'
+          + tipoParam2:  'entero'
+        + tipoRetorno:  'void'
+        + etiqFuncion:  'function0'
+   --------------------------
+ * 'pideTexto'
+   + tipo:  'funcion'
+       + numParam:  1
+          + tipoParam1:  'entero'
+        + tipoRetorno:  'void'
+        + etiqFuncion:  'function0'
+   --------------------------
+ * 'nodecla'
+   + tipo:  'funcion'
+       + numParam:  0
+        + tipoRetorno:  'void'
+        + etiqFuncion:  'function0'
+   --------------------------
+ * 'x'
+   + tipo:  'entero'
+   + despl:  133
+   --------------------------
+ * 'y'
+   + tipo:  'cadena'
+   + despl:  134
+   --------------------------
+ * 'j'
+   + tipo:  'entero'
+   + despl:  198
+   --------------------------
+

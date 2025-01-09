@@ -24,7 +24,6 @@ AnalizadorLexico analizador("hola.txt");
 
 
 std::ostream& operator<<(std::ostream& os, const Entrada& e) {
-    // os << "Nombre: " << e.nombre << ", Tipo: " << e.tipo << ", Desplazamiento: " << e.desplazamiento;
 
     if(e.tipo == "funcion"){
         os << " * '" << e.nombre << "'" << endl;
@@ -39,7 +38,7 @@ std::ostream& operator<<(std::ostream& os, const Entrada& e) {
         for(int i = 0; i < numParam; i++){
             string aux;
             getline(ss, aux, ',');
-            os << "          + tipoParam:  '" << aux << "'" << endl;
+            os << "          + tipoParam" << to_string(i+1) << ":  '" << aux << "'" << endl;
         }
 
         os << "        + tipoRetorno:  '" << e.tipoRetorno << "'" << endl;
@@ -64,7 +63,10 @@ std::ostream& operator<<(std::ostream& os, const Entrada& e) {
 }
 
 std::ostream& operator<<(std::ostream& os, const Tabla& t) {
-    os << t.nombre << " # " << t.contador <<":" << endl << endl;
+    // if(t.entradas.empty()){
+    //     return os;
+    // }
+    os << t.nombre << " # " << t.contador <<":" << endl << endl << endl;
     for(Entrada e : t.entradas){
         os << e;
     }
@@ -331,6 +333,9 @@ Tabla* TSG = new Tabla();
 // tsl
 Tabla* TSL = nullptr;
 int contadorTablas = 0;
+
+
+
 
 
 
@@ -1712,6 +1717,13 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
 int main()
 {
+
+    std::ofstream ficheroTS("TablaSimbolos.txt", std::ios::out | std::ios::trunc);
+
+    if(!ficheroTS.is_open()) {
+        std::cerr << "Failed to open or create the file: TablaSimbolos.txt" << std::endl;
+        return 1; // Return an error code
+    }
     popularMapa();
     reglas noTerminalState = reglas::S; // empieza en el axioma S
     analizador.tsg = TSG;
@@ -1723,6 +1735,7 @@ int main()
     // cosas semanticas de S'
     // {TSG=CreaTabla(); desplG=0}
     noTerminal(noTerminalState, token);
+    ficheroTS << *TSG << endl;
     cout << *TSG << endl;
     // {LiberaTabla(TSG)}
 }

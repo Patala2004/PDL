@@ -4,6 +4,7 @@
 #include <iostream>
 #include <array>
 #include <vector>
+#include <list>
 #include <map>
 #include <iomanip>
 #include <string>
@@ -13,8 +14,57 @@
 #include "aux_enums.hpp"
 
 // Namespace usage
+using namespace std;
 
 // Class declaration
+
+class Entrada{
+    public:
+    string nombre;
+    string tipo;
+    int desplazamiento;
+
+    string tipoRetorno;
+    string tipoParams;
+    string etiqfuncion;
+    int numParam;
+
+    Entrada(string n);
+};
+
+class Tabla{
+    public: 
+
+    list<Entrada> entradas = {};
+
+    string BuscaTipo(string id);
+
+    Entrada& BuscaEntrada(string id);
+
+    Entrada& BuscaEntradaFunc(string id);
+
+    Entrada& BuscaTipoFuncParams(string id);
+
+    Entrada& BuscaTipoFuncRet(string id);
+
+    Entrada& AñadeEntrada(string id);
+
+    void AñadeTipo(Entrada& e, string tipo);
+
+    void AñadeDespl(Entrada& e, int despl);
+
+    void AñadeTipoFunc(Entrada& e, string tipoParam, string tipoRet);
+
+    void AñadeEtiq(Entrada& e, string etiq);
+
+    string nuevaEtiq();
+
+    private:
+    int nfun = 0;
+};
+
+
+
 class AnalizadorLexico
 {
 private:
@@ -37,6 +87,9 @@ public:
     int linea;
     int linea_last_tok;
     int linea_last_finished_tok;
+
+    Tabla* tsg;
+    Tabla* tsl;
     // Constructor
     AnalizadorLexico(const std::string &input_file);
 

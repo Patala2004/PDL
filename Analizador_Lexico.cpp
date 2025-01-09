@@ -36,6 +36,121 @@ std::map<int, string> Tablas;
 
 std::map<string, int> tabla;
 
+
+
+
+    Entrada::Entrada(string n) : nombre(n), tipo("null"), desplazamiento(-1), tipoRetorno(""), tipoParams("null"), etiqfuncion(""), numParam(0){}
+
+
+
+
+    string Tabla::BuscaTipo(string id){
+        for(Entrada& e : entradas){
+            if(e.nombre == id){
+                if(e.tipo != "funcion"){
+                    return e.tipo;
+                }
+            }
+        }
+        return "null";
+    }
+
+    Entrada& Tabla::BuscaEntrada(string id){
+        for(Entrada& e : entradas){
+            if(e.nombre == id){
+                if(e.tipo != "funcion"){
+                    return e;
+                }
+            }
+        }
+        Entrada* e = new Entrada("NOVARIABLE");
+        e->tipo = "null";
+        return *e;
+    }
+
+    Entrada& Tabla::BuscaEntradaFunc(string id){
+        for(Entrada& e : entradas){
+            if(e.nombre == id){
+                if(e.tipo == "funcion"){
+                    return e;
+                }
+            }
+        }
+        Entrada* e = new Entrada("NOVARIABLE");
+        e->tipo = "null";
+        return *e;
+    }
+
+    Entrada& Tabla::BuscaTipoFuncParams(string id){
+        for(Entrada& e : entradas){
+            if(e.nombre == id){
+                if(e.tipo == "funcion"){
+                    return e;
+                }
+            }
+        }
+        cout << "SE ESTA BUSCANDO UNA VARIABLE QUE NO EXISTE EN LA TABLA DE SIMBOLOS " << id << endl;
+        exit(0);
+    }
+
+    Entrada& Tabla::BuscaTipoFuncRet(string id){
+        for(Entrada& e : entradas){
+            if(e.nombre == id){
+                if(e.tipo == "funcion"){
+                    return e;
+                }
+            }
+        }
+        cout << "SE ESTA BUSCANDO UNA VARIABLE QUE NO EXISTE EN LA TABLA DE SIMBOLOS " << id << endl;
+        exit(0);
+    }
+
+    Entrada& Tabla::AñadeEntrada(string id){
+        entradas.push_back(Entrada(id));
+        return entradas.back();
+    }
+
+    void Tabla::AñadeTipo(Entrada& e, string tipo){
+        if(e.tipo != "null"){
+            cout << "CUIDADO, CAMBIANDO TIPO DE VARIABLE YA DECLARADA" << endl;
+        }
+        e.tipo = tipo;
+    }
+
+    void Tabla::AñadeDespl(Entrada& e, int despl){
+        if(e.desplazamiento != -1){
+            cout << "CUIDADO, CAMBIANDO DESPLAZAMIENTO DE VARIABLE YA DECLARADA" << endl;
+        }
+        e.desplazamiento = despl;
+    }
+
+    void Tabla::AñadeTipoFunc(Entrada& e, string tipoParam, string tipoRet){
+        if(e.tipo != "null"){
+            cout << "CUIDADO, CAMBIANDO TIPO DE VARIABLE YA DECLARADA" << endl;
+        }
+        e.tipo = "funcion";
+        e.desplazamiento = 0;
+        e.tipoParams = tipoParam;
+        e.tipoRetorno = tipoRet;
+        e.numParam = tipoParam == "void"? (count(tipoParam.begin(), tipoParam.end(), ',') + 1): 0;
+    }
+
+    void Tabla::AñadeEtiq(Entrada& e, string etiq){
+        if(e.tipo != "funcion"){
+            cout << "INTENTANDO AÑADIR ETIQUETA A UNA VARIABLE QUE NO ES UNA FUNCION" << endl;
+        }
+        e.etiqfuncion = "function"+ to_string(nfun);
+        cout << "añadida etiqueta " << e.etiqfuncion<< endl;
+        nfun++;
+    }
+
+    string Tabla::nuevaEtiq(){
+        return "function"+ to_string(nfun);
+        nfun++;
+    }
+
+
+
 int error(int cod_error, std::ifstream &file, std::streampos position, std::ofstream &err_file)
 {
     file.clear();
@@ -145,27 +260,34 @@ void crearTabla(string nombre_tabla, std::ofstream &tabla_file)
     tabla_file << titulo;
 }
 
-void meterToken(token_ids id, string lex, int desplazamiento, std::ofstream &tabla_file)
+void meterToken(token_ids id, string lex, Tabla* tabla)
 {
-    // Si el token no es un identificador no se anade a la Tabla de simbolos
-    // if de asegurarse
-    if (tokenToString(id) == "ID")
-    {
-        // No esta el token en la tabla
-        if (tabla.find(lex) == tabla.end())
-        {
-            string texto = "";
-            texto += "* LEXEMA: '" + lex + "'" + '\n';
-            texto += "    +despl: " + std::to_string(desplazamiento) + '\n';
-            tabla_file << texto;
-            tabla.insert_or_assign(lex, desplazamiento);
-        }
-        else
-        {
-            std::map<string, int>::iterator it = tabla.find(lex);
-            int desp = it->second;
-        }
+
+    if(id != token_ids::IDENTIFICADOR){
+        throw runtime_error("INTENTANDO AÑADIR UN ID CON UN TOKEN QUE NO ES ID");
     }
+
+    tabla->AñadeEntrada(lex);
+    
+    // Si el token no es un identificador no se anade a la Tabla de simbolos
+    // // if de asegurarse
+    // if (tokenToString(id) == "ID")
+    // {
+    //     // No esta el token en la tabla
+    //     if (tabla.find(lex) == tabla.end())
+    //     {
+    //         string texto = "";
+    //         texto += "* LEXEMA: '" + lex + "'" + '\n';
+    //         texto += "    +despl: " + std::to_string(desplazamiento) + '\n';
+    //         tabla_file << texto;
+    //         tabla.insert_or_assign(lex, desplazamiento);
+    //     }
+    //     else
+    //     {
+    //         std::map<string, int>::iterator it = tabla.find(lex);
+    //         int desp = it->second;
+    //     }
+    // }
 }
 // palabras reservadas
 
@@ -464,7 +586,7 @@ void meterToken(token_ids id, string lex, int desplazamiento, std::ofstream &tab
                     {
                         tokenGenerated = true;
                         res_token = generarToken(token_ids::IDENTIFICADOR, valor_cadena, token_file);
-                        meterToken(token_ids::IDENTIFICADOR, valor_cadena, desplazamiento, tabla_file); // Meter a TS
+                        //meterToken(token_ids::IDENTIFICADOR, valor_cadena, tsg); // Meter a TS
                         pos_tabla_simbolos++;
                         desplazamiento++;
                     }

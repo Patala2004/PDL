@@ -4,7 +4,7 @@ var  int iiii;
 var string s64 ;
 var boolean bo;
 var int sdadas = 12;
-for(i = 1;12;i+=1){}
+for(i = 1;10 == 10;i+=1){}
 function int ffff  (void)
 {
 aa_aa=11;
@@ -16,12 +16,19 @@ return aa_aa;
 output  iiii ;
 
 iiii=aa_aa;
+
+hola = 10;
 	
 output ffff();
-function void put(string m_s_g)
+function void put(string m_s_g, int s_m_g2)
 {
 	output "Mensaje introducido:";
 	output m_s_g;
+	hola = 1;
+	for(i = 200; i == 10; i+=1){
+		return;
+	}
+	var int i;
 }
 function void pideTexto ( void )
 {
@@ -30,4 +37,13 @@ function void pideTexto ( void )
 }
 pideTexto();
   put
-	(texto);
+	(texto, 10);
+function void nodecla(void){}
+
+nodecla();
+
+x = 200;
+y = "hola";
+var int j;
+
+

@@ -14,10 +14,30 @@
 
 using namespace std;
 
+
+
 map<reglas, set<token_ids>> mapaFirst;
 map<reglas, set<token_ids>> mapaFollow;
 
 AnalizadorLexico analizador("hola.txt");
+
+
+std::ostream& operator<<(std::ostream& os, const Entrada& e) {
+    os << "Nombre: " << e.nombre << ", Tipo: " << e.tipo << ", Desplazamiento: " << e.desplazamiento;
+    if(e.tipo == "funcion"){
+        os << ", TipoRet: " << e.tipoRetorno << ", TipoParams: " << e.tipoParams;
+    }
+    return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const Tabla& t) {
+    os << "_____TABLA_____" << endl;
+    for(Entrada e : t.entradas){
+        os << e << endl;
+    }
+    return os;
+}
+
 
 int popularMapa()
 {
@@ -274,9 +294,9 @@ bool zona_decl = false;
 int despG = 0;
 int despL = 0;
 // tsg
-int TSG = NULL;
+Tabla* TSG = new Tabla();
 // tsl
-int TSL = NULL;
+Tabla* TSL = nullptr;
 
 
 
@@ -294,33 +314,66 @@ void error(token_ids token, reglas estado)
 // Funciones semanticas
 
 string BuscaTipo(string id){
-    return "TIPO";
+    return TSG->BuscaTipo(id);
 }
-string BuscaTipoFuncParams(string id){
-    return "TIPO,TIPO";
+Entrada& BuscaEntrada(string id, bool asignacion = false){
+    if(TSL != nullptr && (TSL->BuscaEntrada(id).tipo != "null" || asignacion)){
+        // Quiero saber si una entrada esta en TSL y su valor si:
+        //      1. Existe TSL
+        //      2. Existe una entrada en TSL o no existe PERO estoy asignando (quiero saber que hay huco para asignar)
+        return TSL->BuscaEntrada(id);
+    }
+    return TSG->BuscaEntrada(id);
 }
-string BuscaTipoFuncRet(string id){
-    return "TIPO";
+Entrada& BuscaEntradaFunc(string id){
+    return TSG->BuscaEntradaFunc(id);
+}
+Entrada& BuscaTipoFuncParams(string id){
+    return TSG->BuscaTipoFuncParams(id);
+}
+Entrada& BuscaTipoFuncRet(string id){
+    return TSG->BuscaTipoFuncRet(id);
 }
 
 void AñadeTipo(string id, string tipo){
-
+    TSG->AñadeTipo(BuscaEntrada(id),tipo);
 }
 void AñadeDespl(string id, int despl){
-
+    TSG->AñadeDespl(BuscaEntrada(id),despl);
 }
 void AñadeTipoFunc(string id, string tipoParam, string tipoRet){
-
+    TSG->AñadeTipoFunc(BuscaEntrada(id),tipoParam, tipoRet);
 }
 void AñadeEtiq(string id, string etiq){
-
+    Entrada &e = BuscaEntrada(id);
+    cout << e.tipo << endl;
+    TSG->AñadeEtiq(e, etiq);
 }
 
-int crearTabla(){
-    return NULL;
+Entrada& AñadeEntrada(string id, Tabla* tabla){
+    if(tabla == TSG){
+        return TSG->AñadeEntrada(id);
+    }
+    else if(tabla == nullptr){
+        cout << "INTENTANDO METER EN UNA TABLA NO EXISTENTE" << endl;
+        exit(0);
+    }
+    else if(tabla == TSL){
+        return TSL->AñadeEntrada(id);
+    }
+    else{
+        throw runtime_error("TABLA NO NULA PERO TAMPOCO ES TSL O TSG");
+    }
+    return TSG->AñadeEntrada(id);
 }
-void liberarTabla(int &tabla){
-    tabla = NULL;
+
+Tabla* crearTabla(){
+    return new Tabla();
+}
+
+Tabla* liberarTabla(){
+    cout << *TSL << endl;
+    return nullptr;
 }
 
 int etiqcounter = 0;
@@ -343,10 +396,11 @@ bool equipara(Token &token, token_ids a_equiparar, reglas estado)
     return true;
 }
 
+int auxi = 0;
 bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = nullptr)
 {
 
-    // cout << reglasToString(NT) << endl;
+    // cout << reglasToString(NT) << " " << auxi++ << endl;
     // cout << atrs_semanticos << endl;
 
     // filestream_parse << NT_To_Parse(NT) << endl;
@@ -411,25 +465,28 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
                         
             equipara(token, token_ids::PAL_RES_VAR, NT); // compara, lanza error si no es y avanza un token
             noTerminal(reglas::T, token, &T);
-            string id = get<string>(token.valor);
+            Token iden = token;
             equipara(token, token_ids::IDENTIFICADOR, NT);
+            Entrada& id = AñadeEntrada(get<string>(iden.valor), TSL==nullptr? TSG:TSL);
 
             // semantico
-            string idtipo = BuscaTipo(id);
             // El lexico debe de haber metido al token en la tabla que corresponde y lanzado error si ya existia en la tabla local (o global si no hay local)
-            if(idtipo == "null"){ // Si el token en la TSL no tiene tipo
-                AñadeTipo(id,T["tipo"]);
-                if(TSL == NULL){
-                    AñadeDespl(id,despG);
+            if(id.tipo == "null"){ // Si el token en la TSL no tiene tipo
+                //AñadeTipo(id,T["tipo"]);
+                id.tipo = T["tipo"];
+                if(TSL == nullptr){
+                    //AñadeDespl(id,despG);
+                    id.desplazamiento = despG;
                     despG += stoi(T["ancho"]);
                 }
                 else{
-                    AñadeDespl(id,despL);
+                    //AñadeDespl(id,despL);
+                    id.desplazamiento = despL;
                     despL += stoi(T["ancho"]);
                 }
             }
             else{
-                cout << "ERROR SEMANTICO: LA VARIABLE YA HA SIDO DECLARADA EN LA LINEA " << analizador.linea_last_finished_tok << endl;
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": LA VARIABLE YA HA SIDO DECLARADA EN LA LINEA " << analizador.linea_last_finished_tok << endl;
                 exit(0);
             }
             zona_decl = false;
@@ -441,7 +498,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             // semantico
             if(T["tipo"] != C["tipo"] && C["tipo"] != "vacio"){
-                cout << "ERROR SEMANTICO: LA VARIABLE ASIGNADA NO COINCIDE CON EL TIPO DE LA ASIGNACION" << endl;
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": LA VARIABLE ASIGNADA NO COINCIDE CON EL TIPO DE LA ASIGNACION" << endl;
                 exit(0);
             }
             
@@ -460,7 +517,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             // semantico
             U["tipoRet"] = (*atrs_semanticos)["tipoRet"];
             if(R["tipo"] != "booleano"){
-                cout << "ERROR SEMANTICO: LA CONDICION TIENE QUE SER UNA EXPRESION BOOLEANA" << endl;
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": LA CONDICION TIENE QUE SER UNA EXPRESION BOOLEANA" << endl;
                 exit(0);
             }
             // finsemantico
@@ -494,9 +551,10 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             //semantico
             if(R["tipo"]!="booleano"){
-                cout << "ERROR SEMANTICO: LA CONDICION TIENE QUE SER UNA EXPRESION BOOLEANA" << endl;
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": LA CONDICION TIENE QUE SER UNA EXPRESION BOOLEANA" << endl;
                 exit(0);
             }
+            //finsemantico
 
             equipara(token, token_ids::PUNTO_Y_COMA, NT);
             noTerminal(reglas::F2, token);
@@ -507,7 +565,6 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            cout << "hola";
             error(token.id, NT);
         }
         break;
@@ -530,10 +587,17 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             map<string,string> H = {};
             map<string,string> Q = {};
             noTerminal(reglas::H, token, &H);
-            string id = get<string>(token.valor);
+            Token iden = token;
             equipara(token, token_ids::IDENTIFICADOR, NT);
+            Entrada& idtemp = BuscaEntradaFunc(get<string>(iden.valor)); // Para revisar si existe ya una func con el mismo nombre
 
             //semantico
+            if(idtemp.tipo != "null"){
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": LA FUNCION YA HA SIDO DECLARADA" << endl;
+                exit(0);
+            }
+
+            Entrada& id = AñadeEntrada(get<string>(iden.valor), TSG); // AÑadimos a la tabnla
             TSL = crearTabla();
             despL = 0;
             //finsemantico
@@ -544,10 +608,14 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             noTerminal(reglas::D1, token, &D1);
 
             //semantico
-            AñadeTipoFunc(id, D1["tipo"], H["tipo"]);
-            AñadeEtiq(id,nuevaetiq());
+            //AñadeTipoFunc(id, D1["tipo"], H["tipo"]);
+            id.tipo = "funcion";
+            id.tipoRetorno = H["tipo"];
+            id.tipoParams = D1["tipo"];
+            id.etiqfuncion = TSG->nuevaEtiq();
+            id.desplazamiento = 0;
             zona_decl = false;
-            Q["tipo"] = H["tipo"];
+            Q["tipoRet"] = H["tipo"];
             //finsemantico
 
             equipara(token, token_ids::PARENTESIS_CERRADA, NT);
@@ -556,7 +624,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             equipara(token, token_ids::LLAVE_CERRADA, NT);
 
             //semantico
-            liberarTabla(TSL);
+            TSL = liberarTabla();
             //finsemantico
         }
         else
@@ -698,6 +766,9 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             // L -> =
             parse_file << 17 << " ";
             equipara(token, token_ids::OP_ASIGNACION_SIMPLE, NT);
+
+            //semantico
+            (*atrs_semanticos)["operador"] = "asignacion";
         }
         else
         {
@@ -752,7 +823,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             //semantico
             if((*atrs_semanticos)["tipo"] != "booleano"){
-                cout << "ERROR SEMANTICO: VALOR NO BOOLEANO EN UN AND" << endl;
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": VALOR NO BOOLEANO EN UN AND" << endl;
             }
             //finsemantico
 
@@ -762,7 +833,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             //semantico
             if(R2["tipo"] != "booleano"){
-                cout << "ERROR SEMANTICO: VALOR NO BOOLEANO EN UN AND EN LA PARTE DERECHA" << endl;
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": VALOR NO BOOLEANO EN UN AND EN LA PARTE DERECHA" << endl;
             }
             //nosemantico
 
@@ -838,7 +909,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             
             //semantico
             if((*atrs_semanticos)["tipo"] != R4["tipo"]){
-                cout << "ERROR SEMANTICO: NO PUEDES IGUALAR DATOS DE DISTINTOS TIPOS" << endl;
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": NO PUEDES IGUALAR DATOS DE DISTINTOS TIPOS" << endl;
                 exit(0);
             }
             R3["tipo"] = "booleano"; // Si sigue habiendo mas comparaciones (x == y == z) la parte izquierda va a ser el booleana porque es el resultado de una comparacion
@@ -895,7 +966,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             parse_file << 25 << " ";
 
             if((*atrs_semanticos)["tipo"] != "entero"){
-                cout << "ERROR SEMANTICO: OPERACION ARITMETICA CON DATO NO ENTERO" << endl;
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": OPERACION ARITMETICA CON DATO NO ENTERO" << endl;
                 exit(0);
             }
             noTerminal(reglas::J, token);
@@ -905,7 +976,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             //semantico
             if(O["tipo"] != "entero"){
-                cout << "ERROR SEMANTICO: OPERACION ARITMETICA CON DATO NO ENTERO A LA DERECHA" << endl;
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": OPERACION ARITMETICA CON DATO NO ENTERO A LA DERECHA" << endl;
                 exit(0);
             }
             R5["tipo"] = "entero"; // si hay mas operaciones aritmeticas la parte izquierda sera el resultado de otra op. aritm. -> entero
@@ -973,24 +1044,31 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         {
             // O -> id A
             parse_file << 30 << " ";
-            string id = get<string>(token.valor);
+            Token iden = token;
             equipara(token, token_ids::IDENTIFICADOR, NT);
             map<string,string> A = {};
             noTerminal(reglas::A, token, &A);
 
             //semantico
+
             if(A["tipo"] != ""){ // Si a A SI se le ha asignado algun tipo 
-                if(A["tipo"] == BuscaTipoFuncParams(id)){ // si los tipos de los argumentos coincide con el de los parametros
-                    (*atrs_semanticos)["tipo"] = BuscaTipoFuncRet(id); // tipo de O es el tipo de retorno de la func
+                Entrada& id = BuscaEntradaFunc(get<string>(iden.valor));
+                if(id.tipo == "null"){
+                    cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": LA FUNCION NO HA SIDO DECLARADA" << endl;
+                    exit(0);
+                }
+                if(A["tipo"] == id.tipoParams){ // si los tipos de los argumentos coincide con el de los parametros
+                    (*atrs_semanticos)["tipo"] = id.tipoRetorno; // tipo de O es el tipo de retorno de la func
                 }
                 else{
-                    cout << "ERROR SEMANTICO: LOS PARAMETROS NO SON CORRECTOS PARA ESTA FUNCION" << endl;
+                    cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": LOS PARAMETROS NO SON CORRECTOS PARA ESTA FUNCION" << endl;
                     exit(0);
                 }
             }
             else{
+                Entrada& id = BuscaEntrada(get<string>(iden.valor));
                 // Entonces es una variable, no una func
-                (*atrs_semanticos)["tipo"] = BuscaTipo(id);
+                (*atrs_semanticos)["tipo"] = id.tipo;
             }
             //finsemantico
         }
@@ -1077,6 +1155,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         {
             // A1 -> lambda
             parse_file << 36 << " ";
+            (*atrs_semanticos)["tipo"] = "void";
         }
         else
         {
@@ -1130,13 +1209,13 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             // U -> input id ;
             parse_file << 39 << " ";
             equipara(token, token_ids::PAL_RES_INPUT, NT);
-            string id = get<string>(token.valor);
+            Token iden = token;
             equipara(token, token_ids::IDENTIFICADOR, NT);
 
             //semantico
-            string tipo = BuscaTipo(id);
-            if(tipo != "entero" && tipo != "cadena"){
-                cout << "ERROR SEMANTICO: SOLO SE PUEDEN LEER ENTEROS O CADENAS USANDO INPUT" << endl;
+            Entrada& id = BuscaEntrada(get<string>(iden.valor));
+            if(id.tipo != "entero" && id.tipo != "cadena"){
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": SOLO SE PUEDEN LEER ENTEROS O CADENAS USANDO INPUT" << endl;
                 exit(0);
             }
             //finsemantico
@@ -1153,7 +1232,9 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             //semantico
             if(R["tipo"] != "entero" && R["tipo"] != "cadena"){
-                cout << "ERROR SEMANTICO: SOLO SE PUEDEN IMPRIMIR ENTEROS O CADENAS" << endl;
+                cout << R["tipo"] << endl;
+                cout << *TSL << endl;
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": SOLO SE PUEDEN IMPRIMIR ENTEROS O CADENAS" << endl;
                 exit(0);
             }
             //finsemantico
@@ -1168,10 +1249,10 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             //semantico
             map<string,string> U2 = {};
-            U2["tipo"] = (*atrs_semanticos)["tipoRet"];
-            if(TSL == NULL){
-                cout << "ERROR SEMANTICO: SOLO SE PUEDEN USAR RETURNS DENTRO DE FUNCIONES" << endl;
-                // exit(0)
+            U2["tipoRet"] = (*atrs_semanticos)["tipoRet"];
+            if(TSL == nullptr){
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": SOLO SE PUEDEN USAR RETURNS DENTRO DE FUNCIONES" << endl;
+                exit(0);
             }
             //finsemantico
 
@@ -1186,12 +1267,43 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             map<string,string> U1 = {};
 
-            string id = get<string>(token.valor);
+            Token iden = token;
             equipara(token, token_ids::IDENTIFICADOR, NT);
+
+            //semantico
+            string tipo = BuscaEntrada(get<string>(iden.valor)).tipo;
+            U1["tipo"] = tipo;
+            U1["tipoParams"] = BuscaEntradaFunc(get<string>(iden.valor)).tipoParams;
+            //finsemantico
+
             noTerminal(reglas::U1, token,&U1);
 
-            if(U1["tipo"] != BuscaTipo(id)){
-                // ERROR SEMANTICO
+            //semantico
+            if(U1["modo"] == "asignacion" && tipo == "null"){ // NO VUELVO A HACER BUSCAENTRADA CON ASIG = TRUE PORQUE SI ESTA EN EL GLOBAL NO LO QUIERO ASIGNAR AL LOCAL
+                // si variable no existe crearla
+                Entrada& id = AñadeEntrada(get<string>(iden.valor), TSL == nullptr? TSG:TSL);
+                id.tipo = U1["tipo"]; // ha sido sobreescrito por el valor de R["tipo"] en U1
+                int ancho = -2;
+                if(id.tipo == "entero"){
+                    ancho = 1;
+                }
+                else if(id.tipo == "cadena"){
+                    ancho = 64;
+                }
+                else if(id.tipo == "booleano"){
+                    ancho = 1;
+                }
+                else{
+                    cout << "TIPO DE VAR RARO: " << id.tipo << endl;
+                }
+                if(TSL == nullptr){
+                    id.desplazamiento = despG;
+                    despG += ancho;
+                }
+                else{
+                    id.desplazamiento = despL;
+                    despL += ancho;
+                }
             }
         }
         else
@@ -1212,15 +1324,29 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             map<string,string> L = {};
             map<string,string> R = {};
             noTerminal(reglas::L, token,&L);
+            //semantico
+            if(L["operador"] == "suma" && (*atrs_semanticos)["tipo"] != "entero"){
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": NO SE PUEDE USAR OPERADOR DE ASIGNACION SUMA PARA VAR NO ENTERA" << endl;
+                exit(0);
+            }
+            //finsemantico
             noTerminal(reglas::R, token,&R);
             //semantico
             if(L["operador"] == "suma" && R["tipo"] != "entero"){
-                // ERROR SEMANTICO
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": ASIGNACION-SUMA CON ELEMENTO NO ENTERO" << endl;
+                exit(0);
             }else{
+                if((*atrs_semanticos)["tipo"] != "null" && (*atrs_semanticos)["tipo"] != R["tipo"]){
+                    cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": ASIGNACION A UNA VARIABLE DE UN TIPO CON UN VALOR DE OTRO" << endl;
+                    exit(0);
+                }
                 (*atrs_semanticos)["tipo"] = R["tipo"];
             }
             //fin semantico
             equipara(token, token_ids::PUNTO_Y_COMA, NT);
+            //semantico
+            (*atrs_semanticos)["modo"] = "asignacion";
+            //finsemantico
         }
         else if (token.id == token_ids::PARENTESIS_ABIERTA)
         {
@@ -1230,13 +1356,21 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             map<string,string> A1 = {};
 
             equipara(token, token_ids::PARENTESIS_ABIERTA, NT);
+            //semantico
+            if((*atrs_semanticos)["tipoParams"] == "null"){
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": NO EXISTE ESTA FUNCION" << endl;
+                exit(0);
+            }
+            //finsemantico
             noTerminal(reglas::A1, token,&A1);
+            //semantico
+            if(A1["tipo"] != (*atrs_semanticos)["tipoParams"]){
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": PARAMETROS INCORRECTOS" << endl;
+                exit(0);
+            }
+            //finsemantico
             equipara(token, token_ids::PARENTESIS_CERRADA, NT);
             equipara(token, token_ids::PUNTO_Y_COMA, NT);
-
-            //semantico
-            (*atrs_semanticos)["tipo"] = A1["tipo"];
-            //finsemantico
         }
         else
         {
@@ -1258,7 +1392,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             //semantico
             if((*atrs_semanticos)["tipoRet"] != R["tipo"]){
-                // cout << "El tipo del return no coincide con el valor de retorno de la funcion" ;
+                cout << "ERROR SEMANTICO EN LA LINEA: " << analizador.linea_last_finished_tok << " El tipo del return no coincide con el valor de retorno de la funcion" << endl ;
                 exit(0);
             }
             (*atrs_semanticos)["tipo"] = R["tipo"];
@@ -1290,14 +1424,34 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             map<string,string> R = {};
 
-            string id = get<string>(token.valor);
+            Token iden = token;
             equipara(token, token_ids::IDENTIFICADOR, NT);
             equipara(token, token_ids::OP_ASIGNACION_SIMPLE, NT);
             noTerminal(reglas::R, token,&R);
 
             //semantico
-            if(R["tipo"] != BuscaTipo(id)){
-                // ERROR SEMANTICO
+            string tipo = BuscaEntrada(get<string>(iden.valor), false).tipo;
+            if(tipo == "null"){ // false para no asignar al TSL si la var existe el el TSG
+                // SI no existe -> crear
+                Entrada& id = AñadeEntrada(get<string>(iden.valor), TSL == nullptr? TSG:TSL);
+                id.tipo = R["tipo"];
+                int desplazamiento = 0;
+                if(id.tipo == "entero"){
+                    desplazamiento = 1;
+                }
+                else if(id.tipo == "booleano"){
+                    desplazamiento = 1;
+                }
+                else if(id.tipo == "cadena"){
+                    desplazamiento = 64;
+                }
+                id.desplazamiento = desplazamiento;
+            }
+            else{
+                // Si ya existe -> comprobar que el valor asignado sea del mismo tipo a la var existente
+                if(R["tipo"] !=tipo){
+                    throw runtime_error("ERROR SEMANTICO EN LA LINEA " + to_string(analizador.linea_last_finished_tok) + ": ASIGNACION DE DOS TIPOS DIFERENTES");
+                }
             }
             //finsemantico
         }
@@ -1459,18 +1613,19 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             parse_file << 56 << " ";
             map<string,string> T = {};
             noTerminal(reglas::T, token, &T);
-            string id = get<string>(token.valor);
+            Token iden = token;
             equipara(token, token_ids::IDENTIFICADOR, NT);
 
             //semantico
-            if(BuscaTipo(id) == "null"){ // Si lo ha metido el lexico pero todavia ningun semantico
-                AñadeTipo(id, T["tipo"]);
-                AñadeDespl(id, despL);
+            Entrada& id = AñadeEntrada(get<string>(iden.valor), TSL);
+            if(id.tipo == "null"){ // Si lo ha metido el lexico pero todavia ningun semantico
+                id.tipo = T["tipo"];
+                id.desplazamiento =despL;
                 despL += stoi(T["ancho"]);
                 (*atrs_semanticos)["tipo"] = T["tipo"];
             }
             else{
-                cout << "ERROR SEMANTICO: VARIABLE YA DECLARADA EN LA LINEA " << analizador.linea_last_finished_tok << endl;
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": VARIABLE YA DECLARADA EN LA LINEA " << analizador.linea_last_finished_tok << endl;
                 exit(0);
             }
         }
@@ -1519,10 +1674,13 @@ int main()
 {
     popularMapa();
     reglas noTerminalState = reglas::S; // empieza en el axioma S
+    analizador.tsg = TSG;
     Token token = analizador.processNextChar();
+
     parse_file << "descendente ";
     // cosas semanticas de S'
     // {TSG=CreaTabla(); desplG=0}
     noTerminal(noTerminalState, token);
+    cout << *TSG << endl;
     // {LiberaTabla(TSG)}
 }

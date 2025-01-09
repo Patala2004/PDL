@@ -467,11 +467,12 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             noTerminal(reglas::T, token, &T);
             Token iden = token;
             equipara(token, token_ids::IDENTIFICADOR, NT);
-            Entrada& id = AñadeEntrada(get<string>(iden.valor), TSL==nullptr? TSG:TSL);
+            Entrada& idtemp = BuscaEntrada(get<string>(iden.valor), true);
 
             // semantico
             // El lexico debe de haber metido al token en la tabla que corresponde y lanzado error si ya existia en la tabla local (o global si no hay local)
-            if(id.tipo == "null"){ // Si el token en la TSL no tiene tipo
+            if(idtemp.tipo == "null"){ // Si el token en la TSL no tiene tipo
+                Entrada& id = AñadeEntrada(get<string>(iden.valor), TSL==nullptr? TSG:TSL);
                 //AñadeTipo(id,T["tipo"]);
                 id.tipo = T["tipo"];
                 if(TSL == nullptr){
@@ -1619,8 +1620,9 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             equipara(token, token_ids::IDENTIFICADOR, NT);
 
             //semantico
-            Entrada& id = AñadeEntrada(get<string>(iden.valor), TSL);
-            if(id.tipo == "null"){ // Si lo ha metido el lexico pero todavia ningun semantico
+            Entrada& idtemp = BuscaEntrada(get<string>(iden.valor), true); // True para que si no esta en TSL no lo busque en TSG
+            if(idtemp.tipo == "null"){ // Si lo ha metido el lexico pero todavia ningun semantico
+                Entrada& id = AñadeEntrada(get<string>(iden.valor), TSL);
                 id.tipo = T["tipo"];
                 id.desplazamiento =despL;
                 despL += stoi(T["ancho"]);

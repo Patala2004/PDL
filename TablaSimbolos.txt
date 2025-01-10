@@ -1,133 +1,62 @@
-TABLA DE LA FUNCION pp_ #1:
+TABLA DE LA FUNCION ff #1:
 
 
- * 'pp__'
-   + tipo:  'entero'
-   + despl:  0
-   --------------------------
-
-TABLA DE LA FUNCION FuncionNumero #2:
-
-
- * 'i'
-   + tipo:  'entero'
-   + despl:  0
-   --------------------------
- * 'j'
-   + tipo:  'entero'
-   + despl:  1
-   --------------------------
-
-TABLA DE LA FUNCION FuncionRetorno #3:
-
-
- * 'hola'
+ * 'ss'
    + tipo:  'cadena'
    + despl:  0
    --------------------------
- * 'x'
-   + tipo:  'entero'
+
+TABLA DE LA FUNCION funciOn #2:
+
+
+ * 'logico2'
+   + tipo:  'cadena'
+   + despl:  0
+   --------------------------
+ * 'let'
+   + tipo:  'cadena'
    + despl:  64
-   --------------------------
- * 'z'
-   + tipo:  'booleano'
-   + despl:  65
-   --------------------------
- * 'i'
-   + tipo:  'entero'
-   + despl:  66
-   --------------------------
-
-TABLA DE LA FUNCION FuncionSentencia #4:
-
-
- * 'b'
-   + tipo:  'entero'
-   + despl:  0
-   --------------------------
- * 'z'
-   + tipo:  'booleano'
-   + despl:  1
-   --------------------------
- * 'a'
-   + tipo:  'entero'
-   + despl:  2
-   --------------------------
-
-TABLA DE LA FUNCION Funcion #5:
-
-
- * 'x'
-   + tipo:  'entero'
-   + despl:  0
-   --------------------------
- * 'b'
-   + tipo:  'booleano'
-   + despl:  1
    --------------------------
 
 TABLA GLOBAL #0:
 
 
- * 'entero'
-   + tipo:  'entero'
-   + despl:  0
-   --------------------------
  * 'cadena'
    + tipo:  'cadena'
-   + despl:  1
+   + despl:  0
    --------------------------
- * 'logico'
+ * 'logico1'
+   + tipo:  'booleano'
+   + despl:  64
+   --------------------------
+ * 'logico2'
    + tipo:  'booleano'
    + despl:  65
    --------------------------
- * 'pp_'
-   + tipo:  'funcion'
-       + numParam:  0
-        + tipoRetorno:  'void'
-        + etiqFuncion:  'function0'
-   --------------------------
- * 'pp___'
+ * 'int2'
    + tipo:  'entero'
    + despl:  66
    --------------------------
- * 'FuncionNumero'
-   + tipo:  'funcion'
-       + numParam:  0
-        + tipoRetorno:  'void'
-        + etiqFuncion:  'function1'
-   --------------------------
- * 'FuncionRetorno'
-   + tipo:  'funcion'
-       + numParam:  3
-          + tipoParam1:  'cadena'
-          + tipoParam2:  'entero'
-          + tipoParam3:  'booleano'
-        + tipoRetorno:  'cadena'
-        + etiqFuncion:  'function2'
-   --------------------------
- * 'FuncionSentencia'
-   + tipo:  'funcion'
-       + numParam:  2
-          + tipoParam1:  'entero'
-          + tipoParam2:  'booleano'
-        + tipoRetorno:  'void'
-        + etiqFuncion:  'function3'
-   --------------------------
- * 'Funcion'
-   + tipo:  'funcion'
-       + numParam:  2
-          + tipoParam1:  'entero'
-          + tipoParam2:  'booleano'
-        + tipoRetorno:  'void'
-        + etiqFuncion:  'function4'
-   --------------------------
- * 'iii'
+ * 'int1'
    + tipo:  'entero'
    + despl:  67
    --------------------------
- * 'bbb'
-   + tipo:  'booleano'
+ * 'ff'
+   + tipo:  'funcion'
+       + numParam:  1
+          + tipoParam1:  'cadena'
+        + tipoRetorno:  'cadena'
+        + etiqFuncion:  'function0'
+   --------------------------
+ * 'varglobal'
+   + tipo:  'entero'
    + despl:  68
+   --------------------------
+ * 'funciOn'
+   + tipo:  'funcion'
+       + numParam:  1
+          + tipoParam1:  'cadena'
+        + tipoRetorno:  'cadena'
+        + etiqFuncion:  'function1'
    --------------------------
 

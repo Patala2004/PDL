@@ -1,65 +1,37 @@
-/* Comentario de linea es con //. */
 
-/* El de bloque va entre /* y */
+var string	cadena;
+input 
+cadena;
+var boolean logico1	;
+var boolean logico2 	;
+var int int2			;
 
-var int entero;
-var string cadena;
-var boolean logico;
-function void pp_(void)
+
+
+/* Ejemplo #1*/
+
+int1 = 000000378;
+
+int2 = int1;
+cadena = "string";
+
+function  string ff(string ss)
 {
- var int  pp__  ;
-  pp___  = 0;
-}function void FuncionNumero (void)
-{
-  var  int i;
-  var  int j;
-  
-  logico = i  ==  j;
+	logico2 =  logico1;
+	if (logico2) cadena = ff (ss);
+	varglobal = 78;
+	return cadena;
 }
-function string FuncionRetorno (string hola, int x, boolean z)
-{
-  var  int i
-  
-  ;input i
-  ;output hola
-  ;x=i
-  ;z = x==entero
-  ;if (z)return hola
-  ;return cadena;
-}
-function void FuncionSentencia  (int b, boolean z)
-{
-	var  int a;
-  for (b=1 ; z; )
-  {
-	a=b;
-	output (a);
+		
+function string funciOn (string logico2)
+{	var string let 	;
+
+  for (logico2="";int1 == int2;int2 += int1){
+	logico1 = int1 == int2;output((0));
   }
+  
+  return logico2;
 }
-function void Funcion  (int x, boolean b)
-{
-	FuncionNumero();
-  output 
-    (cadena);return;
-}
-var int iii  ;
-var boolean bbb  ;
+cadena = (ff(funciOn(cadena)));
+output cadena;
 
-/* 
-esto 
-es 
-un 
-comentario! 
-multi 
-//linea */
-
-input iii;
-output  (  iii  )  ;  
-
-iii = iii;
-bbb = bbb;
-
-Funcion
- ( iii, 
-   bbb )
-;

@@ -1,3 +1,71 @@
+TABLA DE LA FUNCION pp_ #1:
+
+
+ * 'pp__'
+   + tipo:  'entero'
+   + despl:  0
+   --------------------------
+
+TABLA DE LA FUNCION FuncionNumero #2:
+
+
+ * 'i'
+   + tipo:  'entero'
+   + despl:  0
+   --------------------------
+ * 'j'
+   + tipo:  'entero'
+   + despl:  1
+   --------------------------
+
+TABLA DE LA FUNCION FuncionRetorno #3:
+
+
+ * 'hola'
+   + tipo:  'cadena'
+   + despl:  0
+   --------------------------
+ * 'x'
+   + tipo:  'entero'
+   + despl:  64
+   --------------------------
+ * 'z'
+   + tipo:  'booleano'
+   + despl:  65
+   --------------------------
+ * 'i'
+   + tipo:  'entero'
+   + despl:  66
+   --------------------------
+
+TABLA DE LA FUNCION FuncionSentencia #4:
+
+
+ * 'b'
+   + tipo:  'entero'
+   + despl:  0
+   --------------------------
+ * 'z'
+   + tipo:  'booleano'
+   + despl:  1
+   --------------------------
+ * 'a'
+   + tipo:  'entero'
+   + despl:  2
+   --------------------------
+
+TABLA DE LA FUNCION Funcion #5:
+
+
+ * 'x'
+   + tipo:  'entero'
+   + despl:  0
+   --------------------------
+ * 'b'
+   + tipo:  'booleano'
+   + despl:  1
+   --------------------------
+
 TABLA GLOBAL #0:
 
 

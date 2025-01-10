@@ -334,6 +334,8 @@ Tabla* TSG = new Tabla();
 Tabla* TSL = nullptr;
 int contadorTablas = 0;
 
+std::ofstream ficheroTS("TablaSimbolos.txt", std::ios::out | std::ios::trunc);
+
 
 
 
@@ -414,7 +416,7 @@ Tabla* crearTabla(string nombre = "TABLA SIN NOMBRE"){
 }
 
 Tabla* liberarTabla(){
-    cout << *TSL << endl;
+    ficheroTS << *TSL << endl;
     return nullptr;
 }
 
@@ -1712,8 +1714,6 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
 int main()
 {
-
-    std::ofstream ficheroTS("TablaSimbolos.txt", std::ios::out | std::ios::trunc);
 
     if(!ficheroTS.is_open()) {
         std::cerr << "Failed to open or create the file: TablaSimbolos.txt" << std::endl;

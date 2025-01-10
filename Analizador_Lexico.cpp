@@ -145,8 +145,7 @@ std::map<string, int> tabla;
     }
 
     string Tabla::nuevaEtiq(){
-        return "function"+ to_string(nfun);
-        nfun++;
+        return "function"+ to_string(nfun++);
     }
 
 

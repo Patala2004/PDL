@@ -1,15 +1,65 @@
-var string texto;
-function void pideTexto  
-                  (void)
+/* Comentario de linea es con //. */
+
+/* El de bloque va entre /* y */
+
+var int entero;
+var string cadena;
+var boolean logico;
+function void pp_(void)
 {
-	output "Introduce un texto";
-	input texto;
-}
-function void put  (string msg1)
+ var int  pp__  ;
+  pp___  = 0;
+}function void FuncionNumero (void)
 {
-	output "Texto introducido:";
-	output msg1;
+  var  int i;
+  var  int j;
+  
+  logico = i  ==  j;
 }
-pideTexto();
-  put
-	(texto);
+function string FuncionRetorno (string hola, int x, boolean z)
+{
+  var  int i
+  
+  ;input i
+  ;output hola
+  ;x=i
+  ;z = x==entero
+  ;if (z)return hola
+  ;return cadena;
+}
+function void FuncionSentencia  (int b, boolean z)
+{
+	var  int a;
+  for (b=1 ; z; )
+  {
+	a=b;
+	output (a);
+  }
+}
+function void Funcion  (int x, boolean b)
+{
+	FuncionNumero();
+  output 
+    (cadena);return;
+}
+var int iii  ;
+var boolean bbb  ;
+
+/* 
+esto 
+es 
+un 
+comentario! 
+multi 
+//linea */
+
+input iii;
+output  (  iii  )  ;  
+
+iii = iii;
+bbb = bbb;
+
+Funcion
+ ( iii, 
+   bbb )
+;

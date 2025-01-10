@@ -1,21 +1,61 @@
 TABLA GLOBAL # 0:
 
 
- * 'texto'
-   + tipo:  'cadena'
+ * 'entero'
+   + tipo:  'entero'
    + despl:  0
    --------------------------
- * 'pideTexto'
+ * 'cadena'
+   + tipo:  'cadena'
+   + despl:  1
+   --------------------------
+ * 'logico'
+   + tipo:  'booleano'
+   + despl:  65
+   --------------------------
+ * 'pp_'
    + tipo:  'funcion'
        + numParam:  0
         + tipoRetorno:  'void'
         + etiqFuncion:  'function0'
    --------------------------
- * 'put'
+ * 'FuncionNumero'
    + tipo:  'funcion'
-       + numParam:  1
-          + tipoParam1:  'cadena'
+       + numParam:  0
         + tipoRetorno:  'void'
-        + etiqFuncion:  'function0'
+        + etiqFuncion:  'function1'
+   --------------------------
+ * 'FuncionRetorno'
+   + tipo:  'funcion'
+       + numParam:  3
+          + tipoParam1:  'cadena'
+          + tipoParam2:  'entero'
+          + tipoParam3:  'booleano'
+        + tipoRetorno:  'cadena'
+        + etiqFuncion:  'function2'
+   --------------------------
+ * 'FuncionSentencia'
+   + tipo:  'funcion'
+       + numParam:  2
+          + tipoParam1:  'entero'
+          + tipoParam2:  'booleano'
+        + tipoRetorno:  'void'
+        + etiqFuncion:  'function3'
+   --------------------------
+ * 'Funcion'
+   + tipo:  'funcion'
+       + numParam:  2
+          + tipoParam1:  'entero'
+          + tipoParam2:  'booleano'
+        + tipoRetorno:  'void'
+        + etiqFuncion:  'function4'
+   --------------------------
+ * 'iii'
+   + tipo:  'entero'
+   + despl:  66
+   --------------------------
+ * 'bbb'
+   + tipo:  'booleano'
+   + despl:  67
    --------------------------
 

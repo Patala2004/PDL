@@ -66,7 +66,7 @@ std::ostream& operator<<(std::ostream& os, const Tabla& t) {
     // if(t.entradas.empty()){
     //     return os;
     // }
-    os << t.nombre << " # " << t.contador <<":" << endl << endl << endl;
+    os << t.nombre << " #" << t.contador <<":" << endl << endl << endl;
     for(Entrada e : t.entradas){
         os << e;
     }
@@ -1325,7 +1325,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             //semantico
             if(U1["modo"] == "asignacion" && tipo == "null"){ // NO VUELVO A HACER BUSCAENTRADA CON ASIG = TRUE PORQUE SI ESTA EN EL GLOBAL NO LO QUIERO ASIGNAR AL LOCAL
                 // si variable no existe crearla
-                Entrada& id = AñadeEntrada(get<string>(iden.valor), TSL == nullptr? TSG:TSL);
+                Entrada& id = AñadeEntrada(get<string>(iden.valor),TSG);
                 id.tipo = U1["tipo"]; // ha sido sobreescrito por el valor de R["tipo"] en U1
                 int ancho = -2;
                 if(id.tipo == "entero"){
@@ -1340,14 +1340,9 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
                 else{
                     cout << "TIPO DE VAR RARO: " << id.tipo << endl;
                 }
-                if(TSL == nullptr){
-                    id.desplazamiento = despG;
-                    despG += ancho;
-                }
-                else{
-                    id.desplazamiento = despL;
-                    despL += ancho;
-                }
+                
+                id.desplazamiento = despG;
+                despG += ancho;
             }
         }
         else

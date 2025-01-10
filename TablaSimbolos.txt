@@ -1,4 +1,4 @@
-TABLA GLOBAL # 0:
+TABLA GLOBAL #0:
 
 
  * 'entero'
@@ -18,6 +18,10 @@ TABLA GLOBAL # 0:
        + numParam:  0
         + tipoRetorno:  'void'
         + etiqFuncion:  'function0'
+   --------------------------
+ * 'pp___'
+   + tipo:  'entero'
+   + despl:  66
    --------------------------
  * 'FuncionNumero'
    + tipo:  'funcion'
@@ -52,10 +56,10 @@ TABLA GLOBAL # 0:
    --------------------------
  * 'iii'
    + tipo:  'entero'
-   + despl:  66
+   + despl:  67
    --------------------------
  * 'bbb'
    + tipo:  'booleano'
-   + despl:  67
+   + despl:  68
    --------------------------
 

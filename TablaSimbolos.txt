@@ -1,20 +1,21 @@
 TABLA GLOBAL # 0:
 
 
- * 'a'
-   + tipo:  'entero'
+ * 'texto'
+   + tipo:  'cadena'
    + despl:  0
    --------------------------
- * 'b'
-   + tipo:  'entero'
-   + despl:  1
+ * 'pideTexto'
+   + tipo:  'funcion'
+       + numParam:  0
+        + tipoRetorno:  'void'
+        + etiqFuncion:  'function0'
    --------------------------
- * 'bbb'
-   + tipo:  'booleano'
-   + despl:  2
-   --------------------------
- * 'c'
-   + tipo:  'booleano'
-   + despl:  3
+ * 'put'
+   + tipo:  'funcion'
+       + numParam:  1
+          + tipoParam1:  'cadena'
+        + tipoRetorno:  'void'
+        + etiqFuncion:  'function0'
    --------------------------
 

@@ -1,13 +1,15 @@
-var int a ;
-var  int   b  ;
-var boolean bbb ;
-a = 3;
-b=a					    		 	 	 	 	 	 	 	 	 	 	 	 	 	 	 													;
-var boolean
-c
-;
-c = a == b;
-if (c) bbb = c;
-a = a + b;
-output a ;
-output b;
+var string texto;
+function void pideTexto  
+                  (void)
+{
+	output "Introduce un texto";
+	input texto;
+}
+function void put  (string msg1)
+{
+	output "Texto introducido:";
+	output msg1;
+}
+pideTexto();
+  put
+	(texto);

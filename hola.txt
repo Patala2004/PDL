@@ -1,71 +1,36 @@
-/* Comentario de linea es con //. */
+var int int_;
+var string string_;
+var boolean boolean_;
+output (00);var  boolean b;
+var  string  s;
+s="Hello?"
+	;function  int function_(int int_1, string string_2, boolean boolean_){
+	int_ = int_1+i;
+	if (boolean_) string_=string_2;
+	boolean_ =  boolean_;
+	return int_
+;}
 
-/* El de bloque va entre /* y */
+function void vacia (void){int_=0;return;}
 
-var int entero;
-var string cadena;
-var boolean logico;
-function void pp_(void)
-{
- var int  abcdefghij________  ;
-  abcdefghij________  = 0;
-}function void FuncionNumero 	(void)
-{
-  var  int i ;
 
-  
-  i=entero;
-  entero = 9  +  i;
-}
-function int FuncionRetorno  (string hola, int x, boolean z)
-{
-  if (z) x = 32765;
-  cadena= hola;
-  return (x);
-}
-var  int aa_aa;
-var string s64 ;
-var boolean boooooo ;
-var  int aaaaa;
-var  int iiiii;
-function boolean fbbb  (void) {return boooooo;}
+if (boolean_) output function_(987,"987",boolean_);vacia();
 
-function int  FuncionSentencia (int b, boolean z)
-{
-	var  int a;
-  for (b=1 ; z; b=a + 1)
-  {
-	aaaaa=b;
-	input (a);
-	z= a  ==  b;
-  }
-}
 
-if (booooo) aaaaa=0;
-function void Funcion  (int pp__x__, boolean b)
-{
-	if (pp__x__  ==  0)FuncionSentencia(pp__x__,b);
-  output 
-    cadena;return;
-}
-var int iii  ;
-var boolean bbb  ;
+output 4+5+77;
 
-/* 
-esto 
-es 
-un 
-comentario! 
-multi 
-//linea */
 
-input iii;
-output  (  iii  )  ;  
 
-iii += iii;
-bbb = bbb;
 
-Funcion
- ( iii, 
-   bbb )
-;
+
+
+
+
+
+
+
+
+
+i = 9999;
+
+output (  i );

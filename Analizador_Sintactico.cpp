@@ -1113,9 +1113,18 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
                 }
             }
             else{
-                Entrada& id = BuscaEntrada(get<string>(iden.valor));
+                Entrada& idtemp = BuscaEntrada(get<string>(iden.valor));
                 // Entonces es una variable, no una func
-                (*atrs_semanticos)["tipo"] = id.tipo;
+                if(idtemp.tipo == "null"){
+                    Entrada& id = AñadeEntrada(get<string>(iden.valor), TSG);
+                    id.tipo = "entero";
+                    (*atrs_semanticos)["tipo"] = "entero";
+                    id.desplazamiento = despG;
+                    despG += 1;
+                }
+                else{
+                    (*atrs_semanticos)["tipo"] = idtemp.tipo;
+                }
             }
             //finsemantico
         }

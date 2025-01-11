@@ -1,0 +1,1 @@
+ERROR. COD: 1 EN (39,7):   Caracter invalido '&'. Querias poner operador logico and '&&'?

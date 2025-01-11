@@ -1,37 +1,71 @@
+/* Comentario de linea es con //. */
 
-var string	cadena;
-input 
-cadena;
-var boolean logico1	;
-var boolean logico2 	;
-var int int2			;
+/* El de bloque va entre /* y */
 
-
-
-/* Ejemplo #1*/
-
-int1 = 000000378;
-
-int2 = int1;
-cadena = "string";
-
-function  string ff(string ss)
+var int entero;
+var string cadena;
+var boolean logico;
+function void pp_(void)
 {
-	logico2 =  logico1;
-	if (logico2) cadena = ff (ss);
-	varglobal = 78;
-	return cadena;
-}
-		
-function string funciOn (string logico2)
-{	var string let 	;
+ var int  abcdefghij________  ;
+  abcdefghij________  = 0;
+}function void FuncionNumero 	(void)
+{
+  var  int i ;
 
-  for (logico2="";int1 == int2;int2 += int1){
-	logico1 = int1 == int2;output((0));
-  }
   
-  return logico2;
+  i=entero;
+  entero = 9  +  i;
 }
-cadena = (ff(funciOn(cadena)));
-output cadena;
+function int FuncionRetorno  (string hola, int x, boolean z)
+{
+  if (z) x = 32765;
+  cadena= hola;
+  return (x);
+}
+var  int aa_aa;
+var string s64 ;
+var boolean boooooo ;
+var  int aaaaa;
+var  int iiiii;
+function boolean fbbb  (void) {return boooooo;}
 
+function int  FuncionSentencia (int b, boolean z)
+{
+	var  int a;
+  for (b=1 ; z; b=a + 1)
+  {
+	aaaaa=b;
+	input (a);
+	z= a  ==  b;
+  }
+}
+
+if (booooo) aaaaa=0;
+function void Funcion  (int pp__x__, boolean b)
+{
+	if (pp__x__  ==  0)FuncionSentencia(pp__x__,b);
+  output 
+    cadena;return;
+}
+var int iii  ;
+var boolean bbb  ;
+
+/* 
+esto 
+es 
+un 
+comentario! 
+multi 
+//linea */
+
+input iii;
+output  (  iii  )  ;  
+
+iii += iii;
+bbb = bbb;
+
+Funcion
+ ( iii, 
+   bbb )
+;

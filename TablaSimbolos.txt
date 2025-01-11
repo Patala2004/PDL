@@ -1,62 +1,36 @@
-TABLA DE LA FUNCION ff #1:
+TABLA DE LA FUNCION pp_ #1:
 
 
- * 'ss'
-   + tipo:  'cadena'
+ * 'abcdefghij________'
+   + tipo:  'entero'
    + despl:  0
    --------------------------
 
-TABLA DE LA FUNCION funciOn #2:
+TABLA DE LA FUNCION FuncionNumero #2:
 
 
- * 'logico2'
+ * 'i'
+   + tipo:  'entero'
+   + despl:  0
+   --------------------------
+
+TABLA DE LA FUNCION FuncionRetorno #3:
+
+
+ * 'hola'
    + tipo:  'cadena'
    + despl:  0
    --------------------------
- * 'let'
-   + tipo:  'cadena'
+ * 'x'
+   + tipo:  'entero'
    + despl:  64
    --------------------------
-
-TABLA GLOBAL #0:
-
-
- * 'cadena'
-   + tipo:  'cadena'
-   + despl:  0
-   --------------------------
- * 'logico1'
-   + tipo:  'booleano'
-   + despl:  64
-   --------------------------
- * 'logico2'
+ * 'z'
    + tipo:  'booleano'
    + despl:  65
    --------------------------
- * 'int2'
-   + tipo:  'entero'
-   + despl:  66
-   --------------------------
- * 'int1'
-   + tipo:  'entero'
-   + despl:  67
-   --------------------------
- * 'ff'
-   + tipo:  'funcion'
-       + numParam:  1
-          + tipoParam1:  'cadena'
-        + tipoRetorno:  'cadena'
-        + etiqFuncion:  'function0'
-   --------------------------
- * 'varglobal'
-   + tipo:  'entero'
-   + despl:  68
-   --------------------------
- * 'funciOn'
-   + tipo:  'funcion'
-       + numParam:  1
-          + tipoParam1:  'cadena'
-        + tipoRetorno:  'cadena'
-        + etiqFuncion:  'function1'
-   --------------------------
+
+TABLA DE LA FUNCION fbbb #4:
+
+
 

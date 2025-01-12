@@ -1,36 +1,31 @@
-var int int_;
-var string string_;
-var boolean boolean_;
-output (00);var  boolean b;
-var  string  s;
-s="Hello?"
-	;function  int function_(int int_1, string string_2, boolean boolean_){
-	int_ = int_1+i;
-	if (boolean_) string_=string_2;
-	boolean_ =  boolean_;
-	return int_
-;}
+/* Ejemplo de Prueba... */
 
-function void vacia (void){int_=0;return;}
+var int int1;
+var string cadena;input cadena;
+var boolean logico1;var boolean logico2 ;
 
+int1 = 000000378;
 
-if (boolean_) output function_(987,"987",boolean_);vacia();
+int2 = int1;
+cadena = "string";
 
+function  string ff(string ss)
+{
+	logico2 =  logico1;
+	if (logico2) cadena = ff (ss);
+	varglobal = 78;
+	return cadena;
+}
+		
+function string funciOn (string logico2)
+{	var string let 	;
 
-output 4+5+77;
+  for (logico2="";int1 == int2;int2 = int1){
+	logico1 = int1 == int2;output((0));
+  }
+  
+  return logico2;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-i = 9999;
-
-output (  i );
+output((cadena));
+cadena = ff(funciOn(cadena));

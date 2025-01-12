@@ -1533,13 +1533,15 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             noTerminal(reglas::L, token,&L);
             noTerminal(reglas::R, token,&R);
 
-            //semantico
+            //semantico AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
             if(L["operador"] == "suma" && R["tipo"] != "entero"){
-                // ERROR SEMANTICO
+                cout << "ERROR SEMANTICO EN LA LINEA: " << analizador.linea_last_finished_tok << " No puedes hacer asignacion suma con algo que no sean enteros" << endl ;
+                exit(0);
             }
 
             if(R["tipo"] != BuscaTipo(id)){
-                // ERROR SEMANTICO
+                cout << "ERROR SEMANTICO EN LA LINEA: " << analizador.linea_last_finished_tok << " No puedes hacer asignacion de distintos tipos" << endl ;
+                exit(0);
             }
             //finsemantico
         }

@@ -27,7 +27,7 @@ B -> if ( R ) U {
                     LanzarError("La condicion tiene que ser una expresion booleana")
                 }
 B -> U  {
-        U.tipoRet := B.tipoRet # Regla cambiada
+        U.tipoRet := B.tipoRet
         }
 B -> for ( F1 ; R ; F2 ) { Q } 
                 {
@@ -38,6 +38,8 @@ B -> for ( F1 ; R ; F2 ) { Q }
 D -> function {zona_decl:= true}
      H id
     {
+    if(id.funcion != null) then
+        LanzaError("Funcion ya declarada")
     TSL:= CreaTabla()
     desplL:=0
     }
@@ -46,7 +48,7 @@ D -> function {zona_decl:= true}
     AñadeTipo(id.pos, D1.tipo->H.tipo);
     AñadeEtiq(id.pos, nuevaetiq())
     zona_decl:= false
-    Q.tipo := H.tipo # SASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS
+    Q.tipoRet := H.tipo;
     }
     ) { Q } 
     {
@@ -73,7 +75,6 @@ R -> R2 R1
             }
 R1 -> && R2 R1 
             {
-
             if(R1.tipo != booleano) then
                 LanzarError("Cuando hay un and debe haber un booleano")
             
@@ -123,15 +124,18 @@ O -> ( R ) {O.tipo=R.tipo}
 O -> id A 
         {
         if (A.tipo != null)then
-            if(A.tipo == BuscaTipoTS(id.pos)) then # Aqui lo que queremos comparar es que los parametros coincidan con
-                                                los tipos ejemplo: L.tipo de la funcion a la que estamos llamando
-                                                coincida con A1: funcion ejemplo(int a,string x) == ejemplo(1,4)
-                                                que coincidan los parametros con los tipos si no devolvemos error
-            O.tipo := BuscaTipoTS(id.pos)
+            if(A.tipo == BuscaTipoTS(id.pos)) # Comparamos parametros
+                O.tipo := BuscaTipoTS(id.pos)->retorno # Ponemos valor de retorno de la funcion
             else 
                 LanzarError("Los parametros no son correctos para la funcion")
         else
-            O.tipo := BuscaTipoTS(id.pos)
+            id.tipo = BuscaTipo(id.pos)
+            if(id.tipo == "null")then   
+                AñadeTipo(id.pos,entero)
+                AñadeDespl(id.pos,DespG)
+                despG += 1
+            else
+                O.tipo = id.tipo
         }
 O -> numero {O.tipo=entero}
 O -> cadena {O.tipo=cadena}
@@ -171,35 +175,56 @@ U -> return U2 ;
             }
 U -> id U1 
             {
-            # Se complica porque puede ser tanto funcion como variable
-            if(U1.operador == null){
-                // es funcion
-
+            id.tipo = BuscaTipo(id.pos)
+            U1.tipo = id.tipo;
+            U1.tipoParams = BuscaEntradaFunc(id.pos)
             }
-            else{
-                // es asignacion
-                if(U1.operador == )
-            }
-
-            if(U1.tipo != BuscaTipoTS(id.pos)) then # Aqui lo que queremos comparar es que los parametros coincidan con
-                                                    los tipos ejemplo: L.tipo de la funcion a la que estamos llamando
-                                                    coincida con A1: funcion ejemplo(int a,string x) == ejemplo(1,4)
-                                                    que coincidan los parametros con los tipos si no devolvemos error
-            LanzarError("Los parametros no son correctos para la funcion/no ha sido asignado correctamente")
+            U1
+            {
+            if(U1.modo == asignacion && id.tipo == null)then    
+                AñadeTipo(id.pos,U1.tipo)
+                AñadeDespl(id.pos,despG)
+                if(U1.tipo == entero)then
+                    despG += 1
+                else if(U1.tipo == booleaño)then
+                    despG += 1
+                else
+                    despG += 64
             }
 
 
             U1.tipo = id.tipo; // null si no existe
 U1 -> L R ; 
+            L
             {
-            if(L.operador == suma && (R.tipo != entero || U1.tipo != entero)) then
-                LanzarError("No puedes usar asignacion suma con algo que no sea un entero")
-            else
-                if(U1.tipo != R.tipo){
-                    LanzaError("No se pueden asignar elementos de tipos distintos")
-                }
+            if(L.operador==suma && U1.tipo != entero)then
+                LanzarError("No puedes hacer += con una variable que no sea entera")
             }
-U1 -> ( A1 ) ; {U1.tipoParam := A1.tipo}
+            R
+            {
+            if(L.operador==suma && R.tipo != entero)then
+                LanzarError("No puedes hacer += con una expresion que no sea entera")
+            else
+                if(U1.tipo != null && U1.tipo != R.tipo)then
+                    LanzaError("Variable y expresion no son del mismo tipo")
+                U1.tipo = R.tipo
+            }
+            ;
+            {
+            U1.modo = asignacion
+            }
+U1 -> ( A1 ) ; 
+            (
+            {
+            if(U1.tipoParams == null)then
+                LanzaError("No existe esa funcion")
+            }
+            A1
+            {
+            if(A1.tipo != U1.tipoParam)then
+                LanzaError("Los parametros no son correctos")
+            }
+            );
 U2 -> R 
             {
             if(U2.tipoRet != R.tipo) then
@@ -209,17 +234,27 @@ U2 -> R
 U2 -> lambda {U2.tipo=void}
 F1 -> id = R 
             {
-            if(R.tipo != BuscaTipoTS(id.pos)) then
-                LanzarError("El id no coincide con el tipo de su asignacion)
+            id.tipo = BuscaTipo(id.pos)
+            if(id.tipo == null) then
+                AñadeTipo(id.pos,R.tipo)
+                AñadeDespl(id.pos,despG)
+                if(R.tipo == entero)then
+                    despG += 1
+                else if(R.tipo == booleaño)then
+                    despG += 1
+                else
+                    despG += 64
+            else
+                if(R.tipo != id.tipo)then
+                    LanzaError("No puedes hacer una asignacion de distintos tipos")
             }
 F1 -> lambda 
-F2 -> id L R
+F2 -> id L R # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
             {
             if(L.operador == suma && R.tipo != entero) then
                 LanzarError("No puedes usar asignacion suma con algo que no sea un entero")
             else
                 U1.tipo := R.tipo
-            }
             if(R.tipo != BuscaTipoTS(id.pos)) then
                 LanzarError("El id no coincide con el tipo de su asignacion)
             }

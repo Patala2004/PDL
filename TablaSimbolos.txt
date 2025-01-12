@@ -1,63 +1,62 @@
-TABLA DE LA FUNCION function_ #1:
+TABLA DE LA FUNCION ff #1:
 
 
- * 'int_1'
-   + tipo:  'entero'
+ * 'ss'
+   + tipo:  'cadena'
    + despl:  0
    --------------------------
- * 'string_2'
+
+TABLA DE LA FUNCION funciOn #2:
+
+
+ * 'logico2'
    + tipo:  'cadena'
-   + despl:  1
+   + despl:  0
    --------------------------
- * 'boolean_'
-   + tipo:  'booleano'
-   + despl:  65
+ * 'let'
+   + tipo:  'cadena'
+   + despl:  64
    --------------------------
-
-TABLA DE LA FUNCION vacia #2:
-
-
 
 TABLA GLOBAL #0:
 
 
- * 'int_'
+ * 'int1'
    + tipo:  'entero'
    + despl:  0
    --------------------------
- * 'string_'
+ * 'cadena'
    + tipo:  'cadena'
    + despl:  1
    --------------------------
- * 'boolean_'
+ * 'logico1'
    + tipo:  'booleano'
    + despl:  65
    --------------------------
- * 'b'
+ * 'logico2'
    + tipo:  'booleano'
    + despl:  66
    --------------------------
- * 's'
-   + tipo:  'cadena'
+ * 'int2'
+   + tipo:  'entero'
    + despl:  67
    --------------------------
- * 'function_'
+ * 'ff'
    + tipo:  'funcion'
-       + numParam:  3
-          + tipoParam1:  'entero'
-          + tipoParam2:  'cadena'
-          + tipoParam3:  'booleano'
-        + tipoRetorno:  'entero'
+       + numParam:  1
+          + tipoParam1:  'cadena'
+        + tipoRetorno:  'cadena'
         + etiqFuncion:  'function0'
    --------------------------
- * 'i'
+ * 'varglobal'
    + tipo:  'entero'
-   + despl:  131
+   + despl:  68
    --------------------------
- * 'vacia'
+ * 'funciOn'
    + tipo:  'funcion'
-       + numParam:  0
-        + tipoRetorno:  'void'
+       + numParam:  1
+          + tipoParam1:  'cadena'
+        + tipoRetorno:  'cadena'
         + etiqFuncion:  'function1'
    --------------------------
 

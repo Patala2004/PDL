@@ -15,6 +15,10 @@ function  string ff(string ss)
 	if (logico2) cadena = ff (ss);
 	varglobal = 78;
 	return cadena;
+	var boolean creat1;
+	for(nocreat0 = 1; nocreat1 == nocreat10; nocreat100 += 1){
+		nocreat0 += 1;
+	}
 }
 		
 function string funciOn (string logico2)

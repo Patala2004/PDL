@@ -1528,18 +1528,46 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             map<string,string> R = {};
             map<string,string> L = {};
 
-            string id = get<string>(token.valor);
+            string idnombre = get<string>(token.valor);
             equipara(token, token_ids::IDENTIFICADOR, NT);
             noTerminal(reglas::L, token,&L);
+            // semantico
+            string tipo;
+            Entrada& idtemp = BuscaEntrada(idnombre);
+            if(idtemp.tipo == "null" && L["operador"] == "suma"){
+                // No existe la var todavia -> Se añade como entero global
+                tipo = "entero";
+                Entrada& id = AñadeEntrada(idnombre, TSG);
+                id.tipo = "entero";
+                id.desplazamiento = despG;
+                despG += 1;
+            }
+            else if(idtemp.tipo != "entero" && L["operador"] == "suma"){
+                // se usa += con una var no entera
+                cout << "ERROR SEMANTICO EN LA LINEA: " << analizador.linea_last_finished_tok << " No se puede usar el operador += con variables no enteras" << endl;
+                exit(0);
+            }
+            else if(idtemp.tipo != "null") tipo = idtemp.tipo;
             noTerminal(reglas::R, token,&R);
+            if(idtemp.tipo == "null" && L["operador"] == "asignacion"){
+                tipo = R["tipo"];
+                Entrada& id = AñadeEntrada(idnombre, TSL==nullptr? TSG:TSL);
+                id.tipo = tipo;
+                id.desplazamiento = despG;
+                if(tipo == "entero") despG+=1;
+                else if(tipo == "cadena") despG+=64;
+                else if(tipo == "booleano") despG+=1;
+                else cout << "TIPO RARO?" <<endl;
+            }
 
             //semantico AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+
             if(L["operador"] == "suma" && R["tipo"] != "entero"){
                 cout << "ERROR SEMANTICO EN LA LINEA: " << analizador.linea_last_finished_tok << " No puedes hacer asignacion suma con algo que no sean enteros" << endl ;
                 exit(0);
             }
 
-            if(R["tipo"] != BuscaTipo(id)){
+            if(R["tipo"] != tipo){
                 cout << "ERROR SEMANTICO EN LA LINEA: " << analizador.linea_last_finished_tok << " No puedes hacer asignacion de distintos tipos" << endl ;
                 exit(0);
             }

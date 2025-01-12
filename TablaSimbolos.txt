@@ -5,6 +5,14 @@ TABLA DE LA FUNCION ff #1:
    + tipo:  'cadena'
    + despl:  0
    --------------------------
+ * 'creat1'
+   + tipo:  'booleano'
+   + despl:  64
+   --------------------------
+ * 'nocreat0'
+   + tipo:  'entero'
+   + despl:  1
+   --------------------------
 
 TABLA DE LA FUNCION funciOn #2:
 
@@ -51,6 +59,18 @@ TABLA GLOBAL #0:
  * 'varglobal'
    + tipo:  'entero'
    + despl:  68
+   --------------------------
+ * 'nocreat1'
+   + tipo:  'entero'
+   + despl:  69
+   --------------------------
+ * 'nocreat10'
+   + tipo:  'entero'
+   + despl:  70
+   --------------------------
+ * 'nocreat100'
+   + tipo:  'entero'
+   + despl:  71
    --------------------------
  * 'funciOn'
    + tipo:  'funcion'

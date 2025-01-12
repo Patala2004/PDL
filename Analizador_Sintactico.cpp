@@ -1270,7 +1270,13 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             //semantico
             Entrada& id = BuscaEntrada(get<string>(iden.valor));
-            if(id.tipo != "entero" && id.tipo != "cadena"){
+            if(id.tipo == "null"){
+                Entrada& id2 = AñadeEntrada(get<string>(iden.valor), TSG);
+                id2.tipo = "entero";
+                id2.desplazamiento = despG;
+                despG++;
+            }
+            else if(id.tipo != "entero" && id.tipo != "cadena"){
                 cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": SOLO SE PUEDEN LEER ENTEROS O CADENAS USANDO INPUT" << endl;
                 exit(0);
             }

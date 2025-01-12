@@ -485,7 +485,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT, "fichero terminado con contenido invalido");
+            error(token.id, NT, "Sentencia iniciada con valor inesperado " + tokenToString2(token.id));
         }
         break;
     case reglas::B:
@@ -1181,6 +1181,9 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
+            if(tokenToString2(token.id) == "="){
+                error(token.id, NT, "Operacion de asignación inesperada");
+            }
             error(token.id, NT, "esperada llamada a parametros de una funcion");
         }
         break;

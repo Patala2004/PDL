@@ -341,11 +341,11 @@ std::ofstream ficheroTS("TablaSimbolos.txt", std::ios::out | std::ios::trunc);
 
 
 
-void error(token_ids token, reglas estado)
+void error(token_ids token, reglas estado, string msgError)
 {
     // cerr << "TOKEN " << tokenToString(token) << " NO ACEPTADO EN EL ESTADO " << reglasToString(estado) <<endl;
     int linea = analizador.sintax_error(1);
-    cout << "ERROR SINTACTICO EN LA LINEA " << linea << " CON EL TOKEN " << tokenToString(token) << endl;
+    cout << "ERROR SINTACTICO EN LA LINEA " << linea << ": " << msgError << endl;
     exit(0);
 }
 
@@ -484,7 +484,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "fichero terminado con contenido invalido");
         }
         break;
     case reglas::B:
@@ -610,7 +610,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "esperado ;");
         }
         break;
     case reglas::D:
@@ -674,7 +674,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "Esperada declaración de funcion");
         }
         break;
     case reglas::H:
@@ -706,7 +706,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "esperado tipo de funcion");
         }
         break;
 
@@ -751,7 +751,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "esperado tipo entero, booleano o cadena");
         }
         break;
 
@@ -786,7 +786,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "esperado ;");
         }
         break;
 
@@ -817,7 +817,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "Esperado operador de asignación = o +=");
         }
         break;
 
@@ -852,7 +852,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "Esperado ;");
         }
         break;
 
@@ -903,7 +903,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "esperado operador lógico AND");
         }
         break;
 
@@ -936,7 +936,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "esperado ;");
         }
         break;
     case reglas::R3:
@@ -975,7 +975,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "esperado operador lógico ==");
         }
         break;
     case reglas::R4:
@@ -999,7 +999,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "esperado operación, variable, función, número entero o cadena");
         }
         break;
     case reglas::R5:
@@ -1042,7 +1042,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "esperado operador aritmetico + o -");
         }
         break;
     case reglas::J:
@@ -1064,7 +1064,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "esperado operador aritmetico + o -");
         }
         break;
     case reglas::O:
@@ -1150,7 +1150,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "esperado operacion, variable, funcion, numero entero o cadena");
         }
         break;
 
@@ -1180,7 +1180,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "esperada llamada a parametros de una funcion");
         }
         break;
 
@@ -1215,7 +1215,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "esperado parametro de funcion");
         }
         break;
 
@@ -1249,7 +1249,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT,"esperado parametro de funcion");
         }
         break;
 
@@ -1358,7 +1358,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "esperada operacion input, output, return, una variable o llamada a funcion");
         }
         break;
 
@@ -1424,7 +1424,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "esperada asignación o parametros de funcion");
         }
         break;
 
@@ -1458,7 +1458,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "esperado operación o valor");
         }
         break;
 
@@ -1512,7 +1512,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "esperada asignación de variable");
         }
         break;
 
@@ -1580,7 +1580,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "esperada operacion de asignacion de una variable");
         }
         break;
 
@@ -1619,7 +1619,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "Esperado ;");
         }
         break;
 
@@ -1652,7 +1652,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "Esperado inicializacion de parametro de funcion");
         }
         break;
 
@@ -1679,7 +1679,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "Esperado tipo del parametro");
         }
         break;
 
@@ -1712,7 +1712,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "esperado tipo del parametro");
         }
         break;
 
@@ -1740,7 +1740,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT);
+            error(token.id, NT, "esperado fin de inicializacion de parametros");
         }
         break;
 

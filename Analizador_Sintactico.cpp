@@ -1328,33 +1328,34 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             //semantico
             string tipo = BuscaEntrada(get<string>(iden.valor)).tipo;
             U1["tipo"] = tipo;
+            U1["nombreVar"] = get<string>(iden.valor); 
             U1["tipoParams"] = BuscaEntradaFunc(get<string>(iden.valor)).tipoParams;
             //finsemantico
 
             noTerminal(reglas::U1, token,&U1);
 
-            //semantico
-            if(U1["modo"] == "asignacion" && tipo == "null"){ // NO VUELVO A HACER BUSCAENTRADA CON ASIG = TRUE PORQUE SI ESTA EN EL GLOBAL NO LO QUIERO ASIGNAR AL LOCAL
-                // si variable no existe crearla
-                Entrada& id = AñadeEntrada(get<string>(iden.valor),TSG);
-                id.tipo = U1["tipo"]; // ha sido sobreescrito por el valor de R["tipo"] en U1
-                int ancho = -2;
-                if(id.tipo == "entero"){
-                    ancho = 1;
-                }
-                else if(id.tipo == "cadena"){
-                    ancho = 64;
-                }
-                else if(id.tipo == "booleano"){
-                    ancho = 1;
-                }
-                else{
-                    cout << "TIPO DE VAR RARO: " << id.tipo << endl;
-                }
+            // //semantico
+            // if(U1["modo"] == "asignacion" && tipo == "null"){ // NO VUELVO A HACER BUSCAENTRADA CON ASIG = TRUE PORQUE SI ESTA EN EL GLOBAL NO LO QUIERO ASIGNAR AL LOCAL
+            //     // si variable no existe crearla
+            //     Entrada& id = AñadeEntrada(get<string>(iden.valor),TSG);
+            //     id.tipo = U1["tipo"]; // ha sido sobreescrito por el valor de R["tipo"] en U1
+            //     int ancho = -2;
+            //     if(id.tipo == "entero"){
+            //         ancho = 1;
+            //     }
+            //     else if(id.tipo == "cadena"){
+            //         ancho = 64;
+            //     }
+            //     else if(id.tipo == "booleano"){
+            //         ancho = 1;
+            //     }
+            //     else{
+            //         cout << "TIPO DE VAR RARO: " << id.tipo << endl;
+            //     }
                 
-                id.desplazamiento = despG;
-                despG += ancho;
-            }
+            //     id.desplazamiento = despG;
+            //     despG += ancho;
+            // }
         }
         else
         {
@@ -1375,7 +1376,15 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             map<string,string> R = {};
             noTerminal(reglas::L, token,&L);
             //semantico
-            if(L["operador"] == "suma" && (*atrs_semanticos)["tipo"] != "entero"){
+            if(L["operador"] == "suma" && (*atrs_semanticos)["tipo"] == "null"){
+                // variable global tipo entera
+                (*atrs_semanticos)["tipo"] = "entero";
+                Entrada& id = AñadeEntrada((*atrs_semanticos)["nombreVar"], TSG);
+                id.tipo = "entero";
+                id.desplazamiento = despG;
+                despG++;
+            }
+            else if(L["operador"] == "suma" && (*atrs_semanticos)["tipo"] != "entero"){
                 cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": NO SE PUEDE USAR OPERADOR DE ASIGNACION SUMA PARA VAR NO ENTERA" << endl;
                 exit(0);
             }
@@ -1389,6 +1398,25 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
                 if((*atrs_semanticos)["tipo"] != "null" && (*atrs_semanticos)["tipo"] != R["tipo"]){
                     cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": ASIGNACION A UNA VARIABLE DE UN TIPO CON UN VALOR DE OTRO" << endl;
                     exit(0);
+                }
+                else if((*atrs_semanticos)["tipo"] == "null"){
+                    // Crear variable del tipo que sea R
+                    Entrada& id = AñadeEntrada((*atrs_semanticos)["nombreVar"], TSL==nullptr? TSG:TSL);
+                    id.tipo = R["tipo"];
+                    if(TSL == nullptr){
+                        id.desplazamiento = despL;
+                        if(id.tipo == "entero") despL+= 1;
+                        else if(id.tipo == "cadena") despL+= 64;
+                        else if(id.tipo == "booleano") despL += 1;
+                        else cout << "TIPO RARO" << endl;
+                    }
+                    else{
+                        id.desplazamiento = despG;
+                        if(id.tipo == "entero") despG+= 1;
+                        else if(id.tipo == "cadena") despG+= 64;
+                        else if(id.tipo == "booleano") despG += 1;
+                        else cout << "TIPO RARO" << endl;
+                    }
                 }
                 (*atrs_semanticos)["tipo"] = R["tipo"];
             }

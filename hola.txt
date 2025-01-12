@@ -19,7 +19,11 @@ function  string ff(string ss)
 	for(nocreat0 = 1; nocreat1 == nocreat10; nocreat100 += 1){
 		nocreat0 += 1;
 	}
+	nodeclarado3 = "hola";
 }
+
+nodeclarado += 111;
+nodeclarado2 = "hola";
 		
 function string funciOn (string logico2)
 {	var string let 	;

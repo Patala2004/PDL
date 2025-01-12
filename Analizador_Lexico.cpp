@@ -227,19 +227,27 @@ int error(int cod_error, std::ifstream &file, std::streampos position, std::ofst
     }
 
     // Imprimir error
-    err_file << "ERROR. COD: " << cod_error << " EN (" << line << "," << column << "):   " << err_msg << endl;
+    cout << "ERROR LEXICO COD: " << cod_error << " EN (" << line << "," << column << "):   " << err_msg << endl;
     // Volver a posición anterior
     file.seekg(position, std::ios::beg);
     return line;
 }
 
-Token generarToken(token_ids id, int valor, std::ofstream &token_file)
+Token generarToken(token_ids id, int valor, std::ofstream &token_file, int linea)
 {
+    if(valor > 32767){
+        cout << "ERROR LEXICO EN LA LINEA " << linea << ": NUMERO FUERA DE RANGO " << endl;
+        exit(0); 
+    }
     token_file << "<" << tokenToString(id) << ", " << valor << ">" << endl;
     return Token(id,valor);
 }
-Token generarToken(token_ids id, string valor, std::ofstream &token_file)
+Token generarToken(token_ids id, string valor, std::ofstream &token_file, int linea)
 {
+    if(valor.length() > 64){
+        cout << "ERROR LEXICO EN LA LINEA " << linea << ": CADENA DEMASIADO LARGA. SE ADMITE UN MAXIMO DE 64 CARACTERES" << endl;
+        exit(0); 
+    }
     token_file << "<" << tokenToString(id) << ", " << '\"' << valor << '\"' << ">" << endl;
     return Token(id,valor);
 }
@@ -373,12 +381,12 @@ void meterToken(token_ids id, string lex, Tabla* tabla)
                 case 17:
                     estado = 18;
                     tokenGenerated = true;
-                    res_token = generarToken(token_ids::NUMERO, valor_numerico, token_file);
+                    res_token = generarToken(token_ids::NUMERO, valor_numerico, token_file, linea);
                     break;
                 case 19:
                     estado = 20;
                     tokenGenerated = true;
-                    res_token = generarToken(token_ids::IDENTIFICADOR, valor_cadena, token_file);
+                    res_token = generarToken(token_ids::IDENTIFICADOR, valor_cadena, token_file, linea);
                     break;
                 case 21:
                     error(2, file, file.tellg(), err_file); // Unfinished string "..." (last " missing)
@@ -558,7 +566,7 @@ void meterToken(token_ids id, string lex, Tabla* tabla)
                 else
                 {
                     tokenGenerated = true;
-                    res_token = generarToken(token_ids::NUMERO, valor_numerico, token_file);
+                    res_token = generarToken(token_ids::NUMERO, valor_numerico, token_file,linea);
                     valor_numerico = 0;
                     file.seekg(-1, std::ios::cur);
                     estado = 18;
@@ -584,7 +592,7 @@ void meterToken(token_ids id, string lex, Tabla* tabla)
                     else
                     {
                         tokenGenerated = true;
-                        res_token = generarToken(token_ids::IDENTIFICADOR, valor_cadena, token_file);
+                        res_token = generarToken(token_ids::IDENTIFICADOR, valor_cadena, token_file, linea);
                         //meterToken(token_ids::IDENTIFICADOR, valor_cadena, tsg); // Meter a TS
                         pos_tabla_simbolos++;
                         desplazamiento++;
@@ -600,7 +608,7 @@ void meterToken(token_ids id, string lex, Tabla* tabla)
                 if (a == '"')
                 {
                     tokenGenerated = true;
-                    res_token = generarToken(token_ids::CADENA, valor_cadena, token_file);
+                    res_token = generarToken(token_ids::CADENA, valor_cadena, token_file,linea);
                     valor_cadena = "";
                     estado = 22;
                 }

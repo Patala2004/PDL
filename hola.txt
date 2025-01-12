@@ -22,6 +22,8 @@ function  string ff(string ss)
 	nodeclarado3 = "hola";
 }
 
+var string x = "01234567890123456789012345678901234567890123456789012345678912314";
+
 nodeclarado += 111;
 nodeclarado2 = "hola";
 		

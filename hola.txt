@@ -22,13 +22,16 @@ function  string ff(string ss)
 	nodeclarado3 = "hola";
 }
 
-var string x = "01234567890123456789012345678901234567890123456789012345678912314";
+var string x = "0123456789012345678901234567890123456789012345678901234562314";
 
 nodeclarado += 111;
 nodeclarado2 = "hola";
 		
 function string funciOn (string logico2)
 {	var string let 	;
+
+	var int x = 0; 
+	for(i = 0;i== i;i += 0)
 
   for (logico2="";int1 == int2;int2 = int1){
 	logico1 = int1 == int2;output((0));

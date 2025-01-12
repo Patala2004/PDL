@@ -56,6 +56,8 @@ class Token
 // Function to convert token_ids to string
 std::string tokenToString(token_ids id);
 
+std::string tokenToString2(token_ids id);
+
 
 enum class reglas{
     S,  // 0

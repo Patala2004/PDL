@@ -227,9 +227,10 @@ int error(int cod_error, std::ifstream &file, std::streampos position, std::ofst
     }
 
     // Imprimir error
-    cout << "ERROR LEXICO COD: " << cod_error << " EN (" << line << "," << column << "):   " << err_msg << endl;
+    cout << "ERROR LEXICO EN LA LINEA " << line << ": " << err_msg << endl;
     // Volver a posición anterior
     file.seekg(position, std::ios::beg);
+    exit(0);
     return line;
 }
 

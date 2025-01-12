@@ -344,7 +344,7 @@ std::ofstream ficheroTS("TablaSimbolos.txt", std::ios::out | std::ios::trunc);
 void error(token_ids token, reglas estado, string msgError)
 {
     // cerr << "TOKEN " << tokenToString(token) << " NO ACEPTADO EN EL ESTADO " << reglasToString(estado) <<endl;
-    int linea = analizador.sintax_error(1);
+    int linea = analizador.linea_last_finished_tok;
     cout << "ERROR SINTACTICO EN LA LINEA " << linea << ": " << msgError << endl;
     exit(0);
 }
@@ -430,9 +430,10 @@ bool equipara(Token &token, token_ids a_equiparar, reglas estado)
 {
     if (token.id != a_equiparar)
     {
-        int linea = analizador.sintax_error(1);
-        cerr << "TOKEN " << tokenToString(token.id) << " NO ES IGUAL A " << tokenToString(a_equiparar) << "EN EL ESTADO "
-             << reglasToString(estado) << " en la linea: " << linea << endl;
+        int linea = analizador.linea_last_finished_tok;
+        cout << "ERROR SINTACTICO EN LA LINEA " << linea << ": esperada " <<tokenToString2(a_equiparar) << ", recibido " << tokenToString2(token.id) << endl;
+        // cerr << "TOKEN " << tokenToString(token.id) << " NO ES IGUAL A " << tokenToString(a_equiparar) << "EN EL ESTADO "
+        //      << reglasToString(estado) << " en la linea: " << linea << endl;
         exit(0);
     }
     // cout << tokenToString(token) << endl;
@@ -852,7 +853,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         }
         else
         {
-            error(token.id, NT, "Esperado ;");
+            error(token.id, NT, "Esperada una expresion");
         }
         break;
 
@@ -1804,6 +1805,6 @@ int main()
     // {TSG=CreaTabla(); desplG=0}
     noTerminal(noTerminalState, token);
     ficheroTS << *TSG << endl;
-    cout << *TSG << endl;
+    // cout << *TSG << endl;
     // {LiberaTabla(TSG)}
 }

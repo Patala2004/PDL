@@ -51,6 +51,38 @@ std::string tokenToString(token_ids id) {
     }
 }
 
+std::string tokenToString2(token_ids id) {
+    switch (id) {
+        case token_ids::LLAVE_ABIERTA: return "{";
+        case token_ids::LLAVE_CERRADA: return "}";
+        case token_ids::PARENTESIS_ABIERTA: return "(";
+        case token_ids::PARENTESIS_CERRADA: return ")";
+        case token_ids::COMA: return ",";
+        case token_ids::PUNTO_Y_COMA: return ";";
+        case token_ids::OP_RELACIONAL_IGUAL: return "==";
+        case token_ids::OP_LOGICO_ANDS: return "&&";
+        case token_ids::OP_ARITMETICO_RESTA: return "-";
+        case token_ids::OP_ARITMETICO_SUMA: return "+";
+        case token_ids::OP_ASIGNACION_SIMPLE: return "=";
+        case token_ids::OP_ASIGNACION_SUMA: return "+=";
+        case token_ids::CADENA: return "Cadena";
+        case token_ids::NUMERO: return "Numero";
+        case token_ids::IDENTIFICADOR: return "Variable";
+        case token_ids::PAL_RES_BOOL: return "'boolean'";
+        case token_ids::PAL_RES_FOR: return "'for'";
+        case token_ids::PAL_RES_FUNCTION: return "Funcion";
+        case token_ids::PAL_RES_IF: return "'if'";
+        case token_ids::PAL_RES_INPUT: return "'input'";
+        case token_ids::PAL_RES_OUTPUT: return "'output'";
+        case token_ids::PAL_RES_RETURN: return "'return'";
+        case token_ids::PAL_RES_STRING: return "'cadena'";
+        case token_ids::PAL_RES_VAR: return "'var'";
+        case token_ids::PAL_RES_VOID: return "'void'";
+        case token_ids::PAL_RES_INT: return "'int'";
+        default: return "UNKNOWN";
+    }
+}
+
 
 string reglasToString(reglas r){
     switch(r){

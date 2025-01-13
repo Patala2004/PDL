@@ -1,16 +1,8 @@
-TABLA DE LA FUNCION hola #1:
+TABLA GLOBAL #0:
 
 
- * 'x'
+ * 'i'
    + tipo:  'entero'
    + despl:  0
-   --------------------------
- * 'y'
-   + tipo:  'entero'
-   + despl:  1
-   --------------------------
- * 'm'
-   + tipo:  'entero'
-   + despl:  2
    --------------------------
 

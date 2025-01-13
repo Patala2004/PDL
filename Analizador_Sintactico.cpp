@@ -1598,10 +1598,11 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
                 tipo = R["tipo"];
                 Entrada& id = AñadeEntrada(idnombre, TSL==nullptr? TSG:TSL);
                 id.tipo = tipo;
-                id.desplazamiento = despG;
-                if(tipo == "entero") despG+=1;
-                else if(tipo == "cadena") despG+=64;
-                else if(tipo == "booleano") despG+=1;
+                int& desp = TSL == nullptr? despG:despL;
+                id.desplazamiento = desp;
+                if(tipo == "entero") desp+=1;
+                else if(tipo == "cadena") desp+=64;
+                else if(tipo == "booleano") desp+=1;
                 else cout << "TIPO RARO?" <<endl;
             }
 

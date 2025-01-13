@@ -544,7 +544,8 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             // semantico
             if(T["tipo"] != C["tipo"] && C["tipo"] != "vacio"){
-                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": LA VARIABLE ASIGNADA NO COINCIDE CON EL TIPO DE LA ASIGNACION" << endl;
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": LA VARIABLE ASIGNADA NO COINCIDE CON EL TIPO DE LA ASIGNACION. TIPO DE VARIABLE "
+                << T["tipo"] << " Y VALOR A ASIGNAR DE TIPO " << C["tipo"] << endl;
                 exit(0);
             }
             
@@ -1341,8 +1342,9 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             U1["nombreVar"] = get<string>(iden.valor); 
             U1["tipoParams"] = BuscaEntradaFunc(get<string>(iden.valor)).tipoParams;
             //finsemantico
-
+            
             noTerminal(reglas::U1, token,&U1);
+
 
             // //semantico
             // if(U1["modo"] == "asignacion" && tipo == "null"){ // NO VUELVO A HACER BUSCAENTRADA CON ASIG = TRUE PORQUE SI ESTA EN EL GLOBAL NO LO QUIERO ASIGNAR AL LOCAL
@@ -1401,15 +1403,20 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             //finsemantico
             noTerminal(reglas::R, token,&R);
             //semantico
+            // volver a mirar tipo por si se ha definido en R
+            (*atrs_semanticos)["tipo"] = BuscaEntrada((*atrs_semanticos)["nombreVar"]).tipo;
+
             if(L["operador"] == "suma" && R["tipo"] != "entero"){
                 cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": ASIGNACION-SUMA CON ELEMENTO NO ENTERO" << endl;
                 exit(0);
             }else{
                 if((*atrs_semanticos)["tipo"] != "null" && (*atrs_semanticos)["tipo"] != R["tipo"]){
-                    cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": ASIGNACION A UNA VARIABLE DE UN TIPO CON UN VALOR DE OTRO" << endl;
+                    cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": ASIGNACION A UNA VARIABLE DE UN TIPO "<< 
+                    (*atrs_semanticos)["tipo"] << " CON UN VALOR DE TIPO " << R["tipo"] << endl;
                     exit(0);
                 }
                 else if((*atrs_semanticos)["tipo"] == "null"){
+
                     // Crear variable del tipo que sea R
                     Entrada& id = AñadeEntrada((*atrs_semanticos)["nombreVar"], TSL==nullptr? TSG:TSL);
                     id.tipo = R["tipo"];
@@ -1744,7 +1751,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
                 (*atrs_semanticos)["tipo"] = T["tipo"];
             }
             else{
-                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": VARIABLE YA DECLARADA EN LA LINEA " << analizador.linea_last_finished_tok << endl;
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": PARAMETRO YA DECLARADA EN LA LINEA " << analizador.linea_last_finished_tok << endl;
                 exit(0);
             }
         }

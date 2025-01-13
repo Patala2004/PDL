@@ -1,0 +1,160 @@
+TABLA DE LA FUNCION cadena #1:
+
+
+ * 'a'
+   + tipo:  'entero'
+   + despl:  0
+   --------------------------
+ * 'b'
+   + tipo:  'entero'
+   + despl:  1
+   --------------------------
+ * 'k'
+   + tipo:  'booleano'
+   + despl:  2
+   --------------------------
+
+TABLA DE LA FUNCION comoEstas #2:
+
+
+ * 'a'
+   + tipo:  'booleano'
+   + despl:  0
+   --------------------------
+ * 'c'
+   + tipo:  'booleano'
+   + despl:  1
+   --------------------------
+ * 'd'
+   + tipo:  'booleano'
+   + despl:  2
+   --------------------------
+ * 'n'
+   + tipo:  'booleano'
+   + despl:  3
+   --------------------------
+ * 'temp'
+   + tipo:  'cadena'
+   + despl:  4
+   --------------------------
+ * 'jul'
+   + tipo:  'entero'
+   + despl:  68
+   --------------------------
+
+TABLA DE LA FUNCION suma #3:
+
+
+ * 'a'
+   + tipo:  'entero'
+   + despl:  0
+   --------------------------
+ * 'b'
+   + tipo:  'entero'
+   + despl:  1
+   --------------------------
+
+TABLA DE LA FUNCION and #4:
+
+
+ * 'a'
+   + tipo:  'booleano'
+   + despl:  0
+   --------------------------
+ * 'b'
+   + tipo:  'booleano'
+   + despl:  1
+   --------------------------
+
+TABLA GLOBAL #0:
+
+
+ * 'a'
+   + tipo:  'entero'
+   + despl:  0
+   --------------------------
+ * 'u'
+   + tipo:  'entero'
+   + despl:  1
+   --------------------------
+ * 'c'
+   + tipo:  'entero'
+   + despl:  2
+   --------------------------
+ * 'ejemplo'
+   + tipo:  'cadena'
+   + despl:  3
+   --------------------------
+ * 'b'
+   + tipo:  'booleano'
+   + despl:  67
+   --------------------------
+ * 'cadena'
+   + tipo:  'funcion'
+       + numParam:  3
+          + tipoParam1:  'entero'
+          + tipoParam2:  'entero'
+          + tipoParam3:  'booleano'
+        + tipoRetorno:  'cadena'
+        + etiqFuncion:  'function0'
+   --------------------------
+ * 'asddsa'
+   + tipo:  'entero'
+   + despl:  68
+   --------------------------
+ * 'bueno'
+   + tipo:  'entero'
+   + despl:  69
+   --------------------------
+ * 'lectura'
+   + tipo:  'entero'
+   + despl:  70
+   --------------------------
+ * 'comoEstas'
+   + tipo:  'funcion'
+       + numParam:  5
+          + tipoParam1:  'booleano'
+          + tipoParam2:  'booleano'
+          + tipoParam3:  'booleano'
+          + tipoParam4:  'booleano'
+          + tipoParam5:  'cadena'
+        + tipoRetorno:  'void'
+        + etiqFuncion:  'function1'
+   --------------------------
+ * 'varglobal'
+   + tipo:  'entero'
+   + despl:  71
+   --------------------------
+ * 'hola'
+   + tipo:  'cadena'
+   + despl:  72
+   --------------------------
+ * 'falso'
+   + tipo:  'booleano'
+   + despl:  136
+   --------------------------
+ * 'suma'
+   + tipo:  'funcion'
+       + numParam:  2
+          + tipoParam1:  'entero'
+          + tipoParam2:  'entero'
+        + tipoRetorno:  'entero'
+        + etiqFuncion:  'function2'
+   --------------------------
+ * 'and'
+   + tipo:  'funcion'
+       + numParam:  2
+          + tipoParam1:  'booleano'
+          + tipoParam2:  'booleano'
+        + tipoRetorno:  'booleano'
+        + etiqFuncion:  'function3'
+   --------------------------
+ * 'p'
+   + tipo:  'entero'
+   + despl:  137
+   --------------------------
+ * 'ejemplo2'
+   + tipo:  'booleano'
+   + despl:  138
+   --------------------------
+

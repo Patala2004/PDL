@@ -1,0 +1,24 @@
+TABLA GLOBAL #0:
+
+
+ * 'i'
+   + tipo:  'entero'
+   + despl:  0
+   --------------------------
+ * 'b'
+   + tipo:  'entero'
+   + despl:  1
+   --------------------------
+ * 'ghgj'
+   + tipo:  'entero'
+   + despl:  2
+   --------------------------
+ * 'dsasda'
+   + tipo:  'entero'
+   + despl:  3
+   --------------------------
+ * 'a'
+   + tipo:  'entero'
+   + despl:  4
+   --------------------------
+

@@ -1,0 +1,64 @@
+TABLA DE LA FUNCION suma #1:
+
+
+ * 'a'
+   + tipo:  'entero'
+   + despl:  0
+   --------------------------
+ * 'b'
+   + tipo:  'entero'
+   + despl:  1
+   --------------------------
+ * 'c'
+   + tipo:  'entero'
+   + despl:  2
+   --------------------------
+
+TABLA DE LA FUNCION printf #2:
+
+
+ * 'a'
+   + tipo:  'entero'
+   + despl:  0
+   --------------------------
+
+TABLA GLOBAL #0:
+
+
+ * 'a'
+   + tipo:  'entero'
+   + despl:  0
+   --------------------------
+ * 'b'
+   + tipo:  'entero'
+   + despl:  1
+   --------------------------
+ * 'c'
+   + tipo:  'entero'
+   + despl:  2
+   --------------------------
+ * 'suma'
+   + tipo:  'funcion'
+       + numParam:  3
+          + tipoParam1:  'entero'
+          + tipoParam2:  'entero'
+          + tipoParam3:  'entero'
+        + tipoRetorno:  'entero'
+        + etiqFuncion:  'function0'
+   --------------------------
+ * 'printf'
+   + tipo:  'funcion'
+       + numParam:  1
+          + tipoParam1:  'entero'
+        + tipoRetorno:  'void'
+        + etiqFuncion:  'function1'
+   --------------------------
+ * 'temp'
+   + tipo:  'entero'
+   + despl:  3
+   --------------------------
+ * 'i'
+   + tipo:  'entero'
+   + despl:  4
+   --------------------------
+

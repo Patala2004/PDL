@@ -1,0 +1,24 @@
+TABLA GLOBAL #0:
+
+
+ * 'i'
+   + tipo:  'entero'
+   + despl:  0
+   --------------------------
+ * 'b'
+   + tipo:  'entero'
+   + despl:  1
+   --------------------------
+ * 'hola'
+   + tipo:  'booleano'
+   + despl:  2
+   --------------------------
+ * 'cadena'
+   + tipo:  'cadena'
+   + despl:  3
+   --------------------------
+ * 'ejemplo'
+   + tipo:  'entero'
+   + despl:  67
+   --------------------------
+

@@ -1,0 +1,8 @@
+var int hola;
+var string texto="holaaaaaaaaaaaaa";
+var iguales;
+var boolean noLLegare;
+function boolean equalsInt (int a, int b){
+	if(a==b) return a == b;
+		return b == a;
+}

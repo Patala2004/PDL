@@ -1,0 +1,5 @@
+var int a;
+a = 5;
+j = 1;
+return a;
+a = j;

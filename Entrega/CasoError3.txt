@@ -1,0 +1,7 @@
+var int a;
+var int b;
+var int c;
+function int suma(int a, int b, int c){
+	a = a + b + c;
+}
+a = suma(a,"hola",c);

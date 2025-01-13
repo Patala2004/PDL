@@ -1,0 +1,1 @@
+ERROR SINTACTICO EN LA LINEA 3: esperado tipo entero, booleano o cadena

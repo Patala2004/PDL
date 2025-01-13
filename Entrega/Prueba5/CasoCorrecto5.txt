@@ -1,0 +1,43 @@
+var int a;
+var int u;
+var int c;
+var string ejemplo = "ejemplo";
+var boolean b = a == u;
+function string cadena(int a, int b,boolean k){
+	a = a + b + c;
+	return "hola";
+}
+ejemplo = cadena(a,u,b);
+asddsa = 7;
+if(ejemplo == "hola" && a == u) c = a;
+for(bueno = 0; a == u && c == a; bueno += 1){
+	for(;b;){
+		input lectura;
+	}
+	output ((lectura));
+}
+
+function void comoEstas (boolean a,boolean c, boolean d, boolean n,string temp){
+	var int jul;
+	varglobal = 0;
+	if (a == c == d == n && temp == ejemplo)
+		output (temp);
+		output "comoEstas";
+}
+comoEstas(b,b,b,b,ejemplo);
+
+var string hola;
+var boolean falso = 1 == 2;
+
+function int suma(int a,int b){
+	return a + b;
+}
+/* hola */
+function boolean and(boolean a, boolean b){
+	output "A continuacion ejecutare el and :O";
+	return a && b;
+}
+p = suma(a,u);
+var boolean ejemplo2 = and(falso,and(b,b));
+
+and(ejemplo2,b);

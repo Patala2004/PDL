@@ -1,0 +1,12 @@
+// IMPORTANTE
+
+ProcesadorWindows.exe para dispositivos windows
+ProcesadorLinux.out para dispositivos linux 
+
+EJEMPLO
+./ejecutable textoAProcesar
+
+./ProcesadorWindows ejemplo.txt (para procesar ejemplo.txt)
+
+Compilacion (para crear un ejecutable)
+g++ -o ProcesadorWindows.exe Analizador_Lexico.cpp Analizador_Sintactico.cpp aux_enums.cpp

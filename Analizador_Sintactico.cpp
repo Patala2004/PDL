@@ -1540,7 +1540,10 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
                 else if(id.tipo == "cadena"){
                     desplazamiento = 64;
                 }
-                id.desplazamiento = desplazamiento;
+                id.desplazamiento = TSL==nullptr? despG:despL;
+
+                if(TSL == nullptr) despG += desplazamiento;
+                else despL += desplazamiento;
             }
             else{
                 // Si ya existe -> comprobar que el valor asignado sea del mismo tipo a la var existente

@@ -2,9 +2,14 @@ S' -> {TSG=CreaTabla(); desplG=0} S {LiberaTabla(TSG)}
 S -> B S {}
 S -> D S {}
 S -> lambda {}
-B -> var {zona_decl:=true}
-     T
-     id {id.tipo = BuscaTipoTS(id.pos)
+B -> var T id C
+    
+    var 
+        {zona_decl:=true}
+    T
+    id
+        {
+        id.tipo = BuscaTipoTS(id.pos)
         if(id.tipo == null)then
             AñadeTipo(id.pos,T.tipo)
             if (TSL == NULL) then # si no hay tabla temporal
@@ -18,114 +23,261 @@ B -> var {zona_decl:=true}
         zona_decl:= false
         } 
         
-     C {if(T.tipo != C.tipo && C.tipo != vacio) then
+    C 
+
+        {
+        if(T.tipo != C.tipo && C.tipo != vacio) then
             LanzarError("La variable asignada no coincide con el tipo de la asignacion")
-     }
-B -> if ( R ) U {
-                U.tipoRet := B.tipoRet
-                if(R.tipo!=booleano)
-                    LanzarError("La condicion tiene que ser una expresion booleana")
-                }
-B -> U  {
+        
+        }
+
+
+B -> if ( R ) U
+    
+    if ( R
+    
+        {
+        if(R.tipo!=booleano) then
+            LanzarError("La condicion tiene que ser una expresion booleana")
+        }
+
+
+    ) U 
+    
+        {
         U.tipoRet := B.tipoRet
         }
-B -> for ( F1 ; R ; F2 ) { Q } 
-                {
-                Q.tipoRet := B.tipoRet
-                if(R.tipo!=booleano)
-                    LanzarError("La condicion tiene que ser una expresion booleana")
-                }
-D -> function {zona_decl:= true}
-     H id
-    {
-    if(id.funcion != null) then
-        LanzaError("Funcion ya declarada")
-    TSL:= CreaTabla()
-    desplL:=0
-    }
+
+                
+B -> U  
+
+    U
+
+        {
+        U.tipoRet := B.tipoRet
+        }
+
+
+B -> for ( F1 ; R ; F2) { Q }
+    
+    for ( F1 ; R 
+
+        {
+        if(R.tipo!=booleano) then
+            LanzarError("La condicion tiene que ser una expresion booleana")
+        
+        Q.tipoRet := B.tipoRet
+        }
+
+    ; F2 ) { Q } 
+
+D -> function H id ( D1 ) { Q }
+    
+    function 
+        
+        {zona_decl:= true}
+     
+    H id
+
+        {
+        if(id.funcion != null) then
+            LanzaError("Funcion ya declarada")
+        TSL:= CreaTabla()
+        desplL:=0
+        }
+
     ( D1 
-    {
-    AñadeTipo(id.pos, D1.tipo->H.tipo);
-    AñadeEtiq(id.pos, nuevaetiq())
-    zona_decl:= false
-    Q.tipoRet := H.tipo;
-    }
+
+        {
+        AñadeTipo(id.pos, D1.tipo->H.tipo);
+        AñadeEtiq(id.pos, nuevaetiq())
+        zona_decl:= false
+        Q.tipoRet := H.tipo;
+        }
+
     ) { Q } 
-    {
-    LiberaTabla(TSL)
-    }
-H -> T {H.tipo=T.tipo} 
-H -> void {H.tipo=void}
-T -> boolean {T.tipo=logico T.ancho=1}
-T -> int {T.tipo=entero T.ancho=1}
-T -> string {T.tipo=cadena T.ancho=64}
-C -> ; {C.tipo=vacio}
-C -> = R ; {C.tipo=R.tipo}
-L -> += {L.operador := suma}
-L -> = {L.operador := simple}
-R -> R2 R1 
-            {
-            R1.tipo = R2.tipo # paso a R1 el valor de R2 para que en caso de que haya un AND pueda comprobar si R2 es booleano o no 
+
+        {
+        LiberaTabla(TSL)
+        }
+
+H -> T 
+
+    T
+        {H.tipo=T.tipo} 
+
+    
+H -> void 
+
+    void
+        {H.tipo=void}
+
+T -> boolean 
+
+    boolean
+        {T.tipo=logico T.ancho=1}
+
+T -> int 
+
+    int
+        {T.tipo=entero T.ancho=1}
+
+T -> string 
+
+    string
+        {T.tipo=cadena T.ancho=64}
+
+C -> ; 
+
+    ;
+        {C.tipo=vacio}
+
+C -> = R ; 
+
+    = R ;
+        {C.tipo=R.tipo}
+
+L -> += 
+
+    +=
+        {L.operador := suma}
+
+L -> = 
+
+    =
+        {L.operador := simple}
+
+R -> R2 R1
+
+    R2
+
+        {
+        R1.tipo = R2.tipo # paso a R1 el valor de R2 para que en caso de que haya un AND pueda comprobar si R2 es booleano o no 
             # esto se hace para leer de izquierda a derecha los tipo
+        }
 
-            if(R1.tipo != vacio)then
-                R.tipo := booleano
-            else
-                R.tipo := R2.tipo
-            }
-R1 -> && R2 R1 
-            {
-            if(R1.tipo != booleano) then
-                LanzarError("Cuando hay un and debe haber un booleano")
-            
-            if (R2.tipo != booleano)then
-                LanzarError("No puedes hacer un AND de algo que no sea booleano")
-            }
-            R1'.tipo = booleano # Porque la parte izquierda del nuevo and va a ser el resultado de otro and, que va a ser booleano
-R1 -> lambda {R1.tipo := vacio}
-R2 -> R4 R3 
-            {
-            R3.tipo = R4.tipo; # le pasamos a R3 el tipo de R4 para que mire si es del mismo tipo que el segundo elemento de la derecha si R3 no es vacio
-            if(R3 != vacio)then
-                R2.tipo := booleano # si no es vacio la comprobación es una operacion booleana
+    R1 
 
-            else
-                R2.tipo := R4.tipo
-            }
+        {
+        if(R1.tipo != vacio)then
+            R.tipo := booleano
+        else
+            R.tipo := R2.tipo
+        }
+
+
+R1 -> && R2 R1
+
+    &&
+
+        {
+        if(R1.tipo != booleano) then #Aqui R1 es la regla en la que estamos, no el R1 que se va a llamar después
+            LanzarError("Valor no booleano no aceptado para operacion AND")
+        }
+
+    R2 R1 
+
+        {
+        if (R2.tipo != booleano)then
+            LanzarError("Valor no booleano no aceptado para operacion AND")
+        
+        R1'.tipo = booleano
+        }
+
+
+R1 -> lambda 
+
+    lambda
+        {R1.tipo := vacio}
+
+R2 -> R4 R3
+
+    R4
+    
+        {
+        R3.tipo = R4.tipo; # le pasamos a R3 el tipo de R4 para que mire si es del mismo tipo que el segundo elemento de la derecha si R3 no es vacio
+        }
+    
+    R3 
+
+        {
+        if(R3 != vacio)then
+            R2.tipo := booleano # si no es vacio la comprobación es una operacion booleana
+
+        else
+            R2.tipo := R4.tipo
+        }
+
+
 R3 -> == R4 R3
-            {
-            if(R3.tipo != R4.tipo) then
-                LanzarError("No puedes igualar datos de distinto tipo")
+
+    == R4
+
+        {
+        if(R3.tipo != R4.tipo) then
+            LanzarError("No puedes igualar datos de distinto tipo")
+        R3'.tipo = booleano # siempre va a ser booleana la parte de la izquierda porque es una comparacion
+        }
+
+    R3
+        
+R3 -> lambda 
+
+    lambda
+        {R3.tipo := vacio}
+
+R4 -> O R5
+
+    O
+    
+        {
+        R5.tipo = O.tipo; # le paso a R5 el tipo de O para que en caso de que no sea vacio compruebe que sea un entero
+        R4.tipo := O.tipo
+        }
+    
+    R5 
             
-            R3'.tipo = booleano # siempre va a ser booleana la parte de la izquierda porque es una comparacion
-
-            }
-R3 -> lambda {R3.tipo := vacio}
-R4 -> O R5 
-            {
-            R5.tipo = O.tipo; # le paso a R5 el tipo de O para que en caso de que no sea vacio compruebe que sea un entero
-
-            R4.tipo := O.tipo
-            }
 R5 -> J O R5
-            {
-            if(R5.tipo != entero) then  
-                LanzarError("No puedes sumar o restar datos que no sean enteros")
 
-            if(O.tipo != entero) then
-                LanzarError("No puedes sumar o restar datos que no sean enteros")
-            R5'.tipo = entero # siempre va a ser entera la parte de la izquierda si es el resultado de una suma o una resta
-            
-            }
-R5 -> lambda {R5.tipo := vacio}
+        {
+        if(R5.tipo != entero) then
+            LanzaError("Operacion aritmetica con dato no entero)
+        }
+    
+
+    J O 
+    
+        {
+        if(O.tipo != entero) then
+            LanzarError("No puedes sumar o restar datos que no sean enteros")
+        R5'.tipo = entero # siempre va a ser entera la parte de la izquierda si es el resultado de una suma o una resta
+        }
+    
+    R5
+
+
+R5 -> lambda 
+
+    lambda
+        {R5.tipo := vacio}
 J -> + 
 J -> - 
-O -> ( R ) {O.tipo=R.tipo}
+O -> ( R )
+    
+    ( R ) 
+        {O.tipo=R.tipo}
+
 O -> id A 
+
+    id A
+
         {
         if (A.tipo != null)then
-            if(A.tipo == BuscaTipoTS(id.pos)) # Comparamos parametros
-                O.tipo := BuscaTipoTS(id.pos)->retorno # Ponemos valor de retorno de la funcion
+            id.tipo = BuscaTipoTS(id.pos);
+            if(id.tipo == null) then   
+                LanzaError("La funcion no ha sido declarada")
+            else if(A.tipo == BuscaTipoParamsTS(id.pos)) # Comparamos parametros
+                O.tipo := BuscaTipoRetTS(id.pos) # Ponemos valor de retorno de la funcion
             else 
                 LanzarError("Los parametros no son correctos para la funcion")
         else
@@ -134,157 +286,280 @@ O -> id A
                 AñadeTipo(id.pos,entero)
                 AñadeDespl(id.pos,DespG)
                 despG += 1
+                O.tipo = entero
             else
                 O.tipo = id.tipo
         }
-O -> numero {O.tipo=entero}
-O -> cadena {O.tipo=cadena}
-A -> ( A1 ) {A.tipo := A1.tipo}
+
+
+O -> numro
+    
+    numero 
+        {O.tipo=entero}
+
+O -> cadena 
+
+    cadena
+        {O.tipo=cadena}
+
+A -> ( A1 ) 
+
+    ( A1 )
+        {A.tipo := A1.tipo}
+
 A -> lambda 
 A1 -> R A2 
-            {
-            if(A2.tipo == null)then
-                A1.tipo = R.tipo
-            else 
-                A1.tipo = R.tipo x A2.tipo
-            }
-A1 -> lambda {A1.tipo = void}
+
+    R A2
+
+        {
+        if(A2.tipo == null)then
+            A1.tipo = R.tipo
+        else 
+            A1.tipo = R.tipo x A2.tipo
+        }
+
+
+A1 -> lambda 
+    
+    lambda
+        {A1.tipo = void}
 A2 -> , R A2 
-            {
-            if(A2'.tipo == null)then
-                A2.tipo = R.tipo
-            else 
-                A2.tipo = R.tipo x A2'.tipo
-            }
+
+    , R A2
+        {
+        if(A2'.tipo == null)then
+            A2.tipo = R.tipo
+        else 
+            A2.tipo = R.tipo x A2'.tipo
+        }
 A2 -> lambda 
-U -> input id ; 
-            {
-            if(BuscaTipoTS(id.pos)!=entero && BuscaTipoTS(id.pos)!=cadena)then
-                LanzarError("no se puede guardar algo que no sea cadena o entero")
-            }
-U -> output R ; 
-            {
-            if(R.tipo!=entero && R.tipo!=cadena)then
-                LanzarError("no se puede imprimir algo que no sea cadena o entero")
-            }
-U -> return U2 ; 
-            {
-            U2.tipoRet := U.tipoRet
-            if(TSL == NULL)then
-                LanzarError("no puedes llamara a return fuera de una funcion")
-            }
-U -> id U1 
-            {
-            id.tipo = BuscaTipo(id.pos)
-            U1.tipo = id.tipo;
-            U1.tipoParams = BuscaEntradaFunc(id.pos)
-            }
-            U1
-            {
-            if(U1.modo == asignacion && id.tipo == null)then    
-                AñadeTipo(id.pos,U1.tipo)
-                AñadeDespl(id.pos,despG)
-                if(U1.tipo == entero)then
-                    despG += 1
-                else if(U1.tipo == booleaño)then
-                    despG += 1
-                else
-                    despG += 64
-            }
+U -> input id ;
+
+    input id
+
+        {
+        id.tipo = BuscaTipoTS(id.pos);
+        if(id.tipo == null) then
+            id.tipo = entero;
+            id.desplazamiento = despG;
+            despG += 1;
+        else if(BuscaTipoTS(id.pos)!=entero && BuscaTipoTS(id.pos)!=cadena)then
+            LanzarError("no se puede guardar algo que no sea cadena o entero")
+        }
+    
+    ;
 
 
-            U1.tipo = id.tipo; // null si no existe
-U1 -> L R ; 
-            L
-            {
-            if(L.operador==suma && U1.tipo != entero)then
-                LanzarError("No puedes hacer += con una variable que no sea entera")
-            }
-            R
-            {
-            if(L.operador==suma && R.tipo != entero)then
-                LanzarError("No puedes hacer += con una expresion que no sea entera")
-            else
-                if(U1.tipo != null && U1.tipo != R.tipo)then
-                    LanzaError("Variable y expresion no son del mismo tipo")
-                U1.tipo = R.tipo
-            }
-            ;
-            {
-            U1.modo = asignacion
-            }
+U -> output R ;
+
+    output R
+
+        {
+        if(R.tipo!=entero && R.tipo!=cadena)then
+            LanzarError("no se puede imprimir algo que no sea cadena o entero")
+        }
+    
+    ; 
+
+
+U -> return U2 ;
+
+    return
+
+        {
+        U2.tipoRet := U.tipoRet
+        if(TSL == NULL)then
+            LanzarError("no puedes llamara a return fuera de una funcion")
+        }
+
+    U2 ;
+
+
+U -> id U1
+
+    id
+
+        {
+        id.tipo = BuscaTipo(id.pos)
+        U1.tipo = id.tipo;
+        U1.tipoParams = BuscaEntradaFunc(id.pos)
+        U1.idpos = id.pos
+        }
+
+    U1 
+
+
+U1 -> L R ;
+
+        {
+        if(U1.tipo == null) then
+            id = BuscaEntrada(U1.idpos)
+            id.tipo = entero
+            id.desplazamiento = despG
+            despG += 1
+            U1.tipo = entero
+        }
+    
+    L 
+    
+        {
+        if(L.operador==suma && U1.tipo != entero)then
+            LanzarError("No puedes hacer += con una variable que no sea entera")
+        }
+
+    R 
+    
+        {
+        if(L.operador==suma && R.tipo != entero)then
+            LanzarError("No puedes hacer += con una expresion que no sea entera")
+        else if(U1.tipo != R.tipo)then
+                LanzaError("Variable y expresion no son del mismo tipo")
+            
+        }
+    
+    ; 
+            
+        {
+        U1.modo = asignacion
+        U1.tipo = R.tipo
+        }
+
+
 U1 -> ( A1 ) ; 
-            (
-            {
-            if(U1.tipoParams == null)then
-                LanzaError("No existe esa funcion")
-            }
-            A1
-            {
-            if(A1.tipo != U1.tipoParam)then
-                LanzaError("Los parametros no son correctos")
-            }
-            );
+    
+    (
+
+        {
+        if(U1.tipoParams == null)then
+            LanzaError("No existe esa funcion")
+        }
+
+    A1
+            
+        {
+        if(A1.tipo != U1.tipoParam)then
+            LanzaError("Los parametros no son correctos")
+        }
+
+    );
+
 U2 -> R 
-            {
-            if(U2.tipoRet != R.tipo) then
-                LanzarError("El tipo del return no coincide con el valor de retorno de la funcion")
-            U2.tipo=R.tipo
-            }
-U2 -> lambda {U2.tipo=void}
+
+    R
+
+        {
+        if(U2.tipoRet != R.tipo) then
+            LanzarError("El tipo del return no coincide con el valor de retorno de la funcion")
+        U2.tipo=R.tipo
+        }
+
+
+U2 -> lambda 
+
+    lambda
+        {U2.tipo=void}
+
 F1 -> id = R 
-            {
-            id.tipo = BuscaTipo(id.pos)
-            if(id.tipo == null) then
-                AñadeTipo(id.pos,R.tipo)
-                AñadeDespl(id.pos,despG)
-                if(R.tipo == entero)then
-                    despG += 1
-                else if(R.tipo == booleaño)then
-                    despG += 1
-                else
-                    despG += 64
-            else
-                if(R.tipo != id.tipo)then
-                    LanzaError("No puedes hacer una asignacion de distintos tipos")
-            }
+
+    id
+
+        {
+        id.tipo = BuscaTipoTS(id.pos)
+        if(id.tipo == null)then
+            id.tipo = entero
+            id.desplazamiento = despG
+            despG += 1
+        }
+    
+    = R
+
+        {
+        if(R.tipo != id.tipo)then
+            LanzaError("No puedes hacer una asignacion de distintos tipos")
+        }
+
+
 F1 -> lambda 
-F2 -> id L R # AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-            {
-            if(L.operador == suma && R.tipo != entero) then
-                LanzarError("No puedes usar asignacion suma con algo que no sea un entero")
-            else
-                U1.tipo := R.tipo
-            if(R.tipo != BuscaTipoTS(id.pos)) then
-                LanzarError("El id no coincide con el tipo de su asignacion)
-            }
+F2 -> id L R
+
+    id
+
+        {
+        id.tipo = BuscaTipoTS(id.pos);
+        if(id.tipo == null) then
+            id.tipo = entero;
+            id.desplazamiento = despG;
+            despG += 1;
+        }
+    L
+
+        {
+        if(L.operador == suma && id.tipo != entero) then
+            LanzaError("No se puede usar el operador += con vairables no enteras)
+        }
+    
+    R
+
+        {
+        if(L.operador == suma && R.tipo != entero) then
+            LanzarError("No puedes usar asignacion suma con algo que no sea un entero")
+        if(L.operador == asingacion && R.tipo != id.tipo) then
+            LanzarError("El id no coincide con el tipo de su asignacion)
+        }
+
+
 F2 -> lambda 
-Q -> B Q 
+Q -> B Q
+
         {
         B.tipoRet := Q.tipoRet
         Q'.tipoRet := Q.tipoRet
         }
-Q -> lambda # Regla quitada
-D1 -> D2 {D1.tipo := D2.tipo}
-D1 -> void {D1.tipo := void}
+
+    B Q
+
+Q -> lambda
+D1 -> D2 
+
+    D2
+        {D1.tipo := D2.tipo}
+
+D1 -> void 
+
+    void
+        {D1.tipo := void}
+
 D2 -> D3 D4 
-            {
-            if(D4.tipo == null) then   
-                D2.tipo := D3.tipo
-            else
-                D2.tipo := D3.tipo x D4.tipo
-            }
+
+    D3 D4 
+
+        {
+        if(D4.tipo == null) then   
+            D2.tipo := D3.tipo
+        else
+            D2.tipo := D3.tipo x D4.tipo
+        }
 
 D3 -> T id 
-            {
-            id.tipo = BuscaTipoTS(id.pos)
-            if(id.tipo == null)then
-                AñadeTipo(id.pos,T.tipo)
-                AñadeDespl(id.pos,despL)
-                despL += T.ancho; # Actualizamos el desplazamiento de la tabla de la funcion
-                D3.tipo = T.tipo
-            else 
-                LanzarError("Esa variable ya ha sido declarada")
-            }   
-D4 -> , D2 {D4.tipo := D2.tipo}
+
+    T id
+
+        {
+        id.tipo = BuscaTipoTS(id.pos)
+        if(id.tipo == null)then
+            AñadeTipo(id.pos,T.tipo)
+            AñadeDespl(id.pos,despL)
+            despL += T.ancho; # Actualizamos el desplazamiento de la tabla de la funcion
+            D3.tipo = T.tipo
+        else 
+            LanzarError("Esa variable ya ha sido declarada")
+        }   
+
+
+D4 -> , D2 
+
+    , D2
+        {D4.tipo := D2.tipo}
+        
 D4 -> lambda 

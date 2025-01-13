@@ -347,7 +347,6 @@ void error(token_ids token, reglas estado, string msgError)
     // cerr << "TOKEN " << tokenToString(token) << " NO ACEPTADO EN EL ESTADO " << reglasToString(estado) <<endl;
     int linea = analizador.linea_last_finished_tok;
     cout << "ERROR SINTACTICO EN LA LINEA " << linea << ": " << msgError << endl;
-    cout << tokenToString(token) << endl;
     exit(0);
 }
 

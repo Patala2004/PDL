@@ -47,6 +47,8 @@ std::string tokenToString(token_ids id) {
         case token_ids::PAL_RES_VAR: return "PalResVAR";
         case token_ids::PAL_RES_VOID: return "PalResVOID";
         case token_ids::PAL_RES_INT: return "PalResINT";
+        case token_ids::ERROR_TOKEN_NOT_RECOGNIZED: return "ERROR_TOKEN";
+        case token_ids::ENDOFFILE: return "EOF";
         default: return "UNKNOWN";
     }
 }

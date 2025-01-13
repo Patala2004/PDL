@@ -1045,7 +1045,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             //finsemantico
         }
         else
-        {
+        {   
             error(token.id, NT, "esperado operador aritmetico + o -");
         }
         break;

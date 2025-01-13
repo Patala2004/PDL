@@ -71,8 +71,7 @@ class Tabla{
 class AnalizadorLexico
 {
 private:
-    std::ifstream file;
-    std::ofstream token_file, err_file, tabla_file;
+    std::ofstream token_file;
 
     int estado;
     int valor_numerico;
@@ -90,6 +89,7 @@ public:
     int linea;
     int linea_last_tok;
     int linea_last_finished_tok;
+    std::ifstream file;
 
     Tabla* tsg;
     Tabla* tsl;
@@ -101,6 +101,7 @@ public:
 
     // Public method to process characters
     Token processNextChar();
+    void abreFichero(const std::string &input_file);
 
     int sintax_error(int cod);
 

@@ -1,0 +1,16 @@
+TABLA DE LA FUNCION hola #1:
+
+
+ * 'x'
+   + tipo:  'entero'
+   + despl:  0
+   --------------------------
+ * 'y'
+   + tipo:  'entero'
+   + despl:  1
+   --------------------------
+ * 'm'
+   + tipo:  'entero'
+   + despl:  2
+   --------------------------
+

@@ -1,0 +1,40 @@
+TABLA DE LA FUNCION hola #1:
+
+
+ * 'x'
+   + tipo:  'entero'
+   + despl:  0
+   --------------------------
+ * 'y'
+   + tipo:  'entero'
+   + despl:  1
+   --------------------------
+ * 'm'
+   + tipo:  'entero'
+   + despl:  2
+   --------------------------
+
+TABLA GLOBAL #0:
+
+
+ * 'hola'
+   + tipo:  'entero'
+   + despl:  0
+   --------------------------
+ * 'i'
+   + tipo:  'entero'
+   + despl:  1
+   --------------------------
+ * 'hola'
+   + tipo:  'funcion'
+       + numParam:  2
+          + tipoParam1:  'entero'
+          + tipoParam2:  'entero'
+        + tipoRetorno:  'void'
+        + etiqFuncion:  'function0'
+   --------------------------
+ * 'z'
+   + tipo:  'entero'
+   + despl:  2
+   --------------------------
+

@@ -150,7 +150,7 @@ std::map<string, int> tabla;
 
 
 
-int error(int cod_error, std::ifstream &file, std::streampos position, std::ofstream &err_file)
+int error(int cod_error, std::ifstream &file, std::streampos position)
 {
     file.clear();
     file.seekg(0, std::ios::beg);
@@ -303,20 +303,17 @@ void meterToken(token_ids id, string lex, Tabla* tabla)
     AnalizadorLexico::AnalizadorLexico(const std::string &input_file) : estado(0), valor_numerico(0), valor_cadena(""), num_linea(1), linea(1), linea_last_tok(1), linea_last_finished_tok(1), pos_tabla_simbolos(0), desplazamiento(0), eof(false)
     {
         // Open files
-        file.open(input_file, std::ios::binary);
-        token_file.open("token.txt", std::ios::trunc);
-        err_file.open("errores.txt", std::ios::trunc);
-        tabla_file.open("tabla.txt", std::ios::trunc);
+        //file.open(input_file, std::ios::binary);
+        //err_file.open("errores.txt", std::ios::trunc);
+        //tabla_file.open("tabla.txt", std::ios::trunc);
 
         // Error checking for file streams
-        if (!file.is_open())
-            throw std::runtime_error("Error: Could not open the file!");
-        if (!token_file)
-            throw std::runtime_error("Error: Could not open token file!");
-        if (!err_file)
-            throw std::runtime_error("Error: Could not open error file!");
-        if (!tabla_file)
-            throw std::runtime_error("Error: Could not open symbol table file!");
+        // if (!file.is_open())
+        //     throw std::runtime_error("Error: Could not open the file!");
+        // if (!err_file)
+        //     throw std::runtime_error("Error: Could not open error file!");
+        // if (!tabla_file)
+        //     throw std::runtime_error("Error: Could not open symbol table file!");
 
         // Prepare reserved words
         palResMap = {
@@ -334,10 +331,26 @@ void meterToken(token_ids id, string lex, Tabla* tabla)
             file.close();
         if (token_file.is_open())
             token_file.close();
-        if (err_file.is_open())
-            err_file.close();
-        if (tabla_file.is_open())
-            tabla_file.close();
+        // if (err_file.is_open())
+        //     err_file.close();
+        // if (tabla_file.is_open())
+        //     tabla_file.close();
+    }
+
+    void AnalizadorLexico::abreFichero(const std::string &input_file){
+        file.open(input_file);
+
+        if(!file.is_open()){
+            cout << "Error: NO se ha podido abrir el fichero " << input_file << ". Compruba que el nombre este bien escrito" << endl;
+            exit(0);
+        }
+
+        
+        token_file.open(input_file+"_Token.txt", std::ios::trunc);
+        if(!token_file.is_open()){
+            cout << "Error creando o abriendo el fichero de tokens " << input_file << "_Token.txt" << endl;
+            exit(0);
+        }
     }
 
     Token AnalizadorLexico::processNextChar()
@@ -377,7 +390,7 @@ void meterToken(token_ids id, string lex, Tabla* tabla)
                     estado = 14;
                     break;
                 case 15:
-                    error(1, file, file.tellg(), err_file); // Unfinished &&
+                    error(1, file, file.tellg()); // Unfinished &&
                     break;
                 case 17:
                     estado = 18;
@@ -390,16 +403,16 @@ void meterToken(token_ids id, string lex, Tabla* tabla)
                     res_token = generarToken(token_ids::IDENTIFICADOR, valor_cadena, token_file, linea);
                     break;
                 case 21:
-                    error(2, file, file.tellg(), err_file); // Unfinished string "..." (last " missing)
+                    error(2, file, file.tellg()); // Unfinished string "..." (last " missing)
                     break;
                 case 23:
-                    error(3, file, file.tellg(), err_file); // '/' sin nada mas (no existe operador de division aqui)
+                    error(3, file, file.tellg()); // '/' sin nada mas (no existe operador de division aqui)
                     break;
                 case 24:
-                    error(4, file, file.tellg(), err_file); // Comentario sin finalizar /* ...
+                    error(4, file, file.tellg()); // Comentario sin finalizar /* ...
                     break;
                 case 25:
-                    error(4, file, file.tellg(), err_file); // Comentario sin finalizar /*...*
+                    error(4, file, file.tellg()); // Comentario sin finalizar /*...*
                     break;
                 }
                 linea_last_finished_tok = linea_last_tok;
@@ -498,7 +511,7 @@ void meterToken(token_ids id, string lex, Tabla* tabla)
                 {
                     estado = 0;
                     file.clear();
-                    error(5, file, file.tellg(), err_file);
+                    error(5, file, file.tellg());
                 }
                 break;
                 // Si no -> el estado se mantiene en 0, lee el char y no hace nada y luego continua
@@ -550,7 +563,7 @@ void meterToken(token_ids id, string lex, Tabla* tabla)
                 }
                 else
                 {
-                    error(1, file, file.tellg() - (std::streampos)1, err_file);
+                    error(1, file, file.tellg() - (std::streampos)1);
                     // file.seekg(-1,std::ios::cur); se retrocede en el error
                     estado = 0;
                     // Lanzar error léxicos
@@ -630,7 +643,7 @@ void meterToken(token_ids id, string lex, Tabla* tabla)
                 {
                     // error
                     estado = 0;
-                    error(6, file, file.tellg(), err_file);
+                    error(6, file, file.tellg());
                 }
                 break;
             case 24:
@@ -677,35 +690,35 @@ void meterToken(token_ids id, string lex, Tabla* tabla)
 
 int AnalizadorLexico::sintax_error(int cod)
 {
-    int linea = error(cod, file, file.tellg(), err_file);
+    int linea = error(cod, file, file.tellg());
     return linea;
 }
 
-int main3(int argc, char *argv[])
-{
-    if (argc < 2)
-    {
-        std::cerr << "Error: You must provide a file name." << std::endl;
-        return -1;
-    }
+// int main3(int argc, char *argv[])
+// {
+//     if (argc < 2)
+//     {
+//         std::cerr << "Error: You must provide a file name." << std::endl;
+//         return -1;
+//     }
 
-    try
-    {
-        AnalizadorLexico analyzer(argv[1]);
-        while (analyzer.processNextChar().id != token_ids::ENDOFFILE)
-        {
-            // Continuously process characters
-        }
-        std::cout << "Tokens generated successfully." << std::endl;
-    }
-    catch (const std::exception &e)
-    {
-        std::cerr << e.what() << std::endl;
-        return -1;
-    }
+//     try
+//     {
+//         AnalizadorLexico analyzer(argv[1]);
+//         while (analyzer.processNextChar().id != token_ids::ENDOFFILE)
+//         {
+//             // Continuously process characters
+//         }
+//         std::cout << "Tokens generated successfully." << std::endl;
+//     }
+//     catch (const std::exception &e)
+//     {
+//         std::cerr << e.what() << std::endl;
+//         return -1;
+//     }
 
-    return 0;
-}
+//     return 0;
+// }
 /*
 int main2(int argc, char *argv[])
 {

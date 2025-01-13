@@ -1,0 +1,13 @@
+var int hola;
+
+
+i = 10;
+
+
+function void hola(int x, int y){
+	x += 1;
+	var int m = z + y;
+}
+
+
+i == 2;

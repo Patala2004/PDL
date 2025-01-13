@@ -323,8 +323,7 @@ token_ids str_to_token(string s)
     }
 }
 
-ifstream token_file("token.txt", std::ios::binary);
-ofstream parse_file("parse.txt", std::ios::binary);
+ofstream parse_file;
 
 // variables globales semanticas
 bool zona_decl = false;
@@ -336,7 +335,7 @@ Tabla* TSG = new Tabla();
 Tabla* TSL = nullptr;
 int contadorTablas = 0;
 
-std::ofstream ficheroTS("TablaSimbolos.txt", std::ios::out | std::ios::trunc);
+std::ofstream ficheroTS;
 
 
 
@@ -1770,13 +1769,28 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
     return true;
 }
 
-int main()
+int main(int argc, char* argv[])
 {
 
+    if(argc < 2){
+        cout << "Programa espera nombre de fichero de codigo como primer parametro" << endl;
+        exit(0);
+    }
+
+    analizador.abreFichero(argv[1]);
+    ficheroTS.open((string(argv[1]) + "_TablaSimbolos.txt"), std::ios::out | std::ios::trunc);
     if(!ficheroTS.is_open()) {
-        std::cerr << "Failed to open or create the file: TablaSimbolos.txt" << std::endl;
+        std::cerr << "Error abriendo o creando el fichero de tabla de simbolo " << (string(argv[1]) + "_TablaSimbolos.txt") << std::endl;
         return 1; // Return an error code
     }
+
+    parse_file.open((string(argv[1]) + "_Parse.txt"), std::ios::out | std::ios::trunc);
+    if(!parse_file.is_open()){
+        std::cerr << "Error abriendo o creando el fichero de tabla de simbolo " << (string(argv[1]) + "_Parse.txt") << std::endl;
+        return 1;
+    }
+
+    
     popularMapa();
     reglas noTerminalState = reglas::S; // empieza en el axioma S
     analizador.tsg = TSG;

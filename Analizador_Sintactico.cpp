@@ -1338,8 +1338,14 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             //semantico
             string tipo = BuscaEntrada(get<string>(iden.valor)).tipo;
+            if(tipo == "null"){
+                Entrada& id = AñadeEntrada(get<string>(iden.valor), TSG);
+                id.tipo = "entero";
+                id.desplazamiento = despG;
+                despG+=1;
+                tipo = "entero";
+            }
             U1["tipo"] = tipo;
-            U1["nombreVar"] = get<string>(iden.valor); 
             U1["tipoParams"] = BuscaEntradaFunc(get<string>(iden.valor)).tipoParams;
             //finsemantico
             
@@ -1388,59 +1394,29 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
             map<string,string> R = {};
             noTerminal(reglas::L, token,&L);
             //semantico
-            if(L["operador"] == "suma" && (*atrs_semanticos)["tipo"] == "null"){
-                // variable global tipo entera
-                (*atrs_semanticos)["tipo"] = "entero";
-                Entrada& id = AñadeEntrada((*atrs_semanticos)["nombreVar"], TSG);
-                id.tipo = "entero";
-                id.desplazamiento = despG;
-                despG++;
-            }
-            else if(L["operador"] == "suma" && (*atrs_semanticos)["tipo"] != "entero"){
-                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": NO SE PUEDE USAR OPERADOR DE ASIGNACION SUMA PARA VAR NO ENTERA" << endl;
+            // tipo nunca va a ser null
+            if(L["operador"] == "suma" && (*atrs_semanticos)["tipo"] != "entero"){
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": NO SE PUEDE USAR OPERADOR DE ASIGNACION SUMA (+=) PARA VAR NO ENTERA" << endl;
                 exit(0);
             }
             //finsemantico
             noTerminal(reglas::R, token,&R);
             //semantico
-            // volver a mirar tipo por si se ha definido en R
-            (*atrs_semanticos)["tipo"] = BuscaEntrada((*atrs_semanticos)["nombreVar"]).tipo;
 
             if(L["operador"] == "suma" && R["tipo"] != "entero"){
-                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": ASIGNACION-SUMA CON ELEMENTO NO ENTERO" << endl;
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": NO SE PUEDE USAR OPERADOR DE ASIGNACION SUMA (+=) CON VALORES NO ENTEROS" << endl;
                 exit(0);
-            }else{
-                if((*atrs_semanticos)["tipo"] != "null" && (*atrs_semanticos)["tipo"] != R["tipo"]){
-                    cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": ASIGNACION A UNA VARIABLE DE UN TIPO "<< 
-                    (*atrs_semanticos)["tipo"] << " CON UN VALOR DE TIPO " << R["tipo"] << endl;
-                    exit(0);
-                }
-                else if((*atrs_semanticos)["tipo"] == "null"){
-
-                    // Crear variable del tipo que sea R
-                    Entrada& id = AñadeEntrada((*atrs_semanticos)["nombreVar"], TSL==nullptr? TSG:TSL);
-                    id.tipo = R["tipo"];
-                    if(TSL != nullptr){
-                        id.desplazamiento = despL;
-                        if(id.tipo == "entero") despL+= 1;
-                        else if(id.tipo == "cadena") despL+= 64;
-                        else if(id.tipo == "booleano") despL += 1;
-                        else cout << "TIPO RARO" << endl;
-                    }
-                    else{
-                        id.desplazamiento = despG;
-                        if(id.tipo == "entero") despG+= 1;
-                        else if(id.tipo == "cadena") despG+= 64;
-                        else if(id.tipo == "booleano") despG += 1;
-                        else cout << "TIPO RARO" << endl;
-                    }
-                }
-                (*atrs_semanticos)["tipo"] = R["tipo"];
+            }else if((*atrs_semanticos)["tipo"] != R["tipo"]){
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": ASIGNACION A UNA VARIABLE DE UN TIPO "<< 
+                (*atrs_semanticos)["tipo"] << " CON UN VALOR DE TIPO " << R["tipo"] << endl;
+                exit(0);
             }
+
             //fin semantico
             equipara(token, token_ids::PUNTO_Y_COMA, NT);
             //semantico
             (*atrs_semanticos)["modo"] = "asignacion";
+            (*atrs_semanticos)["tipo"] = R["tipo"];
             //finsemantico
         }
         else if (token.id == token_ids::PARENTESIS_ABIERTA)
@@ -1521,35 +1497,34 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             Token iden = token;
             equipara(token, token_ids::IDENTIFICADOR, NT);
+
+            string tipo = "null";
+
+            tipo = BuscaEntrada(get<string>(iden.valor), false).tipo;
+
+            if(tipo == "null"){ // false para no asignar al TSL si la var existe el el TSG
+                // SI no existe -> crear global entero
+                tipo = "entero";
+                Entrada& id = AñadeEntrada(get<string>(iden.valor), TSG);
+                id.tipo = "entero";                
+                id.desplazamiento = despG;
+                despG += 1;
+            }
+
+
+
             equipara(token, token_ids::OP_ASIGNACION_SIMPLE, NT);
+
+            
+
             noTerminal(reglas::R, token,&R);
 
             //semantico
-            string tipo = BuscaEntrada(get<string>(iden.valor), false).tipo;
-            if(tipo == "null"){ // false para no asignar al TSL si la var existe el el TSG
-                // SI no existe -> crear
-                Entrada& id = AñadeEntrada(get<string>(iden.valor), TSL == nullptr? TSG:TSL);
-                id.tipo = R["tipo"];
-                int desplazamiento = 0;
-                if(id.tipo == "entero"){
-                    desplazamiento = 1;
-                }
-                else if(id.tipo == "booleano"){
-                    desplazamiento = 1;
-                }
-                else if(id.tipo == "cadena"){
-                    desplazamiento = 64;
-                }
-                id.desplazamiento = TSL==nullptr? despG:despL;
-
-                if(TSL == nullptr) despG += desplazamiento;
-                else despL += desplazamiento;
-            }
-            else{
-                // Si ya existe -> comprobar que el valor asignado sea del mismo tipo a la var existente
-                if(R["tipo"] !=tipo){
-                    throw runtime_error("ERROR SEMANTICO EN LA LINEA " + to_string(analizador.linea_last_finished_tok) + ": ASIGNACION DE DOS TIPOS DIFERENTES");
-                }
+            // Si ya existe -> comprobar que el valor asignado sea del mismo tipo a la var existente
+            if(R["tipo"] !=tipo){
+                cout << "ERROR SEMANTICO EN LA LINEA " << to_string(analizador.linea_last_finished_tok) << ": NO SE PUEDE ASIGNAR UN VALOR DE TIPO " << R["tipo"] <<
+                 " A UNA VARIABLE DE TIPO " << tipo << endl;
+                 exit(0);
             }
             //finsemantico
         }
@@ -1578,11 +1553,9 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             string idnombre = get<string>(token.valor);
             equipara(token, token_ids::IDENTIFICADOR, NT);
-            noTerminal(reglas::L, token,&L);
-            // semantico
-            string tipo;
-            Entrada& idtemp = BuscaEntrada(idnombre);
-            if(idtemp.tipo == "null" && L["operador"] == "suma"){
+
+            string tipo = BuscaEntrada(idnombre).tipo;
+            if(tipo == "null"){
                 // No existe la var todavia -> Se añade como entero global
                 tipo = "entero";
                 Entrada& id = AñadeEntrada(idnombre, TSG);
@@ -1590,33 +1563,24 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
                 id.desplazamiento = despG;
                 despG += 1;
             }
-            else if(idtemp.tipo != "entero" && L["operador"] == "suma"){
+
+            noTerminal(reglas::L, token,&L);
+            // semantico
+
+            // tipo no va a ser null nunca
+            if(tipo != "entero" && L["operador"] == "suma"){
                 // se usa += con una var no entera
                 cout << "ERROR SEMANTICO EN LA LINEA: " << analizador.linea_last_finished_tok << " No se puede usar el operador += con variables no enteras" << endl;
                 exit(0);
             }
-            else if(idtemp.tipo != "null") tipo = idtemp.tipo;
-            noTerminal(reglas::R, token,&R);
-            if(idtemp.tipo == "null" && L["operador"] == "asignacion"){
-                tipo = R["tipo"];
-                Entrada& id = AñadeEntrada(idnombre, TSL==nullptr? TSG:TSL);
-                id.tipo = tipo;
-                int& desp = TSL == nullptr? despG:despL;
-                id.desplazamiento = desp;
-                if(tipo == "entero") desp+=1;
-                else if(tipo == "cadena") desp+=64;
-                else if(tipo == "booleano") desp+=1;
-                else cout << "TIPO RARO?" <<endl;
-            }
 
-            //semantico AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+            noTerminal(reglas::R, token,&R);
 
             if(L["operador"] == "suma" && R["tipo"] != "entero"){
-                cout << "ERROR SEMANTICO EN LA LINEA: " << analizador.linea_last_finished_tok << " No puedes hacer asignacion suma con algo que no sean enteros" << endl ;
+                cout << "ERROR SEMANTICO EN LA LINEA: " << analizador.linea_last_finished_tok << " No puedes hacer asignacion suma (+=) con valores no enteros" << endl ;
                 exit(0);
             }
-
-            if(R["tipo"] != tipo){
+            else if(L["operador"] == "asignacion" && R["tipo"] != tipo){
                 cout << "ERROR SEMANTICO EN LA LINEA: " << analizador.linea_last_finished_tok << " No puedes hacer asignacion de distintos tipos" << endl ;
                 exit(0);
             }

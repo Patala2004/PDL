@@ -5,14 +5,19 @@ var string cadena;input cadena;
 var boolean logico1;var boolean logico2 ;
 
 
-b = a == 10;
+b = b;
 
 
-var boolean bol = 10;
 int1 = 000000378;
 
 int2 = int1;
 cadena = "string";
+
+var boolean nuevob = mandarina == mandarina;
+
+var string x2;
+
+for(i = i; i == i; x2="1"){}
 
 
 
@@ -22,20 +27,21 @@ function  string ff(string ss)
 	if (logico2) cadena = ff (ss);
 	varglobal = 78;
 	return cadena;
+	x34 = nuveoxint + nuveoxint2 - nuevoxint3 - nuveoxint4;
 	var boolean creat1;
 	for(nocreat0 = 1; nocreat1 == nocreat10; nocreat100 += 1){
 		nocreat0 += 1;
 	}
-	nodeclarado3 = "hola";
+	var string nodeclarado3 = "hola";
 
 	
-b = i == 10;
+var boolean b = i == 10;
 }
 
 var string x = "0123456789012345678901234567890123456789012345678901234562314";
 
 nodeclarado += 111;
-nodeclarado2 = "hola";
+var string nodeclarado2 = "hola";
 		
 function string funciOn (string logico2)
 {	var string let 	;

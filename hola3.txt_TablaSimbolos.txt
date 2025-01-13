@@ -1,8 +1,0 @@
-TABLA GLOBAL #0:
-
-
- * 'i'
-   + tipo:  'entero'
-   + despl:  0
-   --------------------------
-

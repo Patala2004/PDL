@@ -4,3 +4,13 @@
 <OpAsignacionSimple, >
 <Numero, 1>
 <PuntoYComa, >
+<PalResVAR, >
+<PalResINT, >
+<ID, "x">
+<OpAsignacionSimple, >
+<Numero, 2>
+<PuntoYComa, >
+<PalResVAR, >
+<PalResINT, >
+<ID, "x">
+<OpAsignacionSimple, >

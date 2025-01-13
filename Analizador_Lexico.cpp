@@ -338,7 +338,7 @@ void meterToken(token_ids id, string lex, Tabla* tabla)
     }
 
     void AnalizadorLexico::abreFichero(const std::string &input_file){
-        file.open(input_file);
+        file.open(input_file, std::ios::binary);
 
         if(!file.is_open()){
             cout << "Error: NO se ha podido abrir el fichero " << input_file << ". Compruba que el nombre este bien escrito" << endl;

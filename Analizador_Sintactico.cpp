@@ -532,7 +532,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
                 }
             }
             else{
-                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": LA VARIABLE YA HA SIDO DECLARADA EN LA LINEA " << analizador.linea_last_finished_tok << endl;
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": LA VARIABLE YA HA SIDO DECLARADA " << endl;
                 exit(0);
             }
             zona_decl = false;
@@ -1755,7 +1755,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
                 (*atrs_semanticos)["tipo"] = T["tipo"];
             }
             else{
-                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": PARAMETRO YA DECLARADA EN LA LINEA " << analizador.linea_last_finished_tok << endl;
+                cout << "ERROR SEMANTICO EN LA LINEA " << analizador.linea_last_finished_tok << ": PARAMETRO YA HA SIDO DECLARADO" << endl;
                 exit(0);
             }
         }

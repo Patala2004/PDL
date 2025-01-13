@@ -1420,7 +1420,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
                     // Crear variable del tipo que sea R
                     Entrada& id = AñadeEntrada((*atrs_semanticos)["nombreVar"], TSL==nullptr? TSG:TSL);
                     id.tipo = R["tipo"];
-                    if(TSL == nullptr){
+                    if(TSL != nullptr){
                         id.desplazamiento = despL;
                         if(id.tipo == "entero") despL+= 1;
                         else if(id.tipo == "cadena") despL+= 64;

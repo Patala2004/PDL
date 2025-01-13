@@ -23,6 +23,8 @@ map<reglas, set<token_ids>> mapaFollow;
 AnalizadorLexico analizador("hola.txt");
 
 
+
+
 std::ostream& operator<<(std::ostream& os, const Entrada& e) {
 
     if(e.tipo == "funcion"){
@@ -1171,6 +1173,7 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             // semantico
             (*atrs_semanticos)["tipo"] = A1["tipo"];
+
             //finsemantico
 
             equipara(token, token_ids::PARENTESIS_CERRADA, NT);
@@ -1338,14 +1341,8 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
 
             //semantico
             string tipo = BuscaEntrada(get<string>(iden.valor)).tipo;
-            if(tipo == "null"){
-                Entrada& id = AñadeEntrada(get<string>(iden.valor), TSG);
-                id.tipo = "entero";
-                id.desplazamiento = despG;
-                despG+=1;
-                tipo = "entero";
-            }
             U1["tipo"] = tipo;
+            U1["nombreVar"] = get<string>(iden.valor);
             U1["tipoParams"] = BuscaEntradaFunc(get<string>(iden.valor)).tipoParams;
             //finsemantico
             
@@ -1389,6 +1386,15 @@ bool noTerminal(reglas NT, Token &token, map<string,string>* atrs_semanticos = n
         if (mapaFirst[reglas::L].find(token.id) != mapaFirst[reglas::L].end())
         {
             // U1 -> L R ;
+
+            if((*atrs_semanticos)["tipo"] == "null"){
+                Entrada& id = AñadeEntrada((*atrs_semanticos)["nombreVar"], TSG);
+                id.tipo = "entero";
+                id.desplazamiento = despG;
+                despG+=1;
+                (*atrs_semanticos)["tipo"] = "entero";
+            }
+
             parse_file << 43 << " ";
             map<string,string> L = {};
             map<string,string> R = {};

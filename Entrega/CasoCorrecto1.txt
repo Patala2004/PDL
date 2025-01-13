@@ -1,0 +1,7 @@
+var int i = 1;
+var int b;
+var boolean hola;
+var string cadena;
+var int ejemplo;
+i = 4;
+if(i==b) output i;

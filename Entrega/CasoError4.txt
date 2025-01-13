@@ -1,0 +1,5 @@
+var int b;
+var int ll;
+var boolean hola;
+if(b==ll) input i;
+for(k=2;i;po +=1){output k}

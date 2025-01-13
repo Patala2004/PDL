@@ -1,0 +1,13 @@
+var int a;
+var int b;
+var int c;
+function int suma(int a, int b, int c){
+	a = a + b + c;
+}
+a = suma(a,b,c);
+function void printf(int a){
+	temp = a;
+	for(i = 0; i == a;){
+		output (a);
+}
+}

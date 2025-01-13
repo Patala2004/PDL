@@ -1,0 +1,13 @@
+var int hola;
+var string soystring="soystring";
+
+
+/*Esta funcion multiplica un numero por otro 100 veces y devuelve el resultado
+function  int ff(int n1, int n2)
+{
+	var int res=0;
+	for(int contador = 0; contador <100; contador += 1){
+		res += n1 * n2;
+	}
+	return res;
+}

@@ -1,0 +1,8 @@
+var int i = 1;
+var int b;
+for(i = 5; i == b; i += 1){
+	b += i;
+}
+i = 5;
+ghgj = 45;
+if(i == dsasda) input a;
